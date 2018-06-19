@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
+import ContentWrapper from './components/ContentWrapper';
 import { Switch, Route } from 'react-router-dom';
 
 import Home from './components/Home';
+import Item from './components/Item';
+import NotFound from './components/NotFound';
 
 class App extends Component {
 	render() {
@@ -12,9 +15,14 @@ class App extends Component {
 			<div className="App">
 				<Header />
 				<Navigation />
-				<Switch>
-					<Route exact path='/' component={Home} />
-				</Switch>
+				<ContentWrapper>
+					<Switch>
+						<Route exact path='/' component={Home} />
+						<Route path='/item/:item' component={Item} />
+
+						<Route path="*" component={NotFound} />
+					</Switch>
+				</ContentWrapper>
 			</div>
 		);
 	}

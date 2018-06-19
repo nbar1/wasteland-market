@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { AppBar, Toolbar, Icon } from '@material-ui/core';
+import { AppBar, Toolbar } from '@material-ui/core';
 import SearchBar from '../SearchBar';
 
 import logo from '../../images/logo-text-white.png';
@@ -19,6 +18,7 @@ const LogoBeta = styled.img`
 const StyledAppBar = styled(AppBar)`
 	&& {
 		background: #000;
+		position: fixed;
 	}
 `;
 
@@ -38,9 +38,5 @@ class Header extends Component {
 		);
 	}
 }
-
-Header.propTypes = {
-
-};
 
 export default Header;

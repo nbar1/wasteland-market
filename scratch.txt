@@ -1,0 +1,7 @@
+http://fallout.wikia.com/api.php?action=query&titles=Addictol&format=json
+
+http://fallout.wikia.com/api.php?action=query&prop=images&titles=Addictol&format=json
+
+http://fallout.wikia.com/api/v1/Articles/AsSimpleJson?id=481012
+
+http://fallout.wikia.com/api/v1/Articles/Details?ids=481012

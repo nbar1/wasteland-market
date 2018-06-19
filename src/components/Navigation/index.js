@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Drawer, List, ListItem, ListItemText, Collapse } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledDrawer = styled(Drawer)`
@@ -49,13 +49,17 @@ class Navigation extends Component {
 		return (
 			<div>
 				<StyledDrawer open={true} variant={'permanent'}>
-					<List disablePadding>
-						<ListItem button={true}>
-							<ListItemText primary="Home" />
-						</ListItem>
-						<ListItem button={true}>
-							<ListItemText primary="Market" />
-						</ListItem>
+					<List>
+						<Link to={`/`}>
+							<ListItem button={true}>
+								<ListItemText primary="Home" />
+							</ListItem>
+						</Link>
+						<Link to={`/market`}>
+							<ListItem button={true}>
+								<ListItemText primary="Market" />
+							</ListItem>
+						</Link>
 						<ListItem button={true} onClick={this.toggleCategories}>
 							<ListItemText primary="Categories" />
 							{this.state.categoriesOpen ? <ExpandLess /> : <ExpandMore />}
@@ -82,9 +86,5 @@ class Navigation extends Component {
 		);
 	};
 }
-
-Navigation.propTypes = {
-
-};
 
 export default Navigation;
