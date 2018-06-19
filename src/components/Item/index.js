@@ -25,7 +25,7 @@ class Item extends Component {
 		name: 'Nuka-Cola',
 		category: 'Food',
 		price: 243,
-		change: -27.3,
+		change: 27.3,
 	}
 
 	render() {
@@ -33,7 +33,7 @@ class Item extends Component {
 			<div>
 				<Details name={this.state.name} category={this.state.category} />
 				<Image>
-					<img src={'/images/items/nuka-cola.png'} />
+					<img src={'/images/items/nuka-cola.png'} alt={this.state.name} />
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
