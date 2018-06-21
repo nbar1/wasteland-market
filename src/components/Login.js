@@ -154,7 +154,7 @@ class Login extends Component {
 			formData.set('email', this.state.email);
 			formData.set('password', this.state.password);
 
-			axios.post('http://localhost:3001/user/login', qs.stringify({
+			axios.post('/user/login', qs.stringify({
 				'email': this.state.email,
 				'password': this.state.password,
 			}))
@@ -162,8 +162,9 @@ class Login extends Component {
 					console.log(res);
 				})
 				.catch((err, res) => {
+					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
 					this.setState({
-						generalError: err.response.data.message,
+						generalError: errorMessage,
 					});
 				});
 		}
