@@ -75,7 +75,7 @@ class Price extends Component {
 		return (
 			<PriceWrapper>
 				<Amount title={`${this.props.amount} caps`}>{this.props.amount}</Amount>
-				<Change className={this.getChangeClass()} title={`${this.props.change}% change, last 24 hours`}>{this.props.change}%</Change>
+				<Change className={this.getChangeClass()} title={`${this.props.change}% change, past 24 hours`}>{this.props.change}%</Change>
 			</PriceWrapper>
 		);
 	}
