@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import AuthProvider from './context/AuthProvider';
 import './App.css';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
@@ -15,20 +16,22 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Header />
-				<Navigation />
-				<ContentWrapper>
-					<Switch>
-						<Route exact path='/' component={Home} />
-						<Route path='/login' component={Login} />
+				<AuthProvider>
+					<Header />
+					<Navigation />
+					<ContentWrapper>
+						<Switch>
+							<Route exact path='/' component={Home} />
+							<Route path='/login' component={Login} />
 
 
-						<Route path='/item/:item' component={Item} />
-						<Route path='/item/:item' component={Item} />
+							<Route path='/item/:item' component={Item} />
+							<Route path='/item/:item' component={Item} />
 
-						<Route path="*" component={NotFound} />
-					</Switch>
-				</ContentWrapper>
+							<Route path="*" component={NotFound} />
+						</Switch>
+					</ContentWrapper>
+				</AuthProvider>
 			</div>
 		);
 	}

@@ -5,8 +5,6 @@ import styled from 'styled-components';
 const SearchBarWrapper = styled.div`
 	border-radius: 3px;
 	box-shadow: 0 0 5px 2px rgba(220, 182, 38);
-	position: absolute;
-	right: 20px;
 `;
 
 const SearchInput = styled.input`

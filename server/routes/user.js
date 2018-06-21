@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var requiresLogin = require('../middleware/requiresLogin');
 var User = require('../models/User');
 
 // register
@@ -22,9 +23,29 @@ router.post('/register', (req, res, next) => {
 	};
 
 	User.create(userData, (err, user) => {
-		if (err) return next(err);
+		if (err) {
+			let errorMessage = 'Unknown Error';
+			if (err.code === 11000 && err.message.indexOf('email') > -1) {
+				errorMessage = 'Email already registered.';
+			}
+			else if (err.code === 11000 && err.message.indexOf('username') > -1) {
+				errorMessage = 'Username is already taken.';
+			}
+
+			return next({
+				status: 401,
+				message: {
+					success: false,
+					message: errorMessage,
+				},
+			});
+		}
 
 		req.session.userId = user._id;
+		req.session.user = {
+			username: user.username,
+			premium: user.premium,
+		}
 
 		return res.send('user created');
 	});
@@ -32,7 +53,6 @@ router.post('/register', (req, res, next) => {
 
 // login
 router.post('/login', (req, res, next) => {
-	console.log(req.body);
 	User.authenticate(req.body.email, req.body.password, (err, user) => {
 		if (err || !user) {
 			return next({
@@ -45,8 +65,17 @@ router.post('/login', (req, res, next) => {
 		}
 
 		req.session.userId = user._id;
+		req.session.user = {
+			username: user.username,
+			premium: user.premium,
+		}
 
-		return res.send('Login success');
+		return res.send({
+			user: {
+				username: user.username,
+				premium: user.premium,
+			},
+		});
 	});
 });
 
@@ -59,6 +88,15 @@ router.get('/logout', (req, res, next) => {
 
 		return res.send('logout success');
 	});
+});
+
+// authStatus
+router.get('/authStatus', requiresLogin, (req, res, next) => {
+	return res.send({
+		loggedIn: true,
+		username: req.session.user.username,
+		premium: req.session.user.premium,
+	})
 });
 
 module.exports = router;

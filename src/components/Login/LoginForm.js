@@ -3,6 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
 
 const LoginWrapper = styled.div`
 	margin: 0 auto;
@@ -69,7 +70,7 @@ const GeneralError = styled.div`
 	color: #f44336;
 `;
 
-class Login extends Component {
+class LoginForm extends Component {
 	state = {
 		isLogin: true,
 		email: '',
@@ -159,7 +160,7 @@ class Login extends Component {
 				'password': this.state.password,
 			}))
 				.then(res => {
-					console.log(res);
+					this.props.context.login(res.data.user);
 				})
 				.catch((err, res) => {
 					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
@@ -170,10 +171,35 @@ class Login extends Component {
 		}
 		else {
 			// Register
+			let formData = new FormData();
+			formData.set('email', this.state.email);
+			formData.set('username', this.state.username);
+			formData.set('password', this.state.password);
+			formData.set('passwordConf', this.state.passwordConf);
+
+			axios.post('/user/register', qs.stringify({
+				'email': this.state.email,
+				'username': this.state.username,
+				'password': this.state.password,
+				'passwordConf': this.state.passwordConf,
+			}))
+				.then(res => {
+					console.log(res);
+				})
+				.catch((err, res) => {
+					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
+					this.setState({
+						generalError: errorMessage,
+					});
+				});
 		}
 	};
 
 	render() {
+		if (this.props.context.isLoggedIn === true) {
+			return <Redirect to='/' />
+		}
+
 		return (
 			<LoginWrapper>
 				<Title>
@@ -261,4 +287,4 @@ class Login extends Component {
 	}
 }
 
-export default Login;
+export default LoginForm;

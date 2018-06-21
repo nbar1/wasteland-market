@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { AppBar, Toolbar } from '@material-ui/core';
-import SearchBar from '../SearchBar';
+import AuthContext from '../../context/AuthContext';
+import SearchBar from './SearchBar';
+import UserHub from './UserHub';
 
 import logo from '../../images/logo-text-white.png';
 import logoBeta from '../../images/beta.svg';
@@ -22,6 +24,16 @@ const StyledAppBar = styled(AppBar)`
 	}
 `;
 
+const SearchBarWrapper = styled.div`
+	position: absolute;
+	right: 110px;
+`;
+
+const UserHubWrapper = styled.div`
+	position: absolute;
+	right: 10px;
+`;
+
 class Header extends Component {
 	render() {
 		return (
@@ -31,7 +43,14 @@ class Header extends Component {
 						<Logo src={logo} alt="Wasteland Market" />
 						<LogoBeta src={logoBeta} alt="Beta" />
 
-						<SearchBar />
+						<SearchBarWrapper>
+							<SearchBar />
+						</SearchBarWrapper>
+						<UserHubWrapper>
+							<AuthContext>
+								{context => <UserHub context={context} />}
+							</AuthContext>
+						</UserHubWrapper>
 					</Toolbar>
 				</StyledAppBar>
 			</div>
