@@ -70,6 +70,12 @@ const GeneralError = styled.div`
 	color: #f44336;
 `;
 
+const HiddenSubmit = styled.input`
+	height: 0;
+	visibility: hidden;
+	width: 0;
+`;
+
 class LoginForm extends Component {
 	state = {
 		isLogin: true,
@@ -146,7 +152,8 @@ class LoginForm extends Component {
 		})
 	}
 
-	submitForm = () => {
+	submitForm = event => {
+		if (event) event.preventDefault();
 		if (this.validateForm() === false) return;
 
 		if (this.state.isLogin === true) {
@@ -206,7 +213,7 @@ class LoginForm extends Component {
 					<div className="header">{this.state.isLogin ? 'Login' : 'Register'}</div>
 					<div className="subheader" onClick={this.toggleForm}>{this.state.isLogin ? 'Register' : 'Login'}</div>
 				</Title>
-				<FormWrapper>
+				<FormWrapper onSubmit={this.submitForm}>
 
 					{this.state.generalError &&
 						<GeneralError>{this.state.generalError}</GeneralError>
@@ -273,6 +280,9 @@ class LoginForm extends Component {
 					{this.state.passwordMismatch && !this.state.isLogin &&
 						<GeneralError>Your passwords do not match</GeneralError>
 					}
+
+					<HiddenSubmit type="submit" />
+
 					<ButtonWrapper>
 						<StyledButton
 							variant="contained"
