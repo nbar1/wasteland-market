@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-
+import Dropdown from './Dropdown';
 
 const UserHubWrapper = styled.div`
 
@@ -24,7 +24,7 @@ class UserHub extends Component {
 		return (
 			<UserHubWrapper>
 				{this.props.context.isLoggedIn &&
-					<div>{this.props.context.username}</div>
+					<Dropdown />
 				}
 				{!this.props.context.isLoggedIn &&
 					<StyledButton

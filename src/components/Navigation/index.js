@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { Drawer, List, ListItem, ListItemText, Collapse } from '@material-ui/core';
+import {
+	Drawer,
+	List,
+	ListItem,
+	ListItemText,
+	Collapse,
+} from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons/';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -62,9 +68,17 @@ class Navigation extends Component {
 						</Link>
 						<ListItem button={true} onClick={this.toggleCategories}>
 							<ListItemText primary="Categories" />
-							{this.state.categoriesOpen ? <ExpandLess /> : <ExpandMore />}
+							{this.state.categoriesOpen ? (
+								<ExpandLess />
+							) : (
+								<ExpandMore />
+							)}
 						</ListItem>
-						<Collapse in={this.state.categoriesOpen} timeout="auto" unmountOnExit>
+						<Collapse
+							in={this.state.categoriesOpen}
+							timeout="auto"
+							unmountOnExit
+						>
 							<List disablePadding>
 								<SecondLevelListItem button>
 									<ListItemText primary="Weapons" />
@@ -80,11 +94,16 @@ class Navigation extends Component {
 								</SecondLevelListItem>
 							</List>
 						</Collapse>
+						<Link to={`/create-item`}>
+							<ListItem button={true}>
+								<ListItemText primary="Add Item" />
+							</ListItem>
+						</Link>
 					</List>
 				</StyledDrawer>
 			</div>
 		);
-	};
+	}
 }
 
 export default Navigation;

@@ -10,6 +10,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 
 import Item from './components/Item';
+import CreateItem from './components/CreateItem';
 import NotFound from './components/NotFound';
 
 class App extends Component {
@@ -26,7 +27,7 @@ class App extends Component {
 
 
 							<Route path='/item/:item' component={Item} />
-							<Route path='/item/:item' component={Item} />
+							<Route path='/create-item' component={CreateItem} />
 
 							<Route path="*" component={NotFound} />
 						</Switch>

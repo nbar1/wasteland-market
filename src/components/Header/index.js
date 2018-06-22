@@ -26,7 +26,7 @@ const StyledAppBar = styled(AppBar)`
 
 const SearchBarWrapper = styled.div`
 	position: absolute;
-	right: 110px;
+	right: ${props => props.offset}px;
 `;
 
 const UserHubWrapper = styled.div`
@@ -42,10 +42,13 @@ class Header extends Component {
 					<Toolbar>
 						<Logo src={logo} alt="Wasteland Market" />
 						<LogoBeta src={logoBeta} alt="Beta" />
-
-						<SearchBarWrapper>
-							<SearchBar />
-						</SearchBarWrapper>
+						<AuthContext>
+							{context => (
+								<SearchBarWrapper offset={context.isLoggedIn ? 69 : 110}>
+									<SearchBar />
+								</SearchBarWrapper>
+							)}
+						</AuthContext>
 						<UserHubWrapper>
 							<AuthContext>
 								{context => <UserHub context={context} />}

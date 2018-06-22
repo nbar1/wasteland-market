@@ -1,28 +1,23 @@
 var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 
 var ItemSchema = new mongoose.Schema({
-	email: {
+	name: {
 		type: String,
 		unique: true,
 		required: true,
 		trim: true,
+		uniqueCaseInsensitive: true,
 	},
-	username: {
+	image: {
 		type: String,
-		unique: true,
-		required: true,
 		trim: true,
 	},
-	password: {
-		type: String,
-		required: true,
-	},
-	passwordConf: {
-		type: String,
-		required: true,
-	},
-	dateRegistered: {
+	dateAdded: {
 		type: Date,
+	},
+	addedBy: {
+		type: String,
 	},
 	enabled: {
 		type: Boolean,
@@ -31,43 +26,13 @@ var ItemSchema = new mongoose.Schema({
 	}
 });
 
-// authenticate input against database
-ItemSchema.statics.authenticate = (email, password, callback) => {
-	Item.findOne({ email: email })
-		.exec((err, user) => {
-			if (err) {
-				return callback(err);
-			}
-			else if (!user) {
-				err = new Error('User not found.');
-				err.status = 401;
-				return callback(err);
-			}
+ItemSchema.plugin(uniqueValidator);
 
-			bcrypt.compare(password, user.password, (err, result) => {
-				if (result === true) {
-					return callback(null, user);
-				}
-
-				return callback();
-			});
-		});
-};
-
-// hash password before saving it to the db
 ItemSchema.pre('save', function(next) {
-	let user = this;
-	user.passwordConf = undefined;
-	user.dateRegistered = new Date();
+	let item = this;
+	item.dateAdded = new Date();
 
-	bcrypt.hash(user.password, 10, (err, hash) => {
-		if (err) {
-			return next(err);
-		}
-
-		user.password = hash;
-		next();
-	});
+	next();
 });
 
 var Item = mongoose.model('Item', ItemSchema);

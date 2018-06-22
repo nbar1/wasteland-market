@@ -5,6 +5,8 @@ import qs from 'querystring';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 
+import Loading from '../Loading';
+
 const LoginWrapper = styled.div`
 	margin: 0 auto;
 	padding-top: 10vh;
@@ -97,6 +99,7 @@ class LoginForm extends Component {
 		});
 
 		this.resetValidation();
+		this.clearForm();
 	};
 
 	onChange = event => {
@@ -149,7 +152,16 @@ class LoginForm extends Component {
 			missingPassword: false,
 			missingPasswordConf: false,
 			passwordMismatch: false,
-		})
+		});
+	}
+
+	clearForm() {
+		this.setState({
+			email: '',
+			username: '',
+			password: '',
+			passwordConf: '',
+		});
 	}
 
 	submitForm = event => {
@@ -191,7 +203,9 @@ class LoginForm extends Component {
 				'passwordConf': this.state.passwordConf,
 			}))
 				.then(res => {
-					console.log(res);
+					if (res.data.success === true) {
+						window.location.href = '/';
+					}
 				})
 				.catch((err, res) => {
 					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';

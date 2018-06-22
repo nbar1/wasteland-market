@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var uniqueValidator = require('mongoose-unique-validator');
 var bcrypt = require('bcrypt');
 
 var UserSchema = new mongoose.Schema({
@@ -7,12 +8,14 @@ var UserSchema = new mongoose.Schema({
 		unique: true,
 		required: true,
 		trim: true,
+		uniqueCaseInsensitive: true,
 	},
 	username: {
 		type: String,
 		unique: true,
 		required: true,
 		trim: true,
+		uniqueCaseInsensitive: true,
 	},
 	password: {
 		type: String,
@@ -36,6 +39,8 @@ var UserSchema = new mongoose.Schema({
 		required: true,
 	}
 });
+
+UserSchema.plugin(uniqueValidator);
 
 // authenticate input against database
 UserSchema.statics.authenticate = (email, password, callback) => {

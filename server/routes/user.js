@@ -25,10 +25,10 @@ router.post('/register', (req, res, next) => {
 	User.create(userData, (err, user) => {
 		if (err) {
 			let errorMessage = 'Unknown Error';
-			if (err.code === 11000 && err.message.indexOf('email') > -1) {
+			if (err.errors.email !== undefined) {
 				errorMessage = 'Email already registered.';
 			}
-			else if (err.code === 11000 && err.message.indexOf('username') > -1) {
+			else if (err.errors.username !== undefined) {
 				errorMessage = 'Username is already taken.';
 			}
 
@@ -47,7 +47,10 @@ router.post('/register', (req, res, next) => {
 			premium: user.premium,
 		}
 
-		return res.send('user created');
+		return res.send({
+			success: true,
+			message: 'user-created',
+		});
 	});
 });
 

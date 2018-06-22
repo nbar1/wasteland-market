@@ -21,6 +21,7 @@ class AuthProvider extends Component {
 
 	state = {
 		isLoggedIn: false,
+		isCurrent: false,
 		username: null,
 		premium: false,
 		login: this.login,
@@ -33,13 +34,15 @@ class AuthProvider extends Component {
 		axios.get('/user/authStatus')
 			.then(res => {
 				this.setState({
+					isCurrent: true,
 					isLoggedIn: true,
 					username: res.data.username,
-					premium: res.data.premium
+					premium: res.data.premium,
 				});
 			})
 			.catch(err => {
 				this.setState({
+					isCurrent: true,
 					isLoggedIn: false,
 					username: null,
 					premium: false,
