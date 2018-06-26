@@ -17,6 +17,7 @@ db.once('open', () => {
 
 // static build
 app.use(express.static('../build'));
+app.enable('trust proxy');
 
 // use sessions for tracking logins
 app.use(session({
@@ -29,7 +30,7 @@ app.use(session({
 }));
 
 // Set up CORS
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
@@ -48,7 +49,7 @@ var itemRoutes = require('./routes/item');
 app.use('/api/item', itemRoutes);
 
 // homepage
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
 	res.sendFile('../build/index.html');
 });
 

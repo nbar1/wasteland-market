@@ -5,8 +5,6 @@ import qs from 'querystring';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 
-import Loading from '../Loading';
-
 const LoginWrapper = styled.div`
 	margin: 0 auto;
 	padding-top: 10vh;

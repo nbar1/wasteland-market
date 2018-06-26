@@ -22,6 +22,7 @@ router.post('/register', (req, res, next) => {
 		password: req.body.password,
 		passwordConf: req.body.passwordConf,
 		dateRegistered: new Date(),
+		registrationIP: req.ip,
 	};
 
 	User.create(userData, (err, user) => {

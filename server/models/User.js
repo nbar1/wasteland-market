@@ -25,17 +25,16 @@ var UserSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	dateRegistered: {
-		type: Date,
-	},
-	enabled: {
-		type: Boolean,
-		default: true,
-		required: true,
-	},
 	premium: {
 		type: Boolean,
 		default: false,
+		required: true,
+	},
+	dateRegistered: Date,
+	registrationIP: String,
+	enabled: {
+		type: Boolean,
+		default: true,
 		required: true,
 	},
 });

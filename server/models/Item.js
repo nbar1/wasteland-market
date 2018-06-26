@@ -19,6 +19,9 @@ var ItemSchema = new mongoose.Schema({
 	addedBy: {
 		type: String,
 	},
+	addedByIP: {
+		type: String,
+	},
 	enabled: {
 		type: Boolean,
 		default: true,
