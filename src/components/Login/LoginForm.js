@@ -170,10 +170,6 @@ class LoginForm extends Component {
 
 		if (this.state.isLogin === true) {
 			// Login
-			let formData = new FormData();
-			formData.set('email', this.state.email);
-			formData.set('password', this.state.password);
-
 			axios.post('/user/login', qs.stringify({
 				'email': this.state.email,
 				'password': this.state.password,
@@ -190,12 +186,6 @@ class LoginForm extends Component {
 		}
 		else {
 			// Register
-			let formData = new FormData();
-			formData.set('email', this.state.email);
-			formData.set('username', this.state.username);
-			formData.set('password', this.state.password);
-			formData.set('passwordConf', this.state.passwordConf);
-
 			axios.post('/user/register', qs.stringify({
 				'email': this.state.email,
 				'username': this.state.username,

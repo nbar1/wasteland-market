@@ -37,39 +37,62 @@ var UserSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 		required: true,
-	}
+	},
 });
 
 UserSchema.plugin(uniqueValidator);
 
 // authenticate input against database
 UserSchema.statics.authenticate = (email, password, callback) => {
-	User.findOne({ email: email })
-		.exec((err, user) => {
-			if (err) {
-				return callback(err);
-			}
-			else if (!user) {
-				err = new Error('User not found.');
-				err.status = 401;
-				return callback(err);
+	User.findOne({ email: email }).exec((err, user) => {
+		if (err) {
+			return callback(err);
+		}
+		else if (!user) {
+			err = new Error('User not found.');
+			err.status = 401;
+			return callback(err);
+		}
+
+		bcrypt.compare(password, user.password, (err, result) => {
+			if (result === true) {
+				return callback(null, user);
 			}
 
-			bcrypt.compare(password, user.password, (err, result) => {
-				if (result === true) {
-					return callback(null, user);
-				}
-
-				return callback();
-			});
+			return callback();
 		});
+	});
+};
+
+// change password
+UserSchema.statics.changePassword = (userId, currentPassword, callback) => {
+	User.findOne({ _id: userId }).exec((err, user) => {
+		if (err) {
+			return callback(err);
+		}
+		else if (!user) {
+			err = new Error('User not found.');
+			err.status = 401;
+			return callback(err);
+		}
+
+		// check if current password matches input
+		bcrypt.compare(currentPassword, user.password, (err, result) => {
+			if (result === true) {
+				return callback(null, user);
+			}
+
+			err = new Error('Current password not valid');
+			err.status = 401;
+			return callback(err);
+		});
+	});
 };
 
 // hash password before saving it to the db
 UserSchema.pre('save', function(next) {
 	let user = this;
 	user.passwordConf = undefined;
-	user.dateRegistered = new Date();
 
 	bcrypt.hash(user.password, 10, (err, hash) => {
 		if (err) {

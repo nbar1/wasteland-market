@@ -8,9 +8,12 @@ import { Switch, Route } from 'react-router-dom';
 
 import Home from './components/Home';
 import Login from './components/Login';
+import Account from './components/Account';
 
 import Item from './components/Item';
 import CreateItem from './components/CreateItem';
+
+
 import NotFound from './components/NotFound';
 
 class App extends Component {
@@ -24,7 +27,7 @@ class App extends Component {
 						<Switch>
 							<Route exact path='/' component={Home} />
 							<Route path='/login' component={Login} />
-
+							<Route path='/account' component={Account} />
 
 							<Route path='/item/:item' component={Item} />
 							<Route path='/create-item' component={CreateItem} />

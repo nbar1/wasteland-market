@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Menu, MenuItem, IconButton } from '@material-ui/core';
 
@@ -52,7 +53,11 @@ class Dropdown extends Component {
 					open={open}
 				>
 					<MenuItem onClick={this.handleClose}>Profile</MenuItem>
-					<MenuItem onClick={this.handleClose}>My Account</MenuItem>
+					<Link to="/account">
+						<MenuItem onClick={this.handleClose}>
+							My Account
+						</MenuItem>
+					</Link>
 					<MenuItem onClick={this.logout}>Logout</MenuItem>
 				</Menu>
 			</div>
