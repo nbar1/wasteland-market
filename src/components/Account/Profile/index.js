@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Typography } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
-import Loading from '../Loading';
-import AuthContext from '../../context/AuthContext';
+import Loading from '../../Loading';
+import AuthContext from '../../../context/AuthContext';
 import Platforms from './Platforms';
 
 class Profile extends Component {

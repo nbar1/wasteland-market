@@ -8,11 +8,11 @@ import { Switch, Route } from 'react-router-dom';
 
 import Home from './components/Home';
 import Login from './components/Login';
-import Profile from './components/Profile';
+import Profile from './components/Account/Profile';
 import Account from './components/Account';
 
 import Item from './components/Item';
-import CreateItem from './components/CreateItem';
+import CreateItem from './components/Item/CreateItem';
 
 import NotFound from './components/NotFound';
 

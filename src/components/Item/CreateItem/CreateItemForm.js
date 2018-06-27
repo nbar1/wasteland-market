@@ -3,9 +3,6 @@ import { TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
-
-import Loading from '../Loading';
 
 const CreateItemWrapper = styled.div`
 	margin: 0 auto;
@@ -156,17 +153,6 @@ class LoginForm extends Component {
 	};
 
 	render() {
-		if (this.props.context.isCurrent === false) {
-			return <Loading fullPage={true} />;
-		}
-		else if (this.props.context.isLoggedIn === false) {
-			return <Redirect to="/login" />;
-		}
-
-		if (this.state.redirect) {
-			return <Redirect to={this.state.redirect} />;
-		}
-
 		return (
 			<CreateItemWrapper>
 				<Title>
