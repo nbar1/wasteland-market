@@ -105,8 +105,8 @@ class LoginForm extends Component {
 			[event.target.name]: event.target.value,
 		});
 
-		this.resetValidation()
-	}
+		this.resetValidation();
+	};
 
 	validateForm = () => {
 		let returnVal = true;
@@ -135,13 +135,17 @@ class LoginForm extends Component {
 			returnVal = false;
 		}
 
-		if (this.state.password !== '' && this.state.passwordConf !== '' && this.state.password !== this.state.passwordConf) {
+		if (
+			this.state.password !== '' &&
+			this.state.passwordConf !== '' &&
+			this.state.password !== this.state.passwordConf
+		) {
 			this.setState({ passwordMismatch: true });
 			returnVal = false;
 		}
 
 		return returnVal;
-	}
+	};
 
 	resetValidation = () => {
 		this.setState({
@@ -151,7 +155,7 @@ class LoginForm extends Component {
 			missingPasswordConf: false,
 			passwordMismatch: false,
 		});
-	}
+	};
 
 	clearForm() {
 		this.setState({
@@ -168,15 +172,22 @@ class LoginForm extends Component {
 
 		if (this.state.isLogin === true) {
 			// Login
-			axios.post('/user/login', qs.stringify({
-				'email': this.state.email,
-				'password': this.state.password,
-			}))
+			axios
+				.post(
+					'/user/login',
+					qs.stringify({
+						email: this.state.email,
+						password: this.state.password,
+					})
+				)
 				.then(res => {
 					this.props.context.login(res.data.user);
 				})
 				.catch((err, res) => {
-					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
+					let errorMessage =
+						err.response && err.response.data
+							? err.response.data.message
+							: 'Unknown Error';
 					this.setState({
 						generalError: errorMessage,
 					});
@@ -184,19 +195,26 @@ class LoginForm extends Component {
 		}
 		else {
 			// Register
-			axios.post('/user/register', qs.stringify({
-				'email': this.state.email,
-				'username': this.state.username,
-				'password': this.state.password,
-				'passwordConf': this.state.passwordConf,
-			}))
+			axios
+				.post(
+					'/user/register',
+					qs.stringify({
+						email: this.state.email,
+						username: this.state.username,
+						password: this.state.password,
+						passwordConf: this.state.passwordConf,
+					})
+				)
 				.then(res => {
 					if (res.data.success === true) {
 						window.location.href = '/';
 					}
 				})
 				.catch((err, res) => {
-					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
+					let errorMessage =
+						err.response && err.response.data
+							? err.response.data.message
+							: 'Unknown Error';
 					this.setState({
 						generalError: errorMessage,
 					});
@@ -204,22 +222,29 @@ class LoginForm extends Component {
 		}
 	};
 
+	componentWillMount() {
+		if (this.props.forceRegister === true && this.state.isLogin === true) {
+			this.setState({ isLogin: false });
+		}
+	}
+
 	render() {
 		if (this.props.context.isLoggedIn === true) {
-			return <Redirect to='/' />
+			return <Redirect to="/" />;
 		}
 
 		return (
 			<LoginWrapper>
 				<Title>
 					<div className="header">{this.state.isLogin ? 'Login' : 'Register'}</div>
-					<div className="subheader" onClick={this.toggleForm}>{this.state.isLogin ? 'Register' : 'Login'}</div>
+					<div className="subheader" onClick={this.toggleForm}>
+						{this.state.isLogin ? 'Register' : 'Login'}
+					</div>
 				</Title>
 				<FormWrapper onSubmit={this.submitForm}>
-
-					{this.state.generalError &&
+					{this.state.generalError && (
 						<GeneralError>{this.state.generalError}</GeneralError>
-					}
+					)}
 
 					<StyledTextField
 						required
@@ -231,10 +256,12 @@ class LoginForm extends Component {
 						value={this.state.email}
 						onChange={this.onChange}
 						error={this.state.missingEmail ? true : false}
-						helperText={this.state.missingEmail ? 'Please enter your Email Address' : false}
+						helperText={
+							this.state.missingEmail ? 'Please enter your Email Address' : false
+						}
 					/>
 
-					{!this.state.isLogin &&
+					{!this.state.isLogin && (
 						<StyledTextField
 							required
 							id="username"
@@ -245,9 +272,11 @@ class LoginForm extends Component {
 							value={this.state.username}
 							onChange={this.onChange}
 							error={this.state.missingUsername ? true : false}
-							helperText={this.state.missingUsername ? 'Please enter your Username' : false}
+							helperText={
+								this.state.missingUsername ? 'Please enter your Username' : false
+							}
 						/>
-					}
+					)}
 
 					<StyledTextField
 						type="password"
@@ -259,11 +288,13 @@ class LoginForm extends Component {
 						fullWidth={true}
 						value={this.state.password}
 						onChange={this.onChange}
-						error={this.state.missingPassword || this.state.passwordMismatch ? true : false}
+						error={
+							this.state.missingPassword || this.state.passwordMismatch ? true : false
+						}
 						helperText={this.state.missingPassword ? 'Please enter a password' : false}
 					/>
 
-					{!this.state.isLogin &&
+					{!this.state.isLogin && (
 						<StyledTextField
 							type="password"
 							required
@@ -274,22 +305,28 @@ class LoginForm extends Component {
 							fullWidth={true}
 							value={this.state.passwordConf}
 							onChange={this.onChange}
-							error={this.state.missingPasswordConf || this.state.passwordMismatch ? true : false}
-							helperText={this.state.missingPasswordConf ? 'Please confirm your password' : false}
+							error={
+								this.state.missingPasswordConf || this.state.passwordMismatch
+									? true
+									: false
+							}
+							helperText={
+								this.state.missingPasswordConf
+									? 'Please confirm your password'
+									: false
+							}
 						/>
-					}
+					)}
 
-					{this.state.passwordMismatch && !this.state.isLogin &&
-						<GeneralError>Your passwords do not match</GeneralError>
-					}
+					{this.state.passwordMismatch &&
+						!this.state.isLogin && (
+							<GeneralError>Your passwords do not match</GeneralError>
+						)}
 
 					<HiddenSubmit type="submit" />
 
 					<ButtonWrapper>
-						<StyledButton
-							variant="contained"
-							size="large"
-							onClick={this.submitForm}>
+						<StyledButton variant="contained" size="large" onClick={this.submitForm}>
 							{this.state.isLogin ? 'Login' : 'Register'}
 						</StyledButton>
 					</ButtonWrapper>
