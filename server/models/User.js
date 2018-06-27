@@ -30,6 +30,10 @@ var UserSchema = new mongoose.Schema({
 		default: false,
 		required: true,
 	},
+	platforms: {
+		type: Map,
+		of: String,
+	},
 	dateRegistered: Date,
 	registrationIP: String,
 	enabled: {

@@ -3,10 +3,9 @@ import { Typography } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import Loading from '../Loading';
 import AuthContext from '../../context/AuthContext';
-import ChangePassword from './ChangePassword';
-import ChangeEmail from './ChangeEmail';
+import Platforms from './Platforms';
 
-class Account extends Component {
+class Profile extends Component {
 	render() {
 		return (
 			<AuthContext>
@@ -19,11 +18,9 @@ class Account extends Component {
 						) : (
 							<div>
 								<Typography gutterBottom variant="headline" component="h1">
-									My Account
+									Profile
 								</Typography>
-								<ChangeEmail />
-								<br />
-								<ChangePassword />
+								<Platforms {...context} />
 							</div>
 						)}
 					</div>
@@ -33,4 +30,4 @@ class Account extends Component {
 	}
 }
 
-export default Account;
+export default Profile;

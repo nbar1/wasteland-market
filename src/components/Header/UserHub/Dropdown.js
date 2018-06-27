@@ -52,11 +52,11 @@ class Dropdown extends Component {
 					onClose={this.handleClose}
 					open={open}
 				>
-					<MenuItem onClick={this.handleClose}>Profile</MenuItem>
+					<Link to="/profile">
+						<MenuItem onClick={this.handleClose}>Profile</MenuItem>
+					</Link>
 					<Link to="/account">
-						<MenuItem onClick={this.handleClose}>
-							My Account
-						</MenuItem>
+						<MenuItem onClick={this.handleClose}>My Account</MenuItem>
 					</Link>
 					<MenuItem onClick={this.logout}>Logout</MenuItem>
 				</Menu>

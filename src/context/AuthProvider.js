@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AuthContext from './AuthContext';
 import axios from 'axios';
 
@@ -8,6 +9,7 @@ class AuthProvider extends Component {
 			isLoggedIn: true,
 			username: user.username,
 			premium: user.premium,
+			platforms: user.platforms,
 		});
 	}
 
@@ -16,6 +18,7 @@ class AuthProvider extends Component {
 			isLoggedIn: false,
 			username: null,
 			premium: false,
+			platforms: {},
 		});
 	}
 
@@ -24,6 +27,7 @@ class AuthProvider extends Component {
 		isCurrent: false,
 		username: null,
 		premium: false,
+		platforms: {},
 		login: this.login,
 		logout: this.logout,
 	}
@@ -38,6 +42,7 @@ class AuthProvider extends Component {
 					isLoggedIn: true,
 					username: res.data.username,
 					premium: res.data.premium,
+					platforms: res.data.platforms,
 				});
 			})
 			.catch(err => {
@@ -46,6 +51,7 @@ class AuthProvider extends Component {
 					isLoggedIn: false,
 					username: null,
 					premium: false,
+					platforms: {},
 				});
 			});
 	}
@@ -58,5 +64,9 @@ class AuthProvider extends Component {
 		);
 	}
 }
+
+AuthProvider.propTypes = {
+	children: PropTypes.array,
+};
 
 export default AuthProvider;

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var User = require('../models/User');
+var Login = require('../models/Login');
 var bcrypt = require('bcrypt');
 
 // register
@@ -23,6 +24,11 @@ router.post('/register', (req, res, next) => {
 		passwordConf: req.body.passwordConf,
 		dateRegistered: new Date(),
 		registrationIP: req.ip,
+		platforms: {
+			xbox: '',
+			playstation: '',
+			steam: '',
+		},
 	};
 
 	User.create(userData, (err, user) => {
@@ -74,12 +80,21 @@ router.post('/login', (req, res, next) => {
 		req.session.user = {
 			username: user.username,
 			premium: user.premium,
+			platforms: user.platforms,
 		};
+
+		Login.create({
+			userID: user._id,
+			username: user.username,
+			date: new Date(),
+			ip: req.ip,
+		});
 
 		return res.send({
 			user: {
 				username: user.username,
 				premium: user.premium,
+				platforms: user.platforms,
 			},
 		});
 	});
@@ -197,12 +212,46 @@ router.post('/change-password', (req, res, next) => {
 	});
 });
 
+// update platforms
+router.post('/update-platforms', (req, res, next) => {
+	let platforms = {
+		xbox: req.body.xbox || '',
+		playstation: req.body.playstation || '',
+		steam: req.body.steam || '',
+	};
+
+	User.findOneAndUpdate(
+		{ _id: req.session.userId },
+		{ $set: { platforms: platforms } },
+		{ upsert: false },
+		err => {
+			if (err) {
+				return next({
+					status: 401,
+					message: {
+						success: false,
+						message: 'Unable to update platforms in database',
+					},
+				});
+			}
+
+			return res.send({
+				success: true,
+				message: 'Your platforms have been updated.',
+			});
+		}
+	);
+});
+
 // authStatus
 router.get('/authStatus', requiresLogin, (req, res, next) => {
-	return res.send({
-		loggedIn: true,
-		username: req.session.user.username,
-		premium: req.session.user.premium,
+	User.findOne({ _id: req.session.userId }, function(err, doc) {
+		return res.send({
+			loggedIn: true,
+			username: doc.username,
+			premium: doc.premium,
+			platforms: doc.platforms,
+		});
 	});
 });
 
