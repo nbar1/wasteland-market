@@ -42,11 +42,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // user routes
 var userRoutes = require('./routes/user');
-app.use('/user', userRoutes);
+app.use('/api/user', userRoutes);
 
 // item routes
 var itemRoutes = require('./routes/item');
 app.use('/api/item', itemRoutes);
+
+// market routes
+var marketRoutes = require('./routes/market');
+app.use('/api/market', marketRoutes);
 
 // homepage
 app.get('/', function(req, res) {

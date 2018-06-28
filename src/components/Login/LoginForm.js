@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from 'react-helmet';
 import { TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
@@ -77,6 +78,11 @@ const HiddenSubmit = styled.input`
 `;
 
 class LoginForm extends Component {
+	/**
+	 * state
+	 *
+	 * @type {object}
+	 */
 	state = {
 		isLogin: true,
 		email: '',
@@ -91,6 +97,11 @@ class LoginForm extends Component {
 		passwordMismatch: false,
 	};
 
+	/**
+	 * toggleForm
+	 *
+	 * @returns {void}
+	 */
 	toggleForm = () => {
 		this.setState({
 			isLogin: !this.state.isLogin,
@@ -100,6 +111,12 @@ class LoginForm extends Component {
 		this.clearForm();
 	};
 
+	/**
+	 * onChange
+	 *
+	 * @param {object} event
+	 * @returns {void}
+	 */
 	onChange = event => {
 		this.setState({
 			[event.target.name]: event.target.value,
@@ -108,6 +125,11 @@ class LoginForm extends Component {
 		this.resetValidation();
 	};
 
+	/**
+	 * validateForm
+	 *
+	 * @returns {bool}
+	 */
 	validateForm = () => {
 		let returnVal = true;
 
@@ -147,6 +169,11 @@ class LoginForm extends Component {
 		return returnVal;
 	};
 
+	/**
+	 * resetValidation
+	 *
+	 * @returns {void}
+	 */
 	resetValidation = () => {
 		this.setState({
 			missingEmail: false,
@@ -157,6 +184,11 @@ class LoginForm extends Component {
 		});
 	};
 
+	/**
+	 * clearForm
+	 *
+	 * @returns {void}
+	 */
 	clearForm() {
 		this.setState({
 			email: '',
@@ -166,6 +198,12 @@ class LoginForm extends Component {
 		});
 	}
 
+	/**
+	 * submitForm
+	 *
+	 * @param {object} event
+	 * @returns {void}
+	 */
 	submitForm = event => {
 		if (event) event.preventDefault();
 		if (this.validateForm() === false) return;
@@ -174,7 +212,7 @@ class LoginForm extends Component {
 			// Login
 			axios
 				.post(
-					'/user/login',
+					'/api/user/login',
 					qs.stringify({
 						email: this.state.email,
 						password: this.state.password,
@@ -197,7 +235,7 @@ class LoginForm extends Component {
 			// Register
 			axios
 				.post(
-					'/user/register',
+					'/api/user/register',
 					qs.stringify({
 						email: this.state.email,
 						username: this.state.username,
@@ -222,12 +260,22 @@ class LoginForm extends Component {
 		}
 	};
 
+	/**
+	 * componentWillMount
+	 *
+	 * @returns {void}
+	 */
 	componentWillMount() {
 		if (this.props.forceRegister === true && this.state.isLogin === true) {
 			this.setState({ isLogin: false });
 		}
 	}
 
+	/**
+	 * render
+	 *
+	 * @returns {jsx}
+	 */
 	render() {
 		if (this.props.context.isLoggedIn === true) {
 			return <Redirect to="/" />;
@@ -235,6 +283,15 @@ class LoginForm extends Component {
 
 		return (
 			<LoginWrapper>
+				{this.state.isLogin ? (
+					<Helmet>
+						<title>Wasteland Market - Login</title>
+					</Helmet>
+				) : (
+					<Helmet>
+						<title>Wasteland Market - Register</title>
+					</Helmet>
+				)}
 				<Title>
 					<div className="header">{this.state.isLogin ? 'Login' : 'Register'}</div>
 					<div className="subheader" onClick={this.toggleForm}>

@@ -89,7 +89,7 @@ class ChangeEmail extends Component {
 		// Register
 		axios
 			.post(
-				'/user/change-email',
+				'/api/user/change-email',
 				qs.stringify({
 					email: this.state.email,
 				})

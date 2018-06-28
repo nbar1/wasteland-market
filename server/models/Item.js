@@ -26,7 +26,7 @@ var ItemSchema = new mongoose.Schema({
 		type: Boolean,
 		default: true,
 		required: true,
-	}
+	},
 });
 
 ItemSchema.plugin(uniqueValidator);

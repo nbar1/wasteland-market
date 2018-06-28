@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Helmet from 'react-helmet';
 import { Typography } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
 import Loading from '../Loading';
@@ -18,6 +19,9 @@ class Account extends Component {
 							<Redirect to="/login" />
 						) : (
 							<div>
+								<Helmet>
+									<title>Wasteland Market - My Account</title>
+								</Helmet>
 								<Typography gutterBottom variant="headline" component="h1">
 									My Account
 								</Typography>

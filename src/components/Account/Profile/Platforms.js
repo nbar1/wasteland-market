@@ -8,8 +8,38 @@ import qs from 'querystring';
 const StyledTextField = styled(TextField)`
 	&& {
 		display: block;
+		margin: 20px 0 20px 30px;
+		position: relative;
 		text-align: center;
 		width: 300px;
+
+		&:before {
+			font-family: 'Font Awesome 5 Brands';
+			font-size: 20px;
+			position: absolute;
+			margin-left: -30px;
+			margin-top: 20px;
+		}
+
+		&.discord:before {
+			color: #7289da;
+			content: '\f392';
+		}
+
+		&.xbox:before {
+			color: #107c11;
+			content: '\f412';
+		}
+
+		&.playstation:before {
+			color: #0072ce;
+			content: '\f3df';
+		}
+
+		&.steam:before {
+			color: #171a21;
+			content: '\f1b6';
+		}
 	}
 `;
 
@@ -50,6 +80,7 @@ class Platforms extends Component {
 			xbox: '',
 			playstation: '',
 			steam: '',
+			discord: '',
 			generalError: '',
 			successMessage: '',
 		};
@@ -58,6 +89,7 @@ class Platforms extends Component {
 			this.state.xbox = props.platforms.xbox;
 			this.state.playstation = props.platforms.playstation;
 			this.state.steam = props.platforms.steam;
+			this.state.discord = props.platforms.discord;
 		}
 	}
 
@@ -73,11 +105,12 @@ class Platforms extends Component {
 		// Register
 		axios
 			.post(
-				'/user/update-platforms',
+				'/api/user/update-platforms',
 				qs.stringify({
 					xbox: this.state.xbox,
 					playstation: this.state.playstation,
 					steam: this.state.steam,
+					discord: this.state.discord,
 				})
 			)
 			.then(res => {
@@ -88,8 +121,7 @@ class Platforms extends Component {
 				}
 			})
 			.catch(err => {
-				let errorMessage =
-					err.response && err.response.data ? err.response.data.message : 'Unknown Error';
+				let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
 				this.setState({
 					generalError: errorMessage,
 				});
@@ -105,18 +137,15 @@ class Platforms extends Component {
 							Platforms
 						</Typography>
 						<form onSubmit={this.submitForm}>
-							{this.state.generalError && (
-								<GeneralError>{this.state.generalError}</GeneralError>
-							)}
-							{this.state.successMessage && (
-								<SuccessMessage>{this.state.successMessage}</SuccessMessage>
-							)}
+							{this.state.generalError && <GeneralError>{this.state.generalError}</GeneralError>}
+							{this.state.successMessage && <SuccessMessage>{this.state.successMessage}</SuccessMessage>}
 
 							<StyledTextField
 								type="text"
 								id="xbox"
 								name="xbox"
 								label="Xbox Gamertag"
+								className="xbox"
 								margin="normal"
 								fullWidth={true}
 								value={this.state.xbox}
@@ -128,6 +157,7 @@ class Platforms extends Component {
 								id="playstation"
 								name="playstation"
 								label="PSN Name"
+								className="playstation"
 								margin="normal"
 								fullWidth={true}
 								value={this.state.playstation}
@@ -136,9 +166,22 @@ class Platforms extends Component {
 
 							<StyledTextField
 								type="text"
+								id="discord"
+								name="discord"
+								label="Discord"
+								className="discord"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.discord}
+								onChange={this.onChange}
+							/>
+
+							<StyledTextField
+								type="text"
 								id="steam"
 								name="steam"
 								label="Steam ID"
+								className="steam"
 								margin="normal"
 								fullWidth={true}
 								value={this.state.steam}
@@ -148,11 +191,7 @@ class Platforms extends Component {
 							<HiddenSubmit type="submit" />
 
 							<ButtonWrapper>
-								<StyledButton
-									variant="contained"
-									size="large"
-									onClick={this.submitForm}
-								>
+								<StyledButton variant="contained" size="large" onClick={this.submitForm}>
 									Update Platforms
 								</StyledButton>
 							</ButtonWrapper>

@@ -35,7 +35,7 @@ class AuthProvider extends Component {
 	componentDidMount = () => {
 		if (this.state.isLoggedIn !== false) return;
 
-		axios.get('/user/authStatus')
+		axios.get('/api/user/authStatus')
 			.then(res => {
 				this.setState({
 					isCurrent: true,

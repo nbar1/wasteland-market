@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 import Details from './Details';
 import Price from './Price';
-import Graph from '../Graph';
-import Orders from '../Orders';
+import Graph from './Graph';
+import Orders from './Orders';
 
 const Image = styled.div`
 	box-sizing: border-box;

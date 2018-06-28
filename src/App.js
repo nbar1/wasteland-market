@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Helmet from 'react-helmet';
 import AuthProvider from './context/AuthProvider';
 import './App.css';
 import Header from './components/Header';
@@ -11,7 +12,8 @@ import Login from './components/Login';
 import Profile from './components/Account/Profile';
 import Account from './components/Account';
 
-import Item from './components/Item';
+import Market from './components/Market';
+import Order from './components/Market/Order';
 import CreateItem from './components/Item/CreateItem';
 
 import NotFound from './components/NotFound';
@@ -21,6 +23,9 @@ class App extends Component {
 		return (
 			<div className="App">
 				<AuthProvider>
+					<Helmet>
+						<title>Wasteland Market</title>
+					</Helmet>
 					<Header />
 					<Navigation />
 					<ContentWrapper>
@@ -31,7 +36,9 @@ class App extends Component {
 							<Route path="/profile" component={Profile} />
 							<Route path="/account" component={Account} />
 
-							<Route path="/item/:item" component={Item} />
+							<Route path="/order" component={Order} />
+							<Route path="/market" component={Market} />
+							<Route path="/market/:item" component={Market} />
 							<Route path="/create-item" component={CreateItem} />
 
 							<Route path="*" component={NotFound} />

@@ -118,7 +118,7 @@ class ChangePassword extends Component {
 		// Register
 		axios
 			.post(
-				'/user/change-password',
+				'/api/user/change-password',
 				qs.stringify({
 					currentPassword: this.state.currentPassword,
 					newPassword: this.state.newPassword,
