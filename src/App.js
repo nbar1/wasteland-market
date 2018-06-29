@@ -14,6 +14,7 @@ import Account from './components/Account';
 
 import Market from './components/Market';
 import Order from './components/Market/Order';
+import OrderSuccess from './components/Market/Order/OrderSuccess';
 import CreateItem from './components/Item/CreateItem';
 
 import NotFound from './components/NotFound';
@@ -31,15 +32,16 @@ class App extends Component {
 					<ContentWrapper>
 						<Switch>
 							<Route exact path="/" component={Home} />
-							<Route path="/login" component={Login} />
-							<Route path="/register" component={Login} />
-							<Route path="/profile" component={Profile} />
-							<Route path="/account" component={Account} />
+							<Route exact path="/login" component={Login} />
+							<Route exact path="/register" component={Login} />
+							<Route exact path="/profile" component={Profile} />
+							<Route exact path="/account" component={Account} />
 
-							<Route path="/order" component={Order} />
-							<Route path="/market" component={Market} />
-							<Route path="/market/:item" component={Market} />
-							<Route path="/create-item" component={CreateItem} />
+							<Route exact path="/order" component={Order} />
+							<Route exact path="/order/success" component={OrderSuccess} />
+							<Route exact path="/market" component={Market} />
+							<Route exact path="/market/:item" component={Market} />
+							<Route exact path="/create-item" component={CreateItem} />
 
 							<Route path="*" component={NotFound} />
 						</Switch>

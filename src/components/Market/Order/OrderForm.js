@@ -15,10 +15,18 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
+import { Redirect } from 'react-router-dom';
 
 const StyledCard = styled(Card)`
 	&& {
 		margin: 15px 15px 30px;
+	}
+`;
+
+const StyledSmallCard = styled(Card)`
+	&& {
+		margin: 15px;
+		width: 400px;
 	}
 `;
 
@@ -37,7 +45,7 @@ const StyledMultilineTextField = styled(TextField)`
 `;
 
 const ButtonWrapper = styled.div`
-	margin: 0 auto 20px;
+	margin: -10px 0 30px 20px;
 `;
 
 const StyledButton = styled(Button)`
@@ -66,32 +74,121 @@ const HiddenSubmit = styled.input`
 `;
 
 class Platforms extends Component {
-	constructor(props) {
-		super();
+	/**
+	 * state
+	 *
+	 * @type {object}
+	 */
+	state = {
+		type: 'buy',
+		platform: null,
+		item: '',
+		price: '',
+		quantity: '1',
+		unusual: false,
+		notes: '',
+		generalError: '',
+		successMessage: '',
+		includeDiscord: false,
+		includeSteam: false,
+		missingOrderType: false,
+		missingItemName: false,
+		missingPrice: false,
+		missingQuantity: false,
+		missingPlatform: false,
+		missingPCContact: false,
+		missingUnusualNotes: false,
+	};
 
-		this.state = {
-			type: 'buy',
-			platform: null,
-			item: '',
-			price: '',
-			quantity: '',
-			unusual: false,
-			notes: '',
-			generalError: '',
-			successMessage: '',
-			includeDiscord: false,
-			includeSteam: false,
-		};
-	}
-
+	/**
+	 * onChange
+	 *
+	 * @param {object} event
+	 * @returns {void}
+	 */
 	onChange = event => {
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
+
+		this.resetValidation();
 	};
+
+	/**
+	 * validateForm
+	 *
+	 * @returns {bool}
+	 */
+	validateForm = () => {
+		let returnVal = true;
+
+		this.setState({ generalError: '' });
+
+		if (this.state.type === '') {
+			this.setState({ missingOrderType: true });
+			returnVal = false;
+		}
+
+		if (this.state.item === '') {
+			this.setState({ missingItemName: true });
+			returnVal = false;
+		}
+
+		if (this.state.price === '' || this.state.price < 1) {
+			this.setState({ missingPrice: true });
+			returnVal = false;
+		}
+
+		if (this.state.quantity === '' || this.state.quantity < 1) {
+			this.setState({ missingQuantity: true });
+			returnVal = false;
+		}
+
+		if (this.state.platform === null) {
+			this.setState({ missingPlatform: true });
+			returnVal = false;
+		}
+
+		if (this.state.platform === 'pc' && !this.state.includeDiscord && !this.state.includeSteam) {
+			this.setState({ missingPCContact: true });
+			returnVal = false;
+		}
+
+		if (this.state.unusual && this.state.notes === '') {
+			this.setState({ missingUnusualNotes: true });
+			returnVal = false;
+		}
+
+		return returnVal;
+	};
+
+	/**
+	 * resetValidation
+	 *
+	 * @returns {void}
+	 */
+	resetValidation = () => {
+		this.setState({
+			missingOrderType: false,
+			missingItemName: false,
+			missingPrice: false,
+			missingQuantity: false,
+			missingPlatform: false,
+			missingPCContact: false,
+			missingUnusualNotes: false,
+		});
+	};
+
+	/**
+	 * submitForm
+	 *
+	 * @param {object} event
+	 * @returns {void}
+	 */
 
 	submitForm = event => {
 		if (event) event.preventDefault();
+		if (this.validateForm() === false) return;
 
 		// Register
 		axios
@@ -110,9 +207,9 @@ class Platforms extends Component {
 				})
 			)
 			.then(res => {
-				if (res.data.success === true) {
+				if (res.data.success === true && res.data.message === 'order-created') {
 					this.setState({
-						successMessage: res.data.message,
+						orderSuccess: true,
 					});
 				}
 			})
@@ -124,7 +221,16 @@ class Platforms extends Component {
 			});
 	};
 
+	/**
+	 * render
+	 *
+	 * @returns {jsx}
+	 */
 	render() {
+		if (this.state.orderSuccess) {
+			return <Redirect to="/order/success" />;
+		}
+
 		return (
 			<div>
 				<form onSubmit={this.submitForm}>
@@ -159,6 +265,8 @@ class Platforms extends Component {
 								fullWidth={true}
 								value={this.state.name}
 								onChange={this.onChange}
+								error={this.state.missingItemName ? true : false}
+								helperText={this.state.missingItemName ? 'Please enter an item name.' : false}
 							/>
 							<FormControlLabel
 								control={
@@ -195,6 +303,8 @@ class Platforms extends Component {
 								fullWidth={true}
 								value={this.state.price}
 								onChange={this.onChange}
+								error={this.state.missingPrice ? true : false}
+								helperText={this.state.missingPrice ? 'Please enter a valid amount.' : false}
 							/>
 
 							<StyledTextField
@@ -207,6 +317,8 @@ class Platforms extends Component {
 								fullWidth={true}
 								value={this.state.quantity}
 								onChange={this.onChange}
+								error={this.state.missingQuantity ? true : false}
+								helperText={this.state.missingQuantity ? 'Please enter a valid quantity.' : false}
 							/>
 
 							{this.state.price &&
@@ -237,6 +349,12 @@ class Platforms extends Component {
 								margin="normal"
 								value={this.state.notes}
 								onChange={this.onChange}
+								error={this.state.missingUnusualNotes ? true : false}
+								helperText={
+									this.state.missingUnusualNotes
+										? 'When marking an item as unusual, you must explain the item attributes.'
+										: false
+								}
 							/>
 						</CardContent>
 					</StyledCard>
@@ -324,12 +442,51 @@ class Platforms extends Component {
 												: 'Include Steam ID'
 										}
 									/>
+									{this.state.missingPlatform && (
+										<GeneralError>You must select a platform.</GeneralError>
+									)}
+									{this.state.missingPCContact && (
+										<GeneralError>
+											When choosing PC as your platform, you must include a contact method.
+										</GeneralError>
+									)}
 								</RadioGroup>
 							</FormControl>
 						</CardContent>
 					</StyledCard>
 
+					{false && (
+						<StyledCard raised={true}>
+							<CardContent>
+								<Typography gutterBottom variant="headline" component="h2">
+									Review Order
+								</Typography>
+								<StyledSmallCard raised={true}>
+									<CardContent>
+										<Typography color="textSecondary">
+											{this.state.type === 'buy' ? 'Buy' : 'Sell'} Order
+										</Typography>
+										<Typography variant="headline" component="h2">
+											{this.state.item}
+										</Typography>
+										<Typography component="p">Price: {this.state.price}</Typography>
+										<Typography component="p">Quantity: {this.state.quantity}</Typography>
+										<Typography component="p">
+											Total: {this.state.price * this.state.quantity}
+										</Typography>
+									</CardContent>
+								</StyledSmallCard>
+								<ButtonWrapper>
+									<StyledButton variant="contained" size="large" onClick={this.submitForm}>
+										Create Order
+									</StyledButton>
+								</ButtonWrapper>
+							</CardContent>
+						</StyledCard>
+					)}
+
 					<HiddenSubmit type="submit" />
+
 					<ButtonWrapper>
 						<StyledButton variant="contained" size="large" onClick={this.submitForm}>
 							Create Order

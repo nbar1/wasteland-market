@@ -22,6 +22,18 @@ var OrderSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	platform: {
+		type: String,
+		required: true,
+	},
+	includeDiscord: {
+		type: Boolean,
+		default: false,
+	},
+	includeSteam: {
+		type: Boolean,
+		default: false,
+	},
 	notes: {
 		type: String,
 	},
@@ -42,13 +54,6 @@ var OrderSchema = new mongoose.Schema({
 		default: true,
 		required: true,
 	},
-});
-
-OrderSchema.pre('save', function(next) {
-	let order = this;
-	order.dateAdded = new Date();
-
-	next();
 });
 
 var Order = mongoose.model('Order', OrderSchema);
