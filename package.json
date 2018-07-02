@@ -17,6 +17,7 @@
 		"nodemon": "^1.17.5",
 		"querystring": "^0.2.0",
 		"react": "^16.4.1",
+		"react-autosuggest": "^9.3.4",
 		"react-dom": "^16.4.1",
 		"react-helmet": "^5.2.0",
 		"react-router-dom": "^4.3.1",

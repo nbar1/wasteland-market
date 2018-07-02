@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Autosuggest from 'react-autosuggest';
 import {
 	Card,
 	Typography,
@@ -20,6 +21,15 @@ import { Redirect } from 'react-router-dom';
 const StyledCard = styled(Card)`
 	&& {
 		margin: 15px 15px 30px;
+		overflow: visible;
+
+		.react-autosuggest__container {
+			position: relative;
+		}
+
+		.react-autosuggest__suggestions-container {
+			z-index: 10;
+		}
 	}
 `;
 
@@ -73,6 +83,44 @@ const HiddenSubmit = styled.input`
 	width: 0;
 `;
 
+const SearchBarWrapper = styled.div`
+	.react-autosuggest__suggestions-container {
+		background: #eee;
+		color: #000;
+		left: 0;
+		position: absolute;
+		top: 48px;
+		width: ${props => props.width || 300}px;
+	}
+
+	ul {
+		border: 1px solid #999;
+		border-top: none;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		text-align: left;
+
+		li {
+			cursor: pointer;
+			font-size: 18px;
+			padding: 10px;
+
+			&:hover {
+				background: #999;
+			}
+		}
+	}
+`;
+
+const LightText = styled.span`
+	color: #999;
+`;
+
+const renderSuggestion = suggestion => <div>{suggestion.name}</div>;
+
+const getSuggestionValue = suggestion => suggestion.name;
+
 class Platforms extends Component {
 	/**
 	 * state
@@ -83,6 +131,7 @@ class Platforms extends Component {
 		type: 'buy',
 		platform: null,
 		item: '',
+		itemId: null,
 		price: '',
 		quantity: '1',
 		unusual: false,
@@ -98,6 +147,7 @@ class Platforms extends Component {
 		missingPlatform: false,
 		missingPCContact: false,
 		missingUnusualNotes: false,
+		suggestions: [],
 	};
 
 	/**
@@ -129,7 +179,7 @@ class Platforms extends Component {
 			returnVal = false;
 		}
 
-		if (this.state.item === '') {
+		if (this.state.itemId === null) {
 			this.setState({ missingItemName: true });
 			returnVal = false;
 		}
@@ -198,6 +248,7 @@ class Platforms extends Component {
 					type: this.state.type,
 					platform: this.state.platform,
 					item: this.state.item,
+					itemId: this.state.itemId,
 					price: this.state.price,
 					quantity: this.state.quantity,
 					unusual: this.state.unusual,
@@ -219,6 +270,53 @@ class Platforms extends Component {
 					generalError: errorMessage,
 				});
 			});
+	};
+
+	onItemNameChange = (event, { newValue }) => {
+		let itemId;
+
+		try {
+			itemId = this.state.suggestions.filter(item => item.name === newValue)[0]._id;
+		}
+		catch (ex) {
+			itemId = null;
+		}
+
+		this.setState({
+			item: newValue,
+			itemId,
+		});
+	};
+
+	// Autosuggest will call this function every time you need to update suggestions.
+	// You already implemented this logic above, so just use it.
+	onSuggestionsFetchRequested = ({ value }) => {
+		axios
+			.post(
+				'/api/search/autocomplete',
+				qs.stringify({
+					query: value,
+				})
+			)
+			.then(res => {
+				if (res.data) {
+					this.setState({
+						suggestions: res.data.data,
+					});
+				}
+			})
+			.catch((err, res) => {
+				this.setState({
+					suggestions: [],
+				});
+			});
+	};
+
+	// Autosuggest will call this function every time you need to clear suggestions.
+	onSuggestionsClearRequested = () => {
+		this.setState({
+			suggestions: [],
+		});
 	};
 
 	/**
@@ -255,19 +353,40 @@ class Platforms extends Component {
 							<Typography gutterBottom variant="headline" component="h2">
 								Item Details
 							</Typography>
-							<StyledTextField
-								type="text"
-								id="item"
-								name="item"
-								label="Item Name"
-								margin="normal"
-								autoComplete="off"
-								fullWidth={true}
-								value={this.state.name}
-								onChange={this.onChange}
-								error={this.state.missingItemName ? true : false}
-								helperText={this.state.missingItemName ? 'Please enter an item name.' : false}
-							/>
+							<SearchBarWrapper>
+								<Autosuggest
+									renderInputComponent={inputProps => {
+										const { ref, ...other } = inputProps;
+										return (
+											<StyledTextField
+												type="text"
+												id="item"
+												name="item"
+												label="Item Name"
+												margin="normal"
+												autoComplete="off"
+												fullWidth={true}
+												style={{ position: 'relative'}}
+												error={this.state.missingItemName ? true : false}
+												helperText={
+													this.state.missingItemName ? 'Please select a valid item.' : false
+												}
+												InputProps={{ inputRef: ref, ...other }}
+											/>
+										);
+									}}
+									value={this.state.item}
+									suggestions={this.state.suggestions}
+									onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+									onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+									getSuggestionValue={getSuggestionValue}
+									renderSuggestion={renderSuggestion}
+									inputProps={{
+										value: this.state.item,
+										onChange: this.onItemNameChange,
+									}}
+								/>
+							</SearchBarWrapper>
 							<FormControlLabel
 								control={
 									<Checkbox
@@ -324,7 +443,7 @@ class Platforms extends Component {
 							{this.state.price &&
 								this.state.quantity && (
 									<Typography gutterBottom variant="headline">
-										{this.state.price} x {this.state.quantity} ={' '}
+										<LightText>{this.state.price} x {this.state.quantity} ={' '}</LightText>
 										{this.state.price * this.state.quantity}
 									</Typography>
 								)}

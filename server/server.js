@@ -52,6 +52,10 @@ app.use('/api/item', itemRoutes);
 var marketRoutes = require('./routes/market');
 app.use('/api/market', marketRoutes);
 
+// search routes
+var searchRoutes = require('./routes/search');
+app.use('/api/search', searchRoutes);
+
 // homepage
 app.get('/', function(req, res) {
 	res.sendFile('../build/index.html');

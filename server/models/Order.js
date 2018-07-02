@@ -9,6 +9,10 @@ var OrderSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	itemId: {
+		type: String,
+		required: true,
+	},
 	unusual: {
 		type: Boolean,
 		default: false,

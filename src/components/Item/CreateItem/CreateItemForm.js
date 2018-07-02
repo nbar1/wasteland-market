@@ -3,6 +3,8 @@ import { TextField, Button, Card, CardContent, Typography } from '@material-ui/c
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
+import Helmet from 'react-helmet';
 
 const StyledCard = styled(Card)`
 	margin: 10vh auto;
@@ -41,7 +43,7 @@ const HelpText = styled.div`
 	}
 `;
 
-class LoginForm extends Component {
+class CreateItemForm extends Component {
 	state = {
 		item: '',
 		generalError: '',
@@ -113,52 +115,62 @@ class LoginForm extends Component {
 	};
 
 	render() {
+		if (this.state.redirect) {
+			return <Redirect to={this.state.redirect} />;
+		}
+
 		return (
-			<StyledCard raised={true}>
-				<form>
-					<CardContent>
-						<Typography gutterBottom variant="headline" component="h2">
-							Add Item
-						</Typography>
-
-						<HelpText>
-							During the BETA, an added item will be available on the market immediately. We ask that you
-							take extra care to ensure that capitalization, punctuation, and format of the name is
-							correct and matches what is in the game. We thank you for taking part in the Wasteland
-							Market BETA!
-							<ul>
-								<li>Ensure item name matches the in-game item name.</li>
-								<li>Item image and attributes will be added by the development team.</li>
-								<li>Abuse of this system will limit your ability to use Wasteland Market.</li>
-							</ul>
-						</HelpText>
-						{this.state.generalError && <GeneralError>{this.state.generalError}</GeneralError>}
-
-						<TextField
-							required
-							id="item"
-							name="item"
-							label="Item Name"
-							margin="normal"
-							fullWidth={true}
-							value={this.state.item}
-							onChange={this.onChange}
-							error={this.state.missingItem ? true : false}
-							helperText={this.state.missingItem ? 'Please enter an item name' : false}
-						/>
-
-						<HiddenSubmit type="submit" />
-
-						<div>
-							<StyledButton variant="contained" size="large" onClick={this.submitForm}>
+			<div>
+				<Helmet>
+					<title>Wasteland Market - Add Item</title>
+				</Helmet>
+				<StyledCard raised={true}>
+					<form onSubmit={this.submitForm}>
+						<CardContent>
+							<Typography gutterBottom variant="headline" component="h2">
 								Add Item
-							</StyledButton>
-						</div>
-					</CardContent>
-				</form>
-			</StyledCard>
+							</Typography>
+
+							<HelpText>
+								During the BETA, an added item will be available on the market immediately. We ask that
+								you take extra care to ensure that capitalization, punctuation, and format of the name
+								is correct and matches what is in the game. We thank you for taking part in the
+								Wasteland Market BETA!
+								<ul>
+									<li>Ensure item name matches the in-game item name.</li>
+									<li>Item image and attributes will be added by the development team.</li>
+									<li>Abuse of this system will limit your ability to use Wasteland Market.</li>
+								</ul>
+							</HelpText>
+							{this.state.generalError && <GeneralError>{this.state.generalError}</GeneralError>}
+
+							<TextField
+								required
+								id="item"
+								name="item"
+								label="Item Name"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.item}
+								onChange={this.onChange}
+								error={this.state.missingItem ? true : false}
+								helperText={this.state.missingItem ? 'Please enter an item name' : false}
+							/>
+
+							<HiddenSubmit type="submit" />
+
+							<div>
+								<StyledButton variant="contained" size="large" onClick={this.submitForm}>
+									Add Item
+								</StyledButton>
+							</div>
+						</CardContent>
+						<HiddenSubmit type="submit" />
+					</form>
+				</StyledCard>
+			</div>
 		);
 	}
 }
 
-export default LoginForm;
+export default CreateItemForm;
