@@ -32,7 +32,7 @@ class Details extends Component {
 
 Details.propTypes = {
 	name: PropTypes.string.isRequired,
-	category: PropTypes.string.isRequired,
+	category: PropTypes.string,
 	attributes: PropTypes.array,
 };
 

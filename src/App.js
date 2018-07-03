@@ -14,6 +14,7 @@ import Account from './components/Account';
 
 import Market from './components/Market';
 import Order from './components/Market/Order';
+import OrderMock from './components/Market/Order/Mock';
 import OrderSuccess from './components/Market/Order/OrderSuccess';
 import CreateItem from './components/Item/CreateItem';
 
@@ -38,6 +39,7 @@ class App extends Component {
 							<Route exact path="/account" component={Account} />
 
 							<Route exact path="/order" component={Order} />
+							<Route exact path="/order/mock" component={OrderMock} />
 							<Route exact path="/order/success" component={OrderSuccess} />
 							<Route exact path="/market" component={Market} />
 							<Route exact path="/market/:item" component={Market} />

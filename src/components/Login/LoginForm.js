@@ -265,7 +265,7 @@ class LoginForm extends Component {
 	 *
 	 * @returns {void}
 	 */
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		if (this.props.forceRegister === true && this.state.isLogin === true) {
 			this.setState({ isLogin: false });
 		}

@@ -11,7 +11,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 		addedByIP: req.ip,
 	};
 
-	Item.create(itemData, (err, user) => {
+	Item.create(itemData, (err, item) => {
 		if (err) {
 			let errorMessage = 'Unknown Error';
 
@@ -20,7 +20,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 			}
 
 			return next({
-				status: 401,
+				status: 400,
 				message: {
 					success: false,
 					message: errorMessage,
@@ -37,12 +37,31 @@ router.post('/create', requiresLogin, (req, res, next) => {
 });
 
 // item info
-router.get('/view/:id', requiresLogin, (req, res, next) => {
-	console.log(req.params);
+router.get('/', (req, res, next) => {
+	Item.find({ name: new RegExp(`^${req.query.name}`, 'i') })
+		.select('name category image')
+		.exec((err, data) => {
+			if (err) {
+				let errorMessage = 'Unknown Error';
 
-	next({
-		message: 'hello',
-	});
+				return next({
+					status: 400,
+					message: {
+						success: false,
+						message: errorMessage,
+					},
+				});
+			}
+
+			if (data.length === 0) {
+				return next({
+					status: 400,
+					message: 'Item not found',
+				});
+			}
+
+			return res.send(data[0]);
+		});
 });
 
 module.exports = router;

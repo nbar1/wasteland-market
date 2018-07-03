@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import Helmet from 'react-helmet';
 
 import Details from './Details';
 import Price from './Price';
@@ -16,29 +18,88 @@ const Image = styled.div`
 
 	> img {
 		max-height: 200px;
-		max-width: 200px;
+		max-width: 100%;
 	}
 `;
 
 class Item extends Component {
 	state = {
-		name: 'Nuka-Cola',
-		category: 'Food',
-		price: 243,
-		change: 27.3,
+		error: false,
+		name: '',
+		itemId: null,
+		category: '',
+		price: 0,
+		change: 0,
+		platform: 'xbox',
+		buyOrders: [],
+		sellOrders: [],
+	};
+
+	constructor(props) {
+		super();
+
+		this.getItemData(props.match.params.item);
 	}
 
+	getItemData = itemName => {
+		axios
+			.get(`/api/item?name=${itemName}`)
+			.then(res => {
+				this.setState({
+					name: res.data.name,
+					category: res.data.category,
+					itemId: res.data._id,
+					image: res.data.image || 'no-item-image',
+				});
+
+				this.getBuys(1);
+				this.getSells(1);
+			})
+			.catch(err => {
+				this.setState({ error: true });
+			});
+	};
+
+	getBuys = (page = 1) => {
+		axios
+			.get(`/api/market/orders/buy?item=${this.state.itemId}&platform=${this.state.platform}&page=${page}`)
+			.then(res => {
+				this.setState({
+					buyOrders: res.data,
+				});
+			})
+			.catch((err, res) => {});
+	};
+
+	getSells = (page = 1) => {
+		axios
+			.get(`/api/market/orders/sell?item=${this.state.itemId}&platform=${this.state.platform}&page=${page}`)
+			.then(res => {
+				this.setState({
+					sellOrders: res.data,
+				});
+			})
+			.catch((err, res) => {});
+	};
+
 	render() {
+		if (this.state.error === true) {
+			return <div>{'Error'}</div>;
+		}
+
 		return (
 			<div>
+				<Helmet>
+					<title>Wasteland Market{this.state.name ? ` - ${this.state.name}` : ''}</title>
+				</Helmet>
 				<Details name={this.state.name} category={this.state.category} />
 				<Image>
-					<img src={'/images/items/nuka-cola.png'} alt={this.state.name} />
+					<img src={`/images/items/${this.state.image}.png`} alt={this.state.name} />
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
-				<Orders type={'sell'} />
-				<Orders type={'buy'} />
+				<Orders type={'sell'} orders={this.state.sellOrders} />
+				<Orders type={'buy'} orders={this.state.buyOrders} />
 			</div>
 		);
 	}

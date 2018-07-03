@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Typography } from '@material-ui/core';
+import capImage from '../../../images/cap.png';
 
-const OrdersWrapper = styled.div`
-	box-sizing: border-box;
-	margin-top: 40px;
-	padding: 15px;
-	text-align: center;
+const StyledPaper = styled(Paper)`
+	&& {
+		margin: 10px 0;
+	}
 `;
 
-const Title = styled.div`
-	font-size: 28px;
-`;
-
-const VisualGraph = styled.div`
-	border: 1px solid #000;
-	box-sizing: border-box;
-	height: 300px;
-	width: 100%;
+const BottleCap = styled.span`
+	background-image: url(${capImage});
+	background-size: 16px;
+	background-repeat: no-repeat;
+	background-position-y: center;
+	padding-left: 20px;
 `;
 
 class Orders extends Component {
@@ -35,16 +33,44 @@ class Orders extends Component {
 	 */
 	render() {
 		return (
-			<OrdersWrapper>
-				<Title>{this.getGraphTitle()}</Title>
-				<VisualGraph />
-			</OrdersWrapper>
+			<div>
+				<Typography gutterBottom variant="headline" component="h2">
+					{this.getGraphTitle()}
+				</Typography>
+				<StyledPaper>
+					<Table>
+						<TableHead>
+							<TableRow>
+								<TableCell>User</TableCell>
+								<TableCell numeric>Price</TableCell>
+								<TableCell numeric>Quantity</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{this.props.orders.map((order, key) => {
+								return (
+									<TableRow key={key}>
+										<TableCell component="th" scope="row">
+											{order.addedBy}
+										</TableCell>
+										<TableCell numeric>
+											<BottleCap>{order.price}</BottleCap>
+										</TableCell>
+										<TableCell numeric>{order.quantity}</TableCell>
+									</TableRow>
+								);
+							})}
+						</TableBody>
+					</Table>
+				</StyledPaper>
+			</div>
 		);
 	}
 }
 
 Orders.propTypes = {
 	type: PropTypes.oneOf(['buy', 'sell']).isRequired,
-}
+	orders: PropTypes.array.isRequired,
+};
 
 export default Orders;

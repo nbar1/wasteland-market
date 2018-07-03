@@ -16,8 +16,7 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
-import { Redirect } from 'react-router-dom';
-import capImage from '../../../images/cap.png';
+import capImage from '../../../../images/cap.png';
 
 const StyledCard = styled(Card)`
 	&& {
@@ -31,13 +30,6 @@ const StyledCard = styled(Card)`
 		.react-autosuggest__suggestions-container {
 			z-index: 10;
 		}
-	}
-`;
-
-const StyledSmallCard = styled(Card)`
-	&& {
-		margin: 15px;
-		width: 400px;
 	}
 `;
 
@@ -157,6 +149,7 @@ class Platforms extends Component {
 		missingPCContact: false,
 		missingUnusualNotes: false,
 		suggestions: [],
+		timestamp: new Date().toISOString(),
 	};
 
 	/**
@@ -169,73 +162,6 @@ class Platforms extends Component {
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
-
-		this.resetValidation();
-	};
-
-	/**
-	 * validateForm
-	 *
-	 * @returns {bool}
-	 */
-	validateForm = () => {
-		let returnVal = true;
-
-		this.setState({ generalError: '' });
-
-		if (this.state.type === '') {
-			this.setState({ missingOrderType: true });
-			returnVal = false;
-		}
-
-		if (this.state.itemId === null) {
-			this.setState({ missingItemName: true });
-			returnVal = false;
-		}
-
-		if (this.state.price === '' || this.state.price < 1) {
-			this.setState({ missingPrice: true });
-			returnVal = false;
-		}
-
-		if (this.state.quantity === '' || this.state.quantity < 1) {
-			this.setState({ missingQuantity: true });
-			returnVal = false;
-		}
-
-		if (this.state.platform === null) {
-			this.setState({ missingPlatform: true });
-			returnVal = false;
-		}
-
-		if (this.state.platform === 'pc' && !this.state.includeDiscord && !this.state.includeSteam) {
-			this.setState({ missingPCContact: true });
-			returnVal = false;
-		}
-
-		if (this.state.unusual && this.state.notes === '') {
-			this.setState({ missingUnusualNotes: true });
-			returnVal = false;
-		}
-
-		return returnVal;
-	};
-
-	/**
-	 * resetValidation
-	 *
-	 * @returns {void}
-	 */
-	resetValidation = () => {
-		this.setState({
-			missingOrderType: false,
-			missingItemName: false,
-			missingPrice: false,
-			missingQuantity: false,
-			missingPlatform: false,
-			missingPCContact: false,
-			missingUnusualNotes: false,
-		});
 	};
 
 	/**
@@ -247,7 +173,6 @@ class Platforms extends Component {
 
 	submitForm = event => {
 		if (event) event.preventDefault();
-		if (this.validateForm() === false) return;
 
 		// Register
 		axios
@@ -264,13 +189,12 @@ class Platforms extends Component {
 					notes: this.state.notes,
 					includeDiscord: this.state.includeDiscord,
 					includeSteam: this.state.includeSteam,
+					definedTimestamp: this.state.timestamp,
 				})
 			)
 			.then(res => {
 				if (res.data.success === true && res.data.message === 'order-created') {
-					this.setState({
-						orderSuccess: true,
-					});
+					this.shuffle();
 				}
 			})
 			.catch(err => {
@@ -328,16 +252,27 @@ class Platforms extends Component {
 		});
 	};
 
+	getTimestamp = () => {
+		let start = new Date(2018, 5, 24);
+		let end = new Date();
+
+		return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString();
+	}
+
+	shuffle = () => {
+		this.setState({
+			price: Math.floor(Math.random() * 20) + 40,
+			quantity: Math.floor(Math.random() * 10) + 1,
+			timestamp: this.getTimestamp(),
+		});
+	};
+
 	/**
 	 * render
 	 *
 	 * @returns {jsx}
 	 */
 	render() {
-		if (this.state.orderSuccess) {
-			return <Redirect to="/order/success" />;
-		}
-
 		return (
 			<div>
 				<form onSubmit={this.submitForm}>
@@ -355,9 +290,6 @@ class Platforms extends Component {
 								</RadioGroup>
 							</FormControl>
 						</CardContent>
-					</StyledCard>
-
-					<StyledCard raised={true}>
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
 								Item Details
@@ -414,9 +346,6 @@ class Platforms extends Component {
 								label="This item has unusual attributes"
 							/>
 						</CardContent>
-					</StyledCard>
-
-					<StyledCard raised={true}>
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
 								Order Information
@@ -459,9 +388,6 @@ class Platforms extends Component {
 									</Typography>
 								)}
 						</CardContent>
-					</StyledCard>
-
-					<StyledCard raised={true}>
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
 								Notes
@@ -487,9 +413,6 @@ class Platforms extends Component {
 								}
 							/>
 						</CardContent>
-					</StyledCard>
-
-					<StyledCard raised={true}>
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
 								Order Platform
@@ -583,43 +506,25 @@ class Platforms extends Component {
 								</RadioGroup>
 							</FormControl>
 						</CardContent>
+						<CardContent>
+							<Typography gutterBottom variant="headline" component="h2">
+								Date/Time
+							</Typography>
+							<LightText>{this.state.timestamp}</LightText>
+						</CardContent>
 					</StyledCard>
-
-					{false && (
-						<StyledCard raised={true}>
-							<CardContent>
-								<Typography gutterBottom variant="headline" component="h2">
-									Review Order
-								</Typography>
-								<StyledSmallCard raised={true}>
-									<CardContent>
-										<Typography color="textSecondary">
-											{this.state.type === 'buy' ? 'Buy' : 'Sell'} Order
-										</Typography>
-										<Typography variant="headline" component="h2">
-											{this.state.item}
-										</Typography>
-										<Typography component="p">Price: {this.state.price}</Typography>
-										<Typography component="p">Quantity: {this.state.quantity}</Typography>
-										<Typography component="p">
-											Total: {this.state.price * this.state.quantity}
-										</Typography>
-									</CardContent>
-								</StyledSmallCard>
-								<ButtonWrapper>
-									<StyledButton variant="contained" size="large" onClick={this.submitForm}>
-										Create Order
-									</StyledButton>
-								</ButtonWrapper>
-							</CardContent>
-						</StyledCard>
-					)}
 
 					<HiddenSubmit type="submit" />
 
 					<ButtonWrapper>
 						<StyledButton variant="contained" size="large" onClick={this.submitForm}>
 							Create Order
+						</StyledButton>
+					</ButtonWrapper>
+
+					<ButtonWrapper>
+						<StyledButton variant="contained" size="large" onClick={this.shuffle}>
+							Shuffle
 						</StyledButton>
 					</ButtonWrapper>
 				</form>
