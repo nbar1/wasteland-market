@@ -150,6 +150,7 @@ class CreateItemForm extends Component {
 								name="item"
 								label="Item Name"
 								margin="normal"
+								autoComplete="off"
 								fullWidth={true}
 								value={this.state.item}
 								onChange={this.onChange}

@@ -17,6 +17,7 @@ const Name = styled.div`
 const Category = styled.div`
 	color: #666;
 	font-size: 24px;
+	text-transform: capitalize;
 `;
 
 class Details extends Component {

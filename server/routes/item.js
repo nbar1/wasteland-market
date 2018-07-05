@@ -7,6 +7,8 @@ var Item = require('../models/Item');
 router.post('/create', requiresLogin, (req, res, next) => {
 	let itemData = {
 		name: req.body.item,
+		linkName: req.body.item.replace(/\s+/g, '-').toLowerCase(),
+		category: 'uncategorized',
 		addedBy: req.session.userId,
 		addedByIP: req.ip,
 	};
@@ -31,14 +33,14 @@ router.post('/create', requiresLogin, (req, res, next) => {
 		return res.send({
 			success: true,
 			message: 'item-created',
-			redirect: `/item/${itemData.name.replace(/\s/g, '_')}`,
+			redirect: `/market/${itemData.name.replace(/\s/g, '-').toLowerCase()}`,
 		});
 	});
 });
 
 // item info
 router.get('/', (req, res, next) => {
-	Item.find({ name: new RegExp(`^${req.query.name}`, 'i') })
+	Item.find({ linkName: new RegExp(`^${req.query.name}`, 'i') })
 		.select('name category image')
 		.exec((err, data) => {
 			if (err) {

@@ -9,6 +9,17 @@ var ItemSchema = new mongoose.Schema({
 		trim: true,
 		uniqueCaseInsensitive: true,
 	},
+	category: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	linkName: {
+		type: String,
+		unique: true,
+		required: true,
+		trim: true,
+	},
 	image: {
 		type: String,
 		trim: true,
