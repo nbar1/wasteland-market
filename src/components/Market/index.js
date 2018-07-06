@@ -54,10 +54,23 @@ class Item extends Component {
 
 				this.getBuys(1);
 				this.getSells(1);
+				this.getPrice();
 			})
 			.catch(err => {
 				this.setState({ error: true });
 			});
+	};
+
+	getPrice = () => {
+		axios
+			.get(`/api/market/price?item=${this.state.itemId}&platform=${this.state.platform}`)
+			.then(res => {
+				this.setState({
+					price: res.data.price,
+					change: res.data.change,
+				});
+			})
+			.catch((err, res) => {});
 	};
 
 	getBuys = (page = 1) => {

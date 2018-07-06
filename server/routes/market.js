@@ -3,18 +3,7 @@ var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var Order = require('../models/Order');
 
-// create
-router.post('/item/:id', (req, res, next) => {
-	console.log(req.params);
-
-	next({
-		message: 'hello',
-	});
-});
-
 router.post('/order', requiresLogin, (req, res, next) => {
-	console.log(req.body);
-
 	let orderData = {
 		type: req.body.type,
 		item: req.body.item,
@@ -36,11 +25,8 @@ router.post('/order', requiresLogin, (req, res, next) => {
 			let errorMessage = 'Unknown Error';
 
 			return next({
-				status: 401,
-				message: {
-					success: false,
-					message: errorMessage,
-				},
+				status: 400,
+				message: errorMessage,
 			});
 		}
 
@@ -69,7 +55,7 @@ const getOrder = (req, res, next, type) => {
 	}
 
 	let page = req.query.page ? req.query.page - 1 : 0;
-	page = (page > 1) ? 1 : page;
+	page = page > 1 ? 1 : page;
 
 	Order.find({
 		itemId: req.query.item,
@@ -98,12 +84,80 @@ const getOrder = (req, res, next, type) => {
 		});
 };
 
+const getMedian = values => {
+	values.sort((a, b) => a - b);
+
+	var half = Math.floor(values.length / 2);
+
+	if (values.length % 2) return values[half];
+
+	return (values[half - 1] + values[half]) / 2.0;
+};
+
 router.get('/orders/buy', (req, res, next) => {
 	getOrder(req, res, next, 'buy');
 });
 
 router.get('/orders/sell', (req, res, next) => {
 	getOrder(req, res, next, 'sell');
+});
+
+router.get('/price', (req, res, next) => {
+	let ordersToCount = 1000;
+
+	Order.find({
+		itemId: req.query.item,
+		platform: req.query.platform,
+		active: true,
+	})
+		.sort({ date: -1 })
+		.limit(ordersToCount)
+		.select('price')
+		.exec((err, data) => {
+			if (err) {
+				let errorMessage = 'Unknown Error';
+
+				return next({
+					status: 400,
+					message: errorMessage,
+				});
+			}
+
+			let prices = [];
+			data.forEach(item => {
+				prices.push(item.price);
+			});
+
+			// get change percent
+			let changeDate = new Date();
+			changeDate.setDate(changeDate.getDate() - 1);
+
+			Order.find({
+				itemId: req.query.item,
+				platform: req.query.platform,
+				active: true,
+				date: { $lte: changeDate.toISOString() },
+			})
+				.sort({ date: -1 })
+				.limit(ordersToCount)
+				.select('price')
+				.exec((err, data) => {
+					let oldPrices = [];
+					data.forEach(item => {
+						oldPrices.push(item.price);
+					});
+
+					let price = Math.round(getMedian(prices)) || 0;
+					let oldPrice = Math.round(getMedian(oldPrices)) || 0;
+					let change = (((oldPrice - price) / oldPrice) * 100).toFixed(2);
+					change = change - change * 2;
+
+					return res.send({
+						price,
+						change,
+					});
+				});
+		});
 });
 
 module.exports = router;

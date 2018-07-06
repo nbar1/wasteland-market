@@ -99,7 +99,6 @@ class CreateItemForm extends Component {
 				})
 			)
 			.then(res => {
-				console.log(res);
 				if (res.data.redirect) {
 					this.setState({
 						redirect: res.data.redirect,

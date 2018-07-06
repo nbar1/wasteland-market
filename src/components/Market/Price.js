@@ -28,7 +28,8 @@ const Change = styled.div`
 	font-size: 18px;
 
 	&:before {
-		font-family: 'FontAwesome';
+		font-family: 'Font Awesome 5 Free';
+		font-weight: 900;
 		margin-right: 5px;
 	}
 
@@ -64,7 +65,7 @@ class Price extends Component {
 		}
 
 		return 'neutral';
-	}
+	};
 
 	/**
 	 * render
@@ -75,7 +76,9 @@ class Price extends Component {
 		return (
 			<PriceWrapper>
 				<Amount title={`${this.props.amount} caps`}>{this.props.amount}</Amount>
-				<Change className={this.getChangeClass()} title={`${this.props.change}% change, past 24 hours`}>{this.props.change}%</Change>
+				<Change className={this.getChangeClass()} title={`${this.props.change}% change, past 24 hours`}>
+					{this.props.change}%
+				</Change>
 			</PriceWrapper>
 		);
 	}
