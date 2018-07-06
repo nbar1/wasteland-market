@@ -439,7 +439,7 @@ class Platforms extends Component {
 								type="number"
 								id="quantity"
 								name="quantity"
-								label="Quantity"
+								label="Quantity Available"
 								margin="normal"
 								autoComplete="off"
 								fullWidth={true}

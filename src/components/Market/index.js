@@ -27,6 +27,7 @@ class Item extends Component {
 		error: false,
 		name: '',
 		itemId: null,
+		image: 'no-item-image',
 		category: '',
 		price: 0,
 		change: 0,
@@ -52,8 +53,8 @@ class Item extends Component {
 					image: res.data.image || 'no-item-image',
 				});
 
-				this.getBuys(1);
-				this.getSells(1);
+				this.getBuys();
+				this.getSells();
 				this.getPrice();
 			})
 			.catch(err => {
@@ -111,8 +112,8 @@ class Item extends Component {
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
-				<Orders type={'sell'} orders={this.state.sellOrders} />
-				<Orders type={'buy'} orders={this.state.buyOrders} />
+				<Orders type={'sell'} orders={this.state.sellOrders} platform={this.state.platform} />
+				<Orders type={'buy'} orders={this.state.buyOrders} platform={this.state.platform} />
 			</div>
 		);
 	}

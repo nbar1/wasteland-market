@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var Order = require('../models/Order');
+var User = require('../models/User');
 
 router.post('/order', requiresLogin, (req, res, next) => {
 	let orderData = {
@@ -36,6 +37,18 @@ router.post('/order', requiresLogin, (req, res, next) => {
 		});
 	});
 });
+
+const getUserById = user => {
+	return User.find({
+		_id: user,
+	})
+		.select('username platforms')
+		.exec()
+		.then(user => user[0].toObject())
+		.catch(err => {
+			return false;
+		});
+};
 
 const getOrder = (req, res, next, type) => {
 	let perPage = 10;
@@ -73,14 +86,25 @@ const getOrder = (req, res, next, type) => {
 
 				return next({
 					status: 400,
-					message: {
-						success: false,
-						message: errorMessage,
-					},
+					message: errorMessage,
 				});
 			}
 
-			return res.send(data);
+			let dataWithUserInfo = [];
+			let processed = 0;
+
+			data.forEach((order, key) => {
+				dataWithUserInfo.push(order.toObject());
+
+				getUserById(order.addedBy, key).then(user => {
+					dataWithUserInfo[key].user = user;
+
+					processed++;
+					if (processed === data.length) {
+						return res.send(dataWithUserInfo);
+					}
+				});
+			});
 		});
 };
 
@@ -150,7 +174,7 @@ router.get('/price', (req, res, next) => {
 					let price = Math.round(getMedian(prices)) || 0;
 					let oldPrice = Math.round(getMedian(oldPrices)) || 0;
 					let change = (((oldPrice - price) / oldPrice) * 100).toFixed(2);
-					change = change - change * 2;
+					change = change - change * 2 || 0;
 
 					return res.send({
 						price,
