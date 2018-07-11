@@ -5,6 +5,7 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var path = require('path');
+require('dotenv').config();
 
 // connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/wasteland-market');
