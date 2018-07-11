@@ -70,6 +70,7 @@ app.use((err, req, res, next) => {
 });
 
 // listen
-app.listen(8080, () => {
-	console.log('Wasteland Market Server running on 8080');
+const PORT = process.env.POST || 8080;
+app.listen(PORT, () => {
+	console.log(`Wasteland Market Server running on ${PORT}`);
 });
