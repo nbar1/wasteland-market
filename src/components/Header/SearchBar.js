@@ -73,8 +73,20 @@ class SearchBar extends Component {
 	};
 
 	onChange = (event, { newValue }) => {
+		let itemId, linkName;
+
+		try {
+			itemId = this.state.suggestions.filter(item => item.name === newValue)[0]._id;
+			linkName = this.state.suggestions.filter(item => item.name === newValue)[0].linkName;
+		}
+		catch (ex) {
+			itemId = null;
+		}
+
 		this.setState({
 			value: newValue,
+			itemId,
+			linkName,
 		});
 	};
 
@@ -102,6 +114,10 @@ class SearchBar extends Component {
 			});
 	};
 
+	onSuggestionSelected = (event, data) => {
+		window.location.href = `/market/${data.suggestion.linkName}`;
+	};
+
 	// Autosuggest will call this function every time you need to clear suggestions.
 	onSuggestionsClearRequested = () => {
 		this.setState({
@@ -123,11 +139,12 @@ class SearchBar extends Component {
 					suggestions={this.state.suggestions}
 					onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
 					onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+					onSuggestionSelected={this.onSuggestionSelected}
 					getSuggestionValue={getSuggestionValue}
 					renderSuggestion={renderSuggestion}
 					inputProps={inputProps}
 				/>
-				<SearchButton className="material-icons">search</SearchButton>
+				{false && (<SearchButton className="material-icons">search</SearchButton>)}
 			</SearchBarWrapper>
 		);
 	}

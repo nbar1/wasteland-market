@@ -6,7 +6,7 @@ var Item = require('../models/Item');
 router.post('/autocomplete', (req, res, next) => {
 	Item.find({ name: new RegExp(`^${req.body.query}`, 'i') })
 		.limit(5)
-		.select('name')
+		.select('name linkName')
 		.exec((err, data) => {
 			if (err) {
 				let errorMessage = 'Unknown Error';
