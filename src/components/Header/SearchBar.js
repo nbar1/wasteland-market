@@ -127,7 +127,7 @@ class SearchBar extends Component {
 
 	render() {
 		const inputProps = {
-			placeholder: 'Search',
+			placeholder: 'Search Market',
 			value: this.state.value,
 			onChange: this.onChange,
 		};

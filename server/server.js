@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var path = require('path');
 
 // connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/wasteland-market');
@@ -17,6 +18,7 @@ db.once('open', () => {
 
 // static build
 app.use(express.static('../build'));
+app.use(express.static('../static'));
 app.enable('trust proxy');
 
 // use sessions for tracking logins
@@ -58,7 +60,7 @@ app.use('/api/search', searchRoutes);
 
 // homepage
 app.get('/', function(req, res) {
-	res.sendFile('../build/index.html');
+	res.sendFile(path.resolve('build/index.html'));
 });
 
 // catch 404 and forward to error handler
