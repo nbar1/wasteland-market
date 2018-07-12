@@ -18,8 +18,7 @@ db.once('open', () => {
 });
 
 // static build
-app.use(express.static(path.resolve(__dirname, '../build')));
-app.use(express.static(path.resolve(__dirname, '../static')));
+app.use(express.static('../build'));
 app.enable('trust proxy');
 
 // use sessions for tracking logins
