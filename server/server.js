@@ -18,7 +18,7 @@ db.once('open', () => {
 });
 
 // static build
-app.use(express.static('../build'));
+app.use(express.static(path.resolve('build')));
 app.enable('trust proxy');
 
 // use sessions for tracking logins
@@ -59,7 +59,7 @@ var searchRoutes = require('./routes/search');
 app.use('/api/search', searchRoutes);
 
 // homepage
-app.get('*', function(req, res) {
+app.get('/*', function(req, res) {
 	res.sendFile(path.resolve('build/index.html'));
 });
 
