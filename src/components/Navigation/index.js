@@ -76,9 +76,9 @@ class Navigation extends Component {
 			<div>
 				<StyledDrawer open={true} variant={'permanent'}>
 					<List>
-						<Link to={'/'}>
+						<Link to={'/order'}>
 							<ListItem button={true}>
-								<ListItemText primary="Home" />
+								<ListItemText primary="Create Order" />
 							</ListItem>
 						</Link>
 						<Link to={'/market'}>

@@ -8,6 +8,8 @@ import Price from './Price';
 import Graph from './Graph';
 import Orders from './Orders';
 
+import ItemNotFound from './ItemNotFound';
+
 const Image = styled.div`
 	box-sizing: border-box;
 	display: inline-block;
@@ -98,7 +100,11 @@ class Item extends Component {
 
 	render() {
 		if (this.state.error === true) {
-			return <div>{'Error'}</div>;
+			return (
+				<div>
+					<ItemNotFound />
+				</div>
+			);
 		}
 
 		return (
