@@ -4,6 +4,7 @@ import { AppBar, Toolbar } from '@material-ui/core';
 import AuthContext from '../../context/AuthContext';
 import SearchBar from './SearchBar';
 import UserHub from './UserHub';
+import { Link } from 'react-router-dom';
 
 import logo from '../../images/logo-text-white.png';
 import logoBeta from '../../images/beta.svg';
@@ -40,7 +41,9 @@ class Header extends Component {
 			<div>
 				<StyledAppBar position="static">
 					<Toolbar>
-						<Logo src={logo} alt="Wasteland Market" />
+						<Link to={'/'}>
+							<Logo src={logo} alt="Wasteland Market" />
+						</Link>
 						<LogoBeta src={logoBeta} alt="Beta" />
 						<AuthContext>
 							{context => (
@@ -50,9 +53,7 @@ class Header extends Component {
 							)}
 						</AuthContext>
 						<UserHubWrapper>
-							<AuthContext>
-								{context => <UserHub context={context} />}
-							</AuthContext>
+							<AuthContext>{context => <UserHub context={context} />}</AuthContext>
 						</UserHubWrapper>
 					</Toolbar>
 				</StyledAppBar>

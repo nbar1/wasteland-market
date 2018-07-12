@@ -28,7 +28,7 @@ class ItemNotFound extends Component {
 				<Helmet>
 					<title>Wasteland Market - Item Not Found</title>
 				</Helmet>
-				<img src="/images/item-not-found.png" />
+				<img src="/images/item-not-found.png" alt="Item Not Found" />
 				<LargeText>Item Not Found</LargeText>
 			</ItemNotFoundWrapper>
 		);
