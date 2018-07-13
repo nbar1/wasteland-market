@@ -19,7 +19,7 @@ class Dropdown extends Component {
 
 	logout = () => {
 		axios
-			.get('/user/logout')
+			.get('/api/user/logout')
 			.then(res => {
 				document.location.href = '/';
 				this.handleClose();

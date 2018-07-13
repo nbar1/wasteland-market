@@ -9,6 +9,7 @@ class AuthProvider extends Component {
 			isLoggedIn: true,
 			username: user.username,
 			premium: user.premium,
+			verified: user.verified,
 			platforms: user.platforms,
 		});
 	}
@@ -18,6 +19,7 @@ class AuthProvider extends Component {
 			isLoggedIn: false,
 			username: null,
 			premium: false,
+			verified: false,
 			platforms: {},
 		});
 	}
@@ -42,6 +44,7 @@ class AuthProvider extends Component {
 					isLoggedIn: true,
 					username: res.data.username,
 					premium: res.data.premium,
+					verified: res.data.verified,
 					platforms: res.data.platforms,
 				});
 			})
@@ -51,6 +54,7 @@ class AuthProvider extends Component {
 					isLoggedIn: false,
 					username: null,
 					premium: false,
+					verified: false,
 					platforms: {},
 				});
 			});
