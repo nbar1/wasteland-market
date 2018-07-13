@@ -274,18 +274,9 @@ router.get('/verify/:token', (req, res, next) => {
 		}
 
 		// If we found a token, find a matching user
-		User.findOne({ _id: token._userId }, function(err, user) {
-			if (!user) return res.status(400).send({ msg: 'User does not exist' });
-
-			// Verify and save the user
-			user.verified = true;
-			user.save(function(err) {
-				if (err) {
-					return res.status(500).send({ msg: err.message });
-				}
-
-				return res.send({ success: true });
-			});
+		User.findOneAndUpdate({ _id: token._userId }, { $set: { verified: true } }, { upsert: false }, err => {
+			if (err) return res.status(400).send({ msg: 'User does not exist' });
+			return res.send({ success: true });
 		});
 	});
 });
