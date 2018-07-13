@@ -43,7 +43,7 @@ const HelpText = styled.div`
 	}
 `;
 
-class CreateItemForm extends Component {
+class CreateItem extends Component {
 	state = {
 		item: '',
 		generalError: '',
@@ -173,4 +173,4 @@ class CreateItemForm extends Component {
 	}
 }
 
-export default CreateItemForm;
+export default CreateItem;

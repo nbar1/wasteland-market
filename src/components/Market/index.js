@@ -41,6 +41,11 @@ class Item extends Component {
 	constructor(props) {
 		super();
 
+		if (props.match.params.item === undefined) {
+			this.state.error = true;
+			return;
+		}
+
 		this.getItemData(props.match.params.item);
 	}
 

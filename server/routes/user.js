@@ -3,7 +3,10 @@ var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var User = require('../models/User');
 var Login = require('../models/Login');
+var VerificationToken = require('../models/VerificationToken');
 var bcrypt = require('bcrypt');
+var crypto = require('crypto');
+var sendMail = require('../lib/email');
 
 // register
 router.post('/register', (req, res, next) => {
@@ -55,11 +58,39 @@ router.post('/register', (req, res, next) => {
 		req.session.user = {
 			username: user.username,
 			premium: user.premium,
+			verified: false,
 		};
 
-		return res.send({
-			success: true,
-			message: 'user-created',
+		var token = new VerificationToken({
+			_userId: user._id,
+			token: crypto.randomBytes(16).toString('hex'),
+		});
+
+		token.save(err => {
+			if (err) {
+				return res.status(500).send({ msg: err.message });
+			}
+
+			let message = `
+				Hello ${user.username},
+				<br><br>
+				Please verify your email address to activate your Wasteland Market account by clicking the link below.
+				<br><br>
+				<a href="https://wastelandmarket.com/account/verify/${token.token}">
+					https://wastelandmarket.com/account/verify/${token.token}
+				</a>
+			`;
+
+			sendMail(user.email, 'Verify Your Email - Wasteland Market', message, (err, data) => {
+				if (err) {
+					return res.status(500).send({ msg: err.message });
+				}
+
+				return res.send({
+					success: true,
+					message: 'user-created',
+				});
+			});
 		});
 	});
 });
@@ -188,27 +219,22 @@ router.post('/change-password', (req, res, next) => {
 				return next(err);
 			}
 
-			User.findOneAndUpdate(
-				{ _id: req.session.userId },
-				{ $set: { password: hash } },
-				{ upsert: false },
-				err => {
-					if (err) {
-						return next({
-							status: 401,
-							message: {
-								success: false,
-								message: 'Unable to update password in database',
-							},
-						});
-					}
-
-					return res.send({
-						success: true,
-						message: 'Your password has been changed.',
+			User.findOneAndUpdate({ _id: req.session.userId }, { $set: { password: hash } }, { upsert: false }, err => {
+				if (err) {
+					return next({
+						status: 401,
+						message: {
+							success: false,
+							message: 'Unable to update password in database',
+						},
 					});
 				}
-			);
+
+				return res.send({
+					success: true,
+					message: 'Your password has been changed.',
+				});
+			});
 		});
 	});
 });
@@ -222,27 +248,46 @@ router.post('/update-platforms', (req, res, next) => {
 		discord: req.body.discord || '',
 	};
 
-	User.findOneAndUpdate(
-		{ _id: req.session.userId },
-		{ $set: { platforms: platforms } },
-		{ upsert: false },
-		err => {
-			if (err) {
-				return next({
-					status: 401,
-					message: {
-						success: false,
-						message: 'Unable to update platforms in database',
-					},
-				});
-			}
-
-			return res.send({
-				success: true,
-				message: 'Your platforms have been updated.',
+	User.findOneAndUpdate({ _id: req.session.userId }, { $set: { platforms: platforms } }, { upsert: false }, err => {
+		if (err) {
+			return next({
+				status: 401,
+				message: {
+					success: false,
+					message: 'Unable to update platforms in database',
+				},
 			});
 		}
-	);
+
+		return res.send({
+			success: true,
+			message: 'Your platforms have been updated.',
+		});
+	});
+});
+
+// verify account
+router.get('/verify/:token', (req, res, next) => {
+	VerificationToken.findOne({ token: req.params.token }, function(err, token) {
+		if (!token) {
+			return res.status(500).send({ msg: 'Could not find token' });
+		}
+
+		// If we found a token, find a matching user
+		User.findOne({ _id: token._userId }, function(err, user) {
+			if (!user) return res.status(400).send({ msg: 'User does not exist' });
+
+			// Verify and save the user
+			user.verified = true;
+			user.save(function(err) {
+				if (err) {
+					return res.status(500).send({ msg: err.message });
+				}
+
+				return res.send({ success: true });
+			});
+		});
+	});
 });
 
 // authStatus
@@ -252,6 +297,7 @@ router.get('/authStatus', requiresLogin, (req, res, next) => {
 			loggedIn: true,
 			username: doc.username,
 			premium: doc.premium,
+			verified: doc.verified,
 			platforms: doc.platforms,
 		});
 	});

@@ -23,7 +23,6 @@ var UserSchema = new mongoose.Schema({
 	},
 	passwordConf: {
 		type: String,
-		required: true,
 	},
 	premium: {
 		type: Boolean,
@@ -36,6 +35,11 @@ var UserSchema = new mongoose.Schema({
 	},
 	dateRegistered: Date,
 	registrationIP: String,
+	verified: {
+		type: Boolean,
+		default: false,
+		required: true,
+	},
 	enabled: {
 		type: Boolean,
 		default: true,

@@ -6,9 +6,12 @@ import Navigation from './components/Navigation';
 import ContentWrapper from './components/ContentWrapper';
 import { Switch, Route } from 'react-router-dom';
 
+import RequiresLogin from './components/Wrappers/RequireLogin';
+
 import Home from './components/Home';
 import Login from './components/Login';
 import Profile from './components/Account/Profile';
+import AccountVerify from './components/Account/Verify';
 import Account from './components/Account';
 
 import Market from './components/Market';
@@ -34,15 +37,16 @@ class App extends Component {
 							<Route exact path="/" component={Home} />
 							<Route exact path="/login" component={Login} />
 							<Route exact path="/register" component={Login} />
-							<Route exact path="/profile" component={Profile} />
-							<Route exact path="/account" component={Account} />
+							<Route exact path="/profile" component={RequiresLogin(Profile)} />
+							<Route exact path="/account" component={RequiresLogin(Account)} />
+							<Route exact path="/account/verify/:token" component={AccountVerify} />
 
-							<Route exact path="/order" component={Order} />
-							<Route exact path="/order/mock" component={OrderMock} />
-							<Route exact path="/order/success" component={OrderSuccess} />
+							<Route exact path="/order" component={RequiresLogin(Order)} />
+							<Route exact path="/order/mock" component={RequiresLogin(OrderMock)} />
+							<Route exact path="/order/success" component={RequiresLogin(OrderSuccess)} />
 							<Route exact path="/market" component={Market} />
 							<Route exact path="/market/:item" component={Market} />
-							<Route exact path="/create-item" component={CreateItem} />
+							<Route exact path="/create-item" component={RequiresLogin(CreateItem)} />
 
 							<Route path="*" component={NotFound} />
 						</Switch>

@@ -23,7 +23,7 @@ app.enable('trust proxy');
 
 // use sessions for tracking logins
 app.use(session({
-	secret: '}r7Xvng(fZx$;H3-',
+	secret: process.env.MONGO_SESSION_SECRET,
 	resave: true,
 	saveUninitialized: false,
 	store: new MongoStore({
@@ -70,7 +70,7 @@ app.use((err, req, res, next) => {
 });
 
 // listen
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-	console.log(`Wasteland Market Server running on ${PORT}`);
+const SERVER_PORT = process.env.SERVER_PORT || 8080;
+app.listen(SERVER_PORT, () => {
+	console.log(`Wasteland Market Server running on ${SERVER_PORT}`);
 });
