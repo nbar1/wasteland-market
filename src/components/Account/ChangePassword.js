@@ -144,7 +144,7 @@ class ChangePassword extends Component {
 	render() {
 		return (
 			<div>
-				<Card>
+				<Card raised>
 					<CardContent>
 						<Typography gutterBottom variant="headline" component="h2">
 							Change Password

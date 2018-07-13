@@ -3,6 +3,7 @@ import Helmet from 'react-helmet';
 import { Typography } from '@material-ui/core';
 import ChangePassword from './ChangePassword';
 import ChangeEmail from './ChangeEmail';
+import VerificationStatus from './VerificationStatus';
 
 class Account extends Component {
 	render() {
@@ -14,9 +15,15 @@ class Account extends Component {
 				<Typography gutterBottom variant="headline" component="h1">
 					My Account
 				</Typography>
-				<ChangeEmail />
-				<br />
+				{!this.props.context.verified && (
+					<div>
+						<VerificationStatus />
+						<br />
+					</div>
+				)}
 				<ChangePassword />
+				<br />
+				<ChangeEmail />
 			</div>
 		);
 	}

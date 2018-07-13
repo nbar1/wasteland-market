@@ -266,6 +266,44 @@ router.post('/update-platforms', (req, res, next) => {
 	});
 });
 
+// resend verification
+router.get('/verify/resend', (req, res, next) => {
+	User.findOne({ _id: req.session.userId }, function(err, user) {
+		if (user.verified === true) {
+			return res.status(400).send({ msg: 'This account has already been verified. Please log in.' });
+		}
+
+		var token = new VerificationToken({
+			_userId: user._id,
+			token: crypto.randomBytes(16).toString('hex'),
+		});
+
+		token.save(err => {
+			if (err) {
+				return res.status(500).send({ msg: err.message });
+			}
+
+			let message = `
+				Hello ${user.username},
+				<br><br>
+				Please verify your email address to activate your Wasteland Market account by clicking the link below.
+				<br><br>
+				<a href="https://wastelandmarket.com/account/verify/${token.token}">
+					https://wastelandmarket.com/account/verify/${token.token}
+				</a>
+			`;
+
+			sendMail(user.email, 'Verify Your Email - Wasteland Market', message, (err, data) => {
+				if (err) {
+					return res.status(500).send({ msg: err.message });
+				}
+
+				return res.send({tokenCreated: true});
+			});
+		});
+	});
+});
+
 // verify account
 router.get('/verify/:token', (req, res, next) => {
 	VerificationToken.findOne({ token: req.params.token }, function(err, token) {
