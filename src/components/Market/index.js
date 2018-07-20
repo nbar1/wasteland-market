@@ -60,8 +60,6 @@ class Item extends Component {
 					image: res.data.image || 'no-item-image',
 				});
 
-				this.getBuys();
-				this.getSells();
 				this.getPrice();
 			})
 			.catch(err => {
@@ -76,28 +74,6 @@ class Item extends Component {
 				this.setState({
 					price: res.data.price,
 					change: res.data.change,
-				});
-			})
-			.catch((err, res) => {});
-	};
-
-	getBuys = (page = 1) => {
-		axios
-			.get(`/api/market/orders/buy?item=${this.state.itemId}&platform=${this.state.platform}&page=${page}`)
-			.then(res => {
-				this.setState({
-					buyOrders: res.data,
-				});
-			})
-			.catch((err, res) => {});
-	};
-
-	getSells = (page = 1) => {
-		axios
-			.get(`/api/market/orders/sell?item=${this.state.itemId}&platform=${this.state.platform}&page=${page}`)
-			.then(res => {
-				this.setState({
-					sellOrders: res.data,
 				});
 			})
 			.catch((err, res) => {});
@@ -123,8 +99,8 @@ class Item extends Component {
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
-				<Orders type={'sell'} orders={this.state.sellOrders} platform={this.state.platform} />
-				<Orders type={'buy'} orders={this.state.buyOrders} platform={this.state.platform} />
+				<Orders type={'sell'} itemId={this.state.itemId} orders={this.state.sellOrders} platform={this.state.platform} />
+				<Orders type={'buy'} itemId={this.state.itemId} orders={this.state.buyOrders} platform={this.state.platform} />
 			</div>
 		);
 	}

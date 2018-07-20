@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Typography } from '@material-ui/core';
+import axios from 'axios';
 import capImage from '../../../images/cap.png';
 
 const StyledPaper = styled(Paper)`
@@ -58,11 +59,41 @@ const StyledTableHeader = styled(Typography)`
 
 class Orders extends Component {
 	/**
+	 * state
+	 *
+	 * @type {object}
+	 */
+	state = {
+		orders: [],
+	};
+
+	/**
 	 * getGraphTitle
 	 *
 	 * @returns {string}
 	 */
 	getGraphTitle = () => `${this.props.type} Orders`;
+
+	/**
+	 * getOrders
+	 *
+	 * @param {int} [page=1]
+	 * @returns {void}
+	 */
+	getOrders = (page = 1) => {
+		axios
+			.get(
+				`/api/market/orders/${this.props.type}?item=${this.props.itemId}&platform=${
+					this.props.platform
+				}&page=${page}`
+			)
+			.then(res => {
+				this.setState({
+					orders: res.data,
+				});
+			})
+			.catch((err, res) => {});
+	};
 
 	/**
 	 * showPlatformContactInfo
@@ -106,6 +137,17 @@ class Orders extends Component {
 	};
 
 	/**
+	 * componentDidUpdate
+	 *
+	 * @returns {(void|null)}
+	 */
+	componentDidUpdate() {
+		if (this.props.itemId === null || this.state.orders.length > 0) return;
+
+		this.getOrders();
+	}
+
+	/**
 	 * render
 	 *
 	 * @returns {jsx}
@@ -127,18 +169,29 @@ class Orders extends Component {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{this.props.orders.map((order, key) => {
-								return (
-									<TableRow key={key}>
-										<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
-										<TableCell numeric>
-											<BottleCap title={`${order.price} Bottle Caps`}>{order.price}</BottleCap>
-										</TableCell>
-										<TableCell numeric>{order.quantity}</TableCell>
-										<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
-									</TableRow>
-								);
-							})}
+							{this.props.itemId &&
+								this.state.orders.map((order, key) => {
+									return (
+										<TableRow key={key}>
+											<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
+											<TableCell numeric>
+												<BottleCap title={`${order.price} Bottle Caps`}>
+													{order.price}
+												</BottleCap>
+											</TableCell>
+											<TableCell numeric>{order.quantity}</TableCell>
+											<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+										</TableRow>
+									);
+								})}
+							{!this.props.itemId && (
+								<TableRow>
+									<TableCell scope="row"></TableCell>
+									<TableCell numeric>	</TableCell>
+									<TableCell numeric></TableCell>
+									<TableCell numeric></TableCell>
+								</TableRow>
+							)}
 						</TableBody>
 					</Table>
 				</StyledPaper>
@@ -149,8 +202,8 @@ class Orders extends Component {
 
 Orders.propTypes = {
 	type: PropTypes.oneOf(['buy', 'sell']).isRequired,
-	orders: PropTypes.array.isRequired,
-	platform: PropTypes.string.isRequired,
+	itemId: PropTypes.string,
+	platform: PropTypes.string,
 };
 
 export default Orders;
