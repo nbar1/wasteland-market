@@ -3,6 +3,7 @@ var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var Order = require('../models/Order');
 var User = require('../models/User');
+var Item = require('../models/Item');
 
 router.post('/order', requiresLogin, (req, res, next) => {
 	let orderData = {
@@ -38,9 +39,9 @@ router.post('/order', requiresLogin, (req, res, next) => {
 	});
 });
 
-const getUserById = user => {
+const getUserById = userId => {
 	return User.find({
-		_id: user,
+		_id: userId,
 	})
 		.select('username platforms')
 		.exec()
@@ -50,36 +51,43 @@ const getUserById = user => {
 		});
 };
 
+const getItemById = itemId => {
+	return Item.find({
+		_id: itemId,
+		enabled: true,
+	})
+		.select('name linkName category')
+		.exec()
+		.then(item => item[0].toObject())
+		.catch(err => {
+			return false;
+		});
+};
+
 const getOrder = (req, res, next, type) => {
 	let perPage = 10;
-
-	if (req.query.item === undefined) {
-		return next({
-			status: 400,
-			message: 'No item ID was provided.',
-		});
-	}
-
-	if (req.query.platform === undefined) {
-		return next({
-			status: 400,
-			message: 'No platform was provided.',
-		});
-	}
 
 	let page = req.query.page ? req.query.page - 1 : 0;
 	page = page > 1 ? 1 : page;
 
-	Order.find({
-		itemId: req.query.item,
-		platform: req.query.platform,
+	let orderQuery = {
 		active: true,
 		type,
-	})
+	};
+
+	if (req.query.item) {
+		orderQuery.itemId = req.query.item;
+	}
+
+	if (req.query.platform) {
+		orderQuery.platform = req.query.platform;
+	}
+
+	Order.find(orderQuery)
 		.sort({ date: -1 })
 		.skip(page * perPage)
 		.limit(perPage)
-		.select('unusual includeDiscord includeSteam price quantity notes platform date addedBy')
+		.select('itemId unusual includeDiscord includeSteam price quantity notes platform date addedBy')
 		.exec((err, data) => {
 			if (err) {
 				let errorMessage = 'Unknown Error';
@@ -98,11 +106,14 @@ const getOrder = (req, res, next, type) => {
 
 				getUserById(order.addedBy, key).then(user => {
 					dataWithUserInfo[key].user = user;
+					getItemById(order.itemId, key).then(item => {
+						dataWithUserInfo[key].item = item;
 
-					processed++;
-					if (processed === data.length) {
-						return res.send(dataWithUserInfo);
-					}
+						processed++;
+						if (processed === data.length) {
+							return res.send(dataWithUserInfo);
+						}
+					});
 				});
 			});
 		});

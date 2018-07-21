@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Typography } from '@material-ui/core';
@@ -68,11 +69,15 @@ class Orders extends Component {
 	};
 
 	/**
-	 * getGraphTitle
+	 * componentDidMount
 	 *
-	 * @returns {string}
+	 * @returns {void}
 	 */
-	getGraphTitle = () => `${this.props.type} Orders`;
+	componentDidMount() {
+		if (this.props.allItems === true) {
+			this.getOrders();
+		}
+	}
 
 	/**
 	 * getOrders
@@ -81,12 +86,12 @@ class Orders extends Component {
 	 * @returns {void}
 	 */
 	getOrders = (page = 1) => {
+		let url = `/api/market/orders/${this.props.type}?page=${page}`;
+		url += this.props.itemId ? `&item=${this.props.itemId}` : '';
+		url += this.props.platform ? `&platform=${this.props.platform}` : '';
+
 		axios
-			.get(
-				`/api/market/orders/${this.props.type}?item=${this.props.itemId}&platform=${
-					this.props.platform
-				}&page=${page}`
-			)
+			.get(url)
 			.then(res => {
 				this.setState({
 					orders: res.data,
@@ -112,7 +117,7 @@ class Orders extends Component {
 					''
 				)}
 				{this.props.platform === 'playstation' ? (
-					<Platform title={`PlayStation: ${order.user.platforms.palystation}`} className="playstation">
+					<Platform title={`PlayStation: ${order.user.platforms.playstation}`} className="playstation">
 						{order.user.platforms.playstation}
 					</Platform>
 				) : (
@@ -154,54 +159,76 @@ class Orders extends Component {
 	 */
 	render() {
 		return (
-			<div>
-				<StyledPaper>
-					<StyledTableHeader gutterBottom variant="title" component="h2">
-						{this.getGraphTitle()}
-					</StyledTableHeader>
-					<Table>
-						<TableHead>
+			<StyledPaper className="wm-orders">
+				<StyledTableHeader gutterBottom variant="title" component="h2">
+					{this.props.title}
+				</StyledTableHeader>
+				<Table>
+					<TableHead>
+						{this.props.itemId && (
 							<TableRow>
 								<TableCell>User</TableCell>
 								<TableCell numeric>Price</TableCell>
 								<TableCell numeric>Quantity</TableCell>
 								<TableCell numeric>Time</TableCell>
 							</TableRow>
-						</TableHead>
-						<TableBody>
-							{this.props.itemId &&
-								this.state.orders.map((order, key) => {
-									return (
-										<TableRow key={key}>
-											<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
-											<TableCell numeric>
-												<BottleCap title={`${order.price} Bottle Caps`}>
-													{order.price}
-												</BottleCap>
-											</TableCell>
-											<TableCell numeric>{order.quantity}</TableCell>
-											<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
-										</TableRow>
-									);
-								})}
-							{!this.props.itemId && (
+						)}
+						{this.props.allItems && (
+							<TableRow>
+								<TableCell>Item</TableCell>
+								<TableCell numeric>Price</TableCell>
+								<TableCell numeric>Time</TableCell>
+							</TableRow>
+						)}
+					</TableHead>
+					<TableBody>
+						{this.props.itemId &&
+							this.state.orders.map((order, key) => {
+								return (
+									<TableRow key={key}>
+										<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
+										<TableCell numeric>
+											<BottleCap title={`${order.price} Bottle Caps`}>{order.price}</BottleCap>
+										</TableCell>
+										<TableCell numeric>{order.quantity}</TableCell>
+										<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+									</TableRow>
+								);
+							})}
+						{this.props.allItems === true &&
+							this.state.orders.map((order, key) => {
+								return (
+									<TableRow key={key}>
+										<TableCell scope="row">
+											<Link to={`/market/${order.item.linkName}`}>{order.item.name}</Link>
+										</TableCell>
+										<TableCell numeric>
+											<BottleCap title={`${order.price} Bottle Caps`}>{order.price}</BottleCap>
+										</TableCell>
+										<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+									</TableRow>
+								);
+							})}
+						{!this.props.itemId &&
+							!this.props.allItems && (
 								<TableRow>
-									<TableCell scope="row"></TableCell>
-									<TableCell numeric>	</TableCell>
-									<TableCell numeric></TableCell>
-									<TableCell numeric></TableCell>
+									<TableCell scope="row" />
+									<TableCell numeric />
+									<TableCell numeric />
+									<TableCell numeric />
 								</TableRow>
 							)}
-						</TableBody>
-					</Table>
-				</StyledPaper>
-			</div>
+					</TableBody>
+				</Table>
+			</StyledPaper>
 		);
 	}
 }
 
 Orders.propTypes = {
 	type: PropTypes.oneOf(['buy', 'sell']).isRequired,
+	title: PropTypes.string.isRequired,
+	allItems: PropTypes.bool,
 	itemId: PropTypes.string,
 	platform: PropTypes.string,
 };

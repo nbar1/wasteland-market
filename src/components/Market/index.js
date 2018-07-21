@@ -34,8 +34,6 @@ class Item extends Component {
 		price: 0,
 		change: 0,
 		platform: 'xbox',
-		buyOrders: [],
-		sellOrders: [],
 	};
 
 	constructor(props) {
@@ -99,8 +97,8 @@ class Item extends Component {
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
-				<Orders type={'sell'} itemId={this.state.itemId} orders={this.state.sellOrders} platform={this.state.platform} />
-				<Orders type={'buy'} itemId={this.state.itemId} orders={this.state.buyOrders} platform={this.state.platform} />
+				<Orders type={'sell'} title={'Sell Orders'} itemId={this.state.itemId} platform={this.state.platform} />
+				<Orders type={'buy'} title={'Buy Orders'} itemId={this.state.itemId} platform={this.state.platform} />
 			</div>
 		);
 	}
