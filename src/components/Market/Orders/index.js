@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Typography } from '@material-ui/core';
@@ -10,6 +10,10 @@ import capImage from '../../../images/cap.png';
 const StyledPaper = styled(Paper)`
 	&& {
 		margin: 15px 0;
+
+		tbody tr.wm-row-link {
+			cursor: pointer;
+		}
 	}
 `;
 
@@ -159,68 +163,81 @@ class Orders extends Component {
 	 */
 	render() {
 		return (
-			<StyledPaper className="wm-orders">
-				<StyledTableHeader gutterBottom variant="title" component="h2">
-					{this.props.title}
-				</StyledTableHeader>
-				<Table>
-					<TableHead>
-						{this.props.itemId && (
-							<TableRow>
-								<TableCell>User</TableCell>
-								<TableCell numeric>Price</TableCell>
-								<TableCell numeric>Quantity</TableCell>
-								<TableCell numeric>Time</TableCell>
-							</TableRow>
-						)}
-						{this.props.allItems && (
-							<TableRow>
-								<TableCell>Item</TableCell>
-								<TableCell numeric>Price</TableCell>
-								<TableCell numeric>Time</TableCell>
-							</TableRow>
-						)}
-					</TableHead>
-					<TableBody>
-						{this.props.itemId &&
-							this.state.orders.map((order, key) => {
-								return (
-									<TableRow key={key}>
-										<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
-										<TableCell numeric>
-											<BottleCap title={`${order.price} Bottle Caps`}>{order.price}</BottleCap>
-										</TableCell>
-										<TableCell numeric>{order.quantity}</TableCell>
-										<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+			<Route
+				render={({ history }) => (
+					<StyledPaper className="wm-orders">
+						<StyledTableHeader gutterBottom variant="title" component="h2">
+							{this.props.title}
+						</StyledTableHeader>
+						<Table>
+							<TableHead>
+								{this.props.itemId && (
+									<TableRow>
+										<TableCell>User</TableCell>
+										<TableCell numeric>Price</TableCell>
+										<TableCell numeric>Quantity</TableCell>
+										<TableCell numeric>Time</TableCell>
 									</TableRow>
-								);
-							})}
-						{this.props.allItems === true &&
-							this.state.orders.map((order, key) => {
-								return (
-									<TableRow key={key}>
-										<TableCell scope="row">
-											<Link to={`/market/${order.item.linkName}`}>{order.item.name}</Link>
-										</TableCell>
-										<TableCell numeric>
-											<BottleCap title={`${order.price} Bottle Caps`}>{order.price}</BottleCap>
-										</TableCell>
-										<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+								)}
+								{this.props.allItems && (
+									<TableRow>
+										<TableCell>Item</TableCell>
+										<TableCell numeric>Price</TableCell>
+										<TableCell numeric>Time</TableCell>
 									</TableRow>
-								);
-							})}
-						{!this.props.itemId &&
-							!this.props.allItems && (
-								<TableRow>
-									<TableCell scope="row" />
-									<TableCell numeric />
-									<TableCell numeric />
-									<TableCell numeric />
-								</TableRow>
-							)}
-					</TableBody>
-				</Table>
-			</StyledPaper>
+								)}
+							</TableHead>
+							<TableBody>
+								{this.props.itemId &&
+									this.state.orders.map((order, key) => {
+										return (
+											<TableRow key={key}>
+												<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
+												<TableCell numeric>
+													<BottleCap title={`${order.price} Bottle Caps`}>
+														{order.price}
+													</BottleCap>
+												</TableCell>
+												<TableCell numeric>{order.quantity}</TableCell>
+												<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+											</TableRow>
+										);
+									})}
+								{this.props.allItems === true &&
+									this.state.orders.map((order, key) => {
+										return (
+											<TableRow
+												key={key}
+												className="wm-row-link"
+												hover={true}
+												onClick={() => {
+													history.push(`/market/${order.item.linkName}`);
+												}}
+											>
+												<TableCell scope="row">{order.item.name}</TableCell>
+												<TableCell numeric>
+													<BottleCap title={`${order.price} Bottle Caps`}>
+														{order.price}
+													</BottleCap>
+												</TableCell>
+												<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+											</TableRow>
+										);
+									})}
+								{!this.props.itemId &&
+									!this.props.allItems && (
+										<TableRow>
+											<TableCell scope="row" />
+											<TableCell numeric />
+											<TableCell numeric />
+											<TableCell numeric />
+										</TableRow>
+									)}
+							</TableBody>
+						</Table>
+					</StyledPaper>
+				)}
+			/>
 		);
 	}
 }
