@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AppBar, Toolbar } from '@material-ui/core';
 import AuthContext from '../../context/AuthContext';
 import SearchBar from './SearchBar';
+import Navigation from '../Navigation';
 import UserHub from './UserHub';
 import { Link } from 'react-router-dom';
 
@@ -57,6 +58,7 @@ class Header extends Component {
 						</UserHubWrapper>
 					</Toolbar>
 				</StyledAppBar>
+				<Navigation />
 			</div>
 		);
 	}
