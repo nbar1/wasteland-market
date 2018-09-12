@@ -194,7 +194,7 @@ class Orders extends Component {
 											<TableRow key={key}>
 												<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
 												<TableCell numeric>
-													<BottleCap title={`${order.price} Bottle Caps`}>
+													<BottleCap title={`${order.price} Caps`}>
 														{order.price}
 													</BottleCap>
 												</TableCell>
@@ -216,7 +216,7 @@ class Orders extends Component {
 											>
 												<TableCell scope="row">{order.item.name}</TableCell>
 												<TableCell numeric>
-													<BottleCap title={`${order.price} Bottle Caps`}>
+													<BottleCap title={`${order.price} Caps`}>
 														{order.price}
 													</BottleCap>
 												</TableCell>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Helmet from 'react-helmet';
 import AuthProvider from './context/AuthProvider';
 import Header from './components/Header';
-import Navigation from './components/Navigation';
 import ContentWrapper from './components/ContentWrapper';
 import { Switch, Route } from 'react-router-dom';
 
@@ -31,7 +30,6 @@ class App extends Component {
 						<title>Wasteland Market</title>
 					</Helmet>
 					<Header />
-					<Navigation />
 					<ContentWrapper>
 						<Switch>
 							<Route exact path="/" component={Home} />

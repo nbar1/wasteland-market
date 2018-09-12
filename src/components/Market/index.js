@@ -10,6 +10,8 @@ import Orders from './Orders';
 
 import ItemNotFound from './ItemNotFound';
 
+import HorizontalAd from '../Ad/HorizontalAd';
+
 const Image = styled.div`
 	box-sizing: border-box;
 	display: inline-block;
@@ -97,8 +99,11 @@ class Item extends Component {
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<Graph />
+				<HorizontalAd />
 				<Orders type={'sell'} title={'Sell Orders'} itemId={this.state.itemId} platform={this.state.platform} />
+				<HorizontalAd />
 				<Orders type={'buy'} title={'Buy Orders'} itemId={this.state.itemId} platform={this.state.platform} />
+				<HorizontalAd />
 			</div>
 		);
 	}
