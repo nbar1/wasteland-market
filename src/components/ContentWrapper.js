@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledContentWrapper = styled.div`
-	margin-left: 250px;
 	padding: 10px;
-	padding-top: 74px;
+	padding-top: 114px;
 	text-align: left;
 `;
 
