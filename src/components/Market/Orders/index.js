@@ -356,7 +356,7 @@ class Orders extends Component {
 										{this.state.dialogDetails.itemName}
 									</DetailsFieldset>
 									<DetailsFieldset>
-										<label>Price</label>
+										<label>Price (each)</label>
 										<BottleCap title={`${this.state.dialogDetails.price} Caps`}>
 											{this.state.dialogDetails.price}
 										</BottleCap>

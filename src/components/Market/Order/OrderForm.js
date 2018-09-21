@@ -466,7 +466,7 @@ class Platforms extends Component {
 								type="number"
 								id="price"
 								name="price"
-								label="Price"
+								label="Price (each)"
 								margin="normal"
 								autoComplete="off"
 								fullWidth={true}
