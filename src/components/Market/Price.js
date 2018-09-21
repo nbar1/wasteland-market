@@ -11,6 +11,12 @@ const PriceWrapper = styled.div`
 	text-align: right;
 	vertical-align: top;
 	width: 40%;
+
+	@media (max-width: 700px) {
+		display: block;
+		text-align: center;
+		width: 100%;
+	}
 `;
 
 const Amount = styled.div`

@@ -193,7 +193,7 @@ class Orders extends Component {
 									<TableRow>
 										<TableCell>Item</TableCell>
 										<TableCell numeric>Price</TableCell>
-										<TableCell numeric>Time</TableCell>
+										<TableCell className="hide-small" numeric>Time</TableCell>
 									</TableRow>
 								)}
 							</TableHead>
@@ -230,7 +230,7 @@ class Orders extends Component {
 														{order.price}
 													</BottleCap>
 												</TableCell>
-												<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+												<TableCell className="hide-small" numeric>{moment(order.date).fromNow()}</TableCell>
 											</TableRow>
 										);
 									})}

@@ -24,6 +24,11 @@ const Image = styled.div`
 		max-height: 200px;
 		max-width: 100%;
 	}
+
+	@media (max-width: 700px) {
+		display: block;
+		width: 100%;
+	}
 `;
 
 class Item extends Component {
@@ -98,8 +103,6 @@ class Item extends Component {
 					<img src={`/images/items/${this.state.image}.png`} alt={this.state.name} />
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
-				<Graph />
-				<HorizontalAd />
 				<Orders type={'sell'} title={'Sell Orders'} itemId={this.state.itemId} platform={this.state.platform} />
 				<HorizontalAd />
 				<Orders type={'buy'} title={'Buy Orders'} itemId={this.state.itemId} platform={this.state.platform} />

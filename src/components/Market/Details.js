@@ -8,6 +8,12 @@ const DetailsWrapper = styled.div`
 	padding: 15px;
 	vertical-align: top;
 	width: 40%;
+
+	@media (max-width: 700px) {
+		display: block;
+		text-align: center;
+		width: 100%;
+	}
 `;
 
 const Name = styled.div`
