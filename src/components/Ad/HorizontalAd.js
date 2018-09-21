@@ -8,7 +8,8 @@ const HorizontalAdWrapper = styled.div`
 	line-height: 90px;
 	margin: 0 auto;
 	text-align: center;
-	width: 600px;
+	max-width: 600px;
+	width: 100%;
 `;
 
 class HorizontalAd extends Component {

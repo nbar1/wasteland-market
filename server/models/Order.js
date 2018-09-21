@@ -5,6 +5,11 @@ var OrderSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	open: {
+		type: Boolean,
+		default: true,
+		required: true,
+	},
 	item: {
 		type: String,
 		required: true,
@@ -21,6 +26,9 @@ var OrderSchema = new mongoose.Schema({
 	price: {
 		type: Number,
 		required: true,
+	},
+	level: {
+		type: Number,
 	},
 	quantity: {
 		type: Number,

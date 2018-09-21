@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { TextField, Button, Card, CardContent, Typography } from '@material-ui/core';
+import {
+	TextField,
+	Button,
+	Card,
+	CardContent,
+	Typography,
+	FormControl,
+	InputLabel,
+	NativeSelect,
+} from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
@@ -7,8 +16,8 @@ import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 
 const StyledCard = styled(Card)`
-	margin: 10vh auto;
-	width: 400px;
+	margin: 0 auto;
+	max-width: 400px;
 `;
 
 const StyledButton = styled(Button)`
@@ -19,6 +28,15 @@ const StyledButton = styled(Button)`
 		&:hover {
 			background: #2a2a2a;
 		}
+	}
+`;
+
+const SelectFormControl = styled(FormControl)`
+	&& {
+		display: block;
+		margin: 20px 0;
+		position: relative;
+		width: 300px;
 	}
 `;
 
@@ -96,6 +114,7 @@ class CreateItem extends Component {
 				'/api/item/create',
 				qs.stringify({
 					item: this.state.item,
+					category: this.state.category,
 				})
 			)
 			.then(res => {
@@ -156,6 +175,28 @@ class CreateItem extends Component {
 								error={this.state.missingItem ? true : false}
 								helperText={this.state.missingItem ? 'Please enter an item name' : false}
 							/>
+
+							<SelectFormControl>
+								<InputLabel htmlFor="category">Category</InputLabel>
+								<NativeSelect
+									value={this.state.category}
+									onChange={this.onChange}
+									inputProps={{
+										name: 'category',
+										value: this.state.category,
+									}}
+								>
+									<option value={'uncategorized'}>Uncategorized</option>
+									<option value={'ammunition'}>Ammunition</option>
+									<option value={'resource'}>Resource</option>
+									<option value={'weapon'}>Weapon</option>
+									<option value={'armor'}>Armor</option>
+									<option value={'food'}>Food</option>
+									<option value={'drink'}>Drink</option>
+									<option value={'clothing'}>Clothing</option>
+									<option value={'junk'}>Junk</option>
+								</NativeSelect>
+							</SelectFormControl>
 
 							<HiddenSubmit type="submit" />
 

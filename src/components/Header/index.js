@@ -23,12 +23,23 @@ const StyledAppBar = styled(AppBar)`
 	&& {
 		background: #000;
 		position: fixed;
+
+		@media (max-width: 700px) {
+			height: 105px;
+		}
 	}
 `;
 
 const SearchBarWrapper = styled.div`
 	position: absolute;
 	right: ${props => props.offset}px;
+
+	@media (max-width: 700px) {
+		left: 2%;
+		right: 2%;
+		top: 62px;
+		width: 100%;
+	}
 `;
 
 const UserHubWrapper = styled.div`

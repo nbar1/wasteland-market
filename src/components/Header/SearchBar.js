@@ -8,14 +8,20 @@ import styled from 'styled-components';
 const SearchBarWrapper = styled.div`
 	border-radius: 3px;
 	box-shadow: 0 0 5px 2px rgba(220, 182, 38);
+	width: ${props => props.width || 300}px;
+
+	@media (max-width: 700px) {
+		width: 96%;
+	}
 
 	input {
 		border-radius: 3px;
 		border: none;
 		box-sizing: border-box;
 		font-size: 18px;
+		margin: 0;
 		padding: 5px 30px 5px 10px;
-		width: ${props => props.width || 300}px;
+		width: 100%;
 
 		&:focus {
 			outline: none;

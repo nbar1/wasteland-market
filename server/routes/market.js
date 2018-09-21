@@ -12,6 +12,7 @@ router.post('/order', requiresLogin, (req, res, next) => {
 		itemId: req.body.itemId,
 		price: req.body.price,
 		quantity: req.body.quantity,
+		level: req.body.level,
 		unusual: req.body.unusual,
 		notes: req.body.notes,
 		platform: req.body.platform,

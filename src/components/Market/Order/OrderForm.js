@@ -13,6 +13,8 @@ import {
 	FormControl,
 	Radio,
 	Checkbox,
+	InputLabel,
+	NativeSelect,
 } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
@@ -51,8 +53,18 @@ const StyledTextField = styled(TextField)`
 	}
 `;
 
+const SelectFormControl = styled(FormControl)`
+	&& {
+		display: block;
+		margin: 20px 0;
+		position: relative;
+		width: 300px;
+	}
+`;
+
 const StyledMultilineTextField = styled(TextField)`
-	width: 400px;
+	max-width: 400px;
+	width: 100%;
 `;
 
 const ButtonWrapper = styled.div`
@@ -143,6 +155,7 @@ class Platforms extends Component {
 		itemId: null,
 		price: '',
 		quantity: '1',
+		level: 0,
 		unusual: false,
 		notes: '',
 		generalError: '',
@@ -166,6 +179,7 @@ class Platforms extends Component {
 	 * @returns {void}
 	 */
 	onChange = event => {
+		console.log(event.target);
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
@@ -260,6 +274,7 @@ class Platforms extends Component {
 					itemId: this.state.itemId,
 					price: this.state.price,
 					quantity: this.state.quantity,
+					level: this.state.level === 0 ? undefined : this.state.level,
 					unusual: this.state.unusual,
 					notes: this.state.notes,
 					includeDiscord: this.state.includeDiscord,
@@ -338,6 +353,15 @@ class Platforms extends Component {
 			return <Redirect to="/order/success" />;
 		}
 
+		const levelOptions = [];
+		for (let i = 1; i < 51; i++) {
+			levelOptions.push(
+				<option key={i} value={i}>
+					{i}
+				</option>
+			);
+		}
+
 		return (
 			<div>
 				<form onSubmit={this.submitForm}>
@@ -396,23 +420,40 @@ class Platforms extends Component {
 									}}
 								/>
 							</SearchBarWrapper>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={this.state.unusual}
-										onChange={this.onChange.bind(this, {
-											target: {
-												name: 'unusual',
-												value: !this.state.unusual,
-											},
-										})}
-										name="unusual"
-										value="true"
-										color="primary"
-									/>
-								}
-								label="This item has unusual attributes"
-							/>
+							<SelectFormControl>
+								<InputLabel htmlFor="level">Item Level</InputLabel>
+								<NativeSelect
+									value={this.state.level}
+									onChange={this.onChange}
+									inputProps={{
+										name: 'level',
+										value: this.state.level,
+									}}
+								>
+									<option value={0}>None</option>
+									{levelOptions}
+								</NativeSelect>
+							</SelectFormControl>
+							<br />
+							<FormControl>
+								<FormControlLabel
+									control={
+										<Checkbox
+											checked={this.state.unusual}
+											onChange={this.onChange.bind(this, {
+												target: {
+													name: 'unusual',
+													value: !this.state.unusual,
+												},
+											})}
+											name="unusual"
+											value="true"
+											color="primary"
+										/>
+									}
+									label="This item has unusual attributes"
+								/>
+							</FormControl>
 						</CardContent>
 					</StyledCard>
 

@@ -15,6 +15,16 @@ const StyledPaper = styled(Paper)`
 			cursor: pointer;
 		}
 	}
+
+	@media (max-width: 700px) {
+		.hide-small {
+			display: none;
+		}
+
+		.show-small {
+			display: table-row;
+		}
+	}
 `;
 
 const BottleCap = styled.span`
@@ -175,8 +185,8 @@ class Orders extends Component {
 									<TableRow>
 										<TableCell>User</TableCell>
 										<TableCell numeric>Price</TableCell>
-										<TableCell numeric>Quantity</TableCell>
-										<TableCell numeric>Time</TableCell>
+										<TableCell className="hide-small" numeric>Quantity</TableCell>
+										<TableCell className="hide-small" numeric>Time</TableCell>
 									</TableRow>
 								)}
 								{this.props.allItems && (
@@ -198,8 +208,8 @@ class Orders extends Component {
 														{order.price}
 													</BottleCap>
 												</TableCell>
-												<TableCell numeric>{order.quantity}</TableCell>
-												<TableCell numeric>{moment(order.date).fromNow()}</TableCell>
+												<TableCell className="hide-small" numeric>{order.quantity}</TableCell>
+												<TableCell className="hide-small" numeric>{moment(order.date).fromNow()}</TableCell>
 											</TableRow>
 										);
 									})}
@@ -229,8 +239,8 @@ class Orders extends Component {
 										<TableRow>
 											<TableCell scope="row" />
 											<TableCell numeric />
-											<TableCell numeric />
-											<TableCell numeric />
+											<TableCell className="hide-small" numeric />
+											<TableCell className="hide-small" numeric />
 										</TableRow>
 									)}
 							</TableBody>

@@ -5,6 +5,10 @@ const StyledContentWrapper = styled.div`
 	padding: 10px;
 	padding-top: 114px;
 	text-align: left;
+
+	@media (max-width: 700px) {
+		padding-top: 156px;
+	}
 `;
 
 const ContentWrapper = (props) => {
@@ -12,7 +16,7 @@ const ContentWrapper = (props) => {
 		<StyledContentWrapper>
 			{props.children}
 		</StyledContentWrapper>
-	)
-}
+	);
+};
 
 export default ContentWrapper;

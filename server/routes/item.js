@@ -8,7 +8,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 	let itemData = {
 		name: req.body.item,
 		linkName: req.body.item.replace(/\s+/g, '-').toLowerCase(),
-		category: 'uncategorized',
+		category: req.body.category,
 		addedBy: req.session.userId,
 		addedByIP: req.ip,
 	};
