@@ -3,7 +3,21 @@ import PropTypes from 'prop-types';
 import { Route } from 'react-router-dom';
 import moment from 'moment';
 import styled from 'styled-components';
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper, Typography } from '@material-ui/core';
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableRow,
+	Paper,
+	Typography,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	Button,
+} from '@material-ui/core';
 import axios from 'axios';
 import capImage from '../../../images/cap.png';
 
@@ -72,6 +86,17 @@ const StyledTableHeader = styled(Typography)`
 	text-transform: capitalize;
 `;
 
+const DetailsFieldset = styled.div`
+	min-width: 400px;
+	padding: 10px 0;
+
+	> label {
+		color: #555;
+		display: block;
+		font-weight: bold;
+	}
+`;
+
 class Orders extends Component {
 	/**
 	 * state
@@ -80,6 +105,18 @@ class Orders extends Component {
 	 */
 	state = {
 		orders: [],
+		dialogOpen: false,
+		dialogDetails: {
+			order: null,
+			itemName: null,
+			price: null,
+			platform: null,
+			quantity: null,
+			unusual: null,
+			date: null,
+			notes: null,
+			level: null,
+		},
 	};
 
 	/**
@@ -91,6 +128,51 @@ class Orders extends Component {
 		if (this.props.allItems === true) {
 			this.getOrders();
 		}
+	}
+
+	/**
+	 * openDialog
+	 *
+	 * @param {int} key
+	 * @returns {void}
+	 */
+	openDialog(key) {
+		this.setState({
+			dialogOpen: true,
+			dialogDetails: {
+				order: this.state.orders[key],
+				itemName: this.state.orders[key].item.name,
+				price: this.state.orders[key].price,
+				platform: this.state.orders[key].platform,
+				quantity: this.state.orders[key].quantity,
+				unusual: this.state.orders[key].unusual,
+				date: this.state.orders[key].date,
+				notes: this.state.orders[key].notes,
+				level: this.state.orders[key].level ? this.state.orders[key].level : undefined,
+			},
+		});
+	}
+
+	/**
+	 * closeDialog
+	 *
+	 * @returns {void}
+	 */
+	closeDialog() {
+		this.setState({
+			dialogOpen: false,
+			dialogDetails: {
+				order: null,
+				itemName: null,
+				price: null,
+				platform: null,
+				quantity: null,
+				unusual: null,
+				date: null,
+				notes: null,
+				level: null,
+			},
+		});
 	}
 
 	/**
@@ -121,6 +203,8 @@ class Orders extends Component {
 	 * @returns {jsx}
 	 */
 	showPlatformContactInfo = order => {
+		if (order === null) return;
+
 		return (
 			<div>
 				{this.props.platform === 'xbox' ? (
@@ -185,15 +269,21 @@ class Orders extends Component {
 									<TableRow>
 										<TableCell>User</TableCell>
 										<TableCell numeric>Price</TableCell>
-										<TableCell className="hide-small" numeric>Quantity</TableCell>
-										<TableCell className="hide-small" numeric>Time</TableCell>
+										<TableCell className="hide-small" numeric>
+											Quantity
+										</TableCell>
+										<TableCell className="hide-small" numeric>
+											Time
+										</TableCell>
 									</TableRow>
 								)}
 								{this.props.allItems && (
 									<TableRow>
 										<TableCell>Item</TableCell>
 										<TableCell numeric>Price</TableCell>
-										<TableCell className="hide-small" numeric>Time</TableCell>
+										<TableCell className="hide-small" numeric>
+											Time
+										</TableCell>
 									</TableRow>
 								)}
 							</TableHead>
@@ -201,15 +291,22 @@ class Orders extends Component {
 								{this.props.itemId &&
 									this.state.orders.map((order, key) => {
 										return (
-											<TableRow key={key}>
+											<TableRow
+												key={key}
+												className="wm-row-link"
+												hover={true}
+												onClick={() => this.openDialog(key)}
+											>
 												<TableCell scope="row">{this.showPlatformContactInfo(order)}</TableCell>
 												<TableCell numeric>
-													<BottleCap title={`${order.price} Caps`}>
-														{order.price}
-													</BottleCap>
+													<BottleCap title={`${order.price} Caps`}>{order.price}</BottleCap>
 												</TableCell>
-												<TableCell className="hide-small" numeric>{order.quantity}</TableCell>
-												<TableCell className="hide-small" numeric>{moment(order.date).fromNow()}</TableCell>
+												<TableCell className="hide-small" numeric>
+													{order.quantity}
+												</TableCell>
+												<TableCell className="hide-small" numeric>
+													{moment(order.date).fromNow()}
+												</TableCell>
 											</TableRow>
 										);
 									})}
@@ -226,11 +323,11 @@ class Orders extends Component {
 											>
 												<TableCell scope="row">{order.item.name}</TableCell>
 												<TableCell numeric>
-													<BottleCap title={`${order.price} Caps`}>
-														{order.price}
-													</BottleCap>
+													<BottleCap title={`${order.price} Caps`}>{order.price}</BottleCap>
 												</TableCell>
-												<TableCell className="hide-small" numeric>{moment(order.date).fromNow()}</TableCell>
+												<TableCell className="hide-small" numeric>
+													{moment(order.date).fromNow()}
+												</TableCell>
 											</TableRow>
 										);
 									})}
@@ -245,6 +342,49 @@ class Orders extends Component {
 									)}
 							</TableBody>
 						</Table>
+						<Dialog
+							open={this.state.dialogOpen}
+							onClose={this.closeDialog}
+							aria-labelledby="alert-dialog-title"
+							aria-describedby="alert-dialog-description"
+						>
+							<DialogTitle id="alert-dialog-title">Order Details</DialogTitle>
+							<DialogContent>
+								<DialogContentText id="alert-dialog-description">
+									<DetailsFieldset>
+										<label>Item</label>
+										{this.state.dialogDetails.itemName}
+									</DetailsFieldset>
+									<DetailsFieldset>
+										<label>Price</label>
+										<BottleCap title={`${this.state.dialogDetails.price} Caps`}>
+											{this.state.dialogDetails.price}
+										</BottleCap>
+									</DetailsFieldset>
+									<DetailsFieldset>
+										<label>Quantity</label>
+										{this.state.dialogDetails.quantity}
+									</DetailsFieldset>
+									<DetailsFieldset>
+										<label>Platform</label>
+										{this.state.dialogDetails.platform}
+									</DetailsFieldset>
+									<DetailsFieldset>
+										<label>Date Added</label>
+										{moment(this.state.dialogDetails.date).fromNow()}
+									</DetailsFieldset>
+									<DetailsFieldset>
+										<label>User</label>
+										{this.showPlatformContactInfo(this.state.dialogDetails.order)}
+									</DetailsFieldset>
+								</DialogContentText>
+							</DialogContent>
+							<DialogActions>
+								<Button onClick={this.closeDialog.bind(this)} color="primary">
+									Done
+								</Button>
+							</DialogActions>
+						</Dialog>
 					</StyledPaper>
 				)}
 			/>
