@@ -65,7 +65,7 @@ const getItemById = itemId => {
 		});
 };
 
-const getOrder = (req, res, next, type) => {
+const getOrders = (req, res, next, type) => {
 	let perPage = 10;
 
 	let page = req.query.page ? req.query.page - 1 : 0;
@@ -73,6 +73,7 @@ const getOrder = (req, res, next, type) => {
 
 	let orderQuery = {
 		active: true,
+		open: { $ne: false },
 		type,
 	};
 
@@ -131,11 +132,25 @@ const getMedian = values => {
 };
 
 router.get('/orders/buy', (req, res, next) => {
-	getOrder(req, res, next, 'buy');
+	getOrders(req, res, next, 'buy');
 });
 
 router.get('/orders/sell', (req, res, next) => {
-	getOrder(req, res, next, 'sell');
+	getOrders(req, res, next, 'sell');
+});
+
+router.post('/orders/close', (req, res) => {
+	let orderId = req.body.orderId;
+
+	Order.findOneAndUpdate(
+		{ _id: orderId, addedBy: req.session.userId },
+		{ $set: { open: false, closedDatetime: new Date() } },
+		{ upsert: false },
+		err => {
+			if (err) return res.status(400).send({ msg: 'Invalid order' });
+			return res.send({ success: true });
+		}
+	);
 });
 
 router.get('/price', (req, res, next) => {

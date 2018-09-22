@@ -14,11 +14,11 @@ import {
 	Dialog,
 	DialogActions,
 	DialogContent,
-	DialogContentText,
 	DialogTitle,
 	Button,
 } from '@material-ui/core';
 import axios from 'axios';
+import qs from 'querystring';
 import capImage from '../../../images/cap.png';
 
 const StyledPaper = styled(Paper)`
@@ -87,13 +87,31 @@ const StyledTableHeader = styled(Typography)`
 `;
 
 const DetailsFieldset = styled.div`
+	color: rgba(0, 0, 0, 0.54);
 	min-width: 400px;
 	padding: 10px 0;
 
 	> label {
 		color: #555;
-		display: block;
 		font-weight: bold;
+		margin-right: 15px;
+		vertical-align: top;
+
+		&.label-block {
+			display: block;
+		}
+	}
+
+	> div {
+		display: inline-block;
+
+		> div {
+			padding-top: 0;
+
+			&:before {
+				line-height: 20px;
+			}
+		}
 	}
 `;
 
@@ -128,6 +146,19 @@ class Orders extends Component {
 		if (this.props.allItems === true) {
 			this.getOrders();
 		}
+	}
+
+	/**
+	 * orderIsMine
+	 *
+	 * @returns {bool}
+	 */
+	orderIsMine() {
+		if (!this.state.dialogDetails.order) return false;
+		if (!this.props.authContext.id) return false;
+		if (this.state.dialogDetails.order.user._id !== this.props.authContext.id) return false;
+
+		return true;
 	}
 
 	/**
@@ -173,6 +204,28 @@ class Orders extends Component {
 				level: null,
 			},
 		});
+	}
+
+	/**
+	 * closeOrder
+	 *
+	 * @returns {void}
+	 */
+	closeOrder() {
+		axios
+			.post(
+				'/api/market/orders/close',
+				qs.stringify({
+					orderId: this.state.dialogDetails.order._id,
+				})
+			)
+			.then(res => {
+				if (res.data.success === true) {
+					this.closeDialog();
+					this.getOrders();
+				}
+			})
+			.catch(() => {});
 	}
 
 	/**
@@ -350,36 +403,39 @@ class Orders extends Component {
 						>
 							<DialogTitle id="alert-dialog-title">Order Details</DialogTitle>
 							<DialogContent>
-								<DialogContentText id="alert-dialog-description">
-									<DetailsFieldset>
-										<label>Item</label>
-										{this.state.dialogDetails.itemName}
-									</DetailsFieldset>
-									<DetailsFieldset>
-										<label>Price (each)</label>
-										<BottleCap title={`${this.state.dialogDetails.price} Caps`}>
-											{this.state.dialogDetails.price}
-										</BottleCap>
-									</DetailsFieldset>
-									<DetailsFieldset>
-										<label>Quantity</label>
-										{this.state.dialogDetails.quantity}
-									</DetailsFieldset>
-									<DetailsFieldset>
-										<label>Platform</label>
-										{this.state.dialogDetails.platform}
-									</DetailsFieldset>
-									<DetailsFieldset>
-										<label>Date Added</label>
-										{moment(this.state.dialogDetails.date).fromNow()}
-									</DetailsFieldset>
-									<DetailsFieldset>
-										<label>User</label>
-										{this.showPlatformContactInfo(this.state.dialogDetails.order)}
-									</DetailsFieldset>
-								</DialogContentText>
+								<DetailsFieldset>
+									<label>Item</label>
+									{this.state.dialogDetails.itemName}
+								</DetailsFieldset>
+								<DetailsFieldset>
+									<label>Price (each)</label>
+									<BottleCap title={`${this.state.dialogDetails.price} Caps`}>
+										{this.state.dialogDetails.price}
+									</BottleCap>
+								</DetailsFieldset>
+								<DetailsFieldset>
+									<label>Quantity</label>
+									{this.state.dialogDetails.quantity}
+								</DetailsFieldset>
+								<DetailsFieldset>
+									<label>Platform</label>
+									{this.state.dialogDetails.platform}
+								</DetailsFieldset>
+								<DetailsFieldset>
+									<label>Date Added</label>
+									{moment(this.state.dialogDetails.date).fromNow()}
+								</DetailsFieldset>
+								<DetailsFieldset>
+									<label>User</label>
+									{this.showPlatformContactInfo(this.state.dialogDetails.order)}
+								</DetailsFieldset>
 							</DialogContent>
 							<DialogActions>
+								{this.orderIsMine() ? (
+									<Button onClick={this.closeOrder.bind(this)} color="secondary">
+										Close Order
+									</Button>
+								) : null}
 								<Button onClick={this.closeDialog.bind(this)} color="primary">
 									Done
 								</Button>
@@ -398,6 +454,7 @@ Orders.propTypes = {
 	allItems: PropTypes.bool,
 	itemId: PropTypes.string,
 	platform: PropTypes.string,
+	authContext: PropTypes.object,
 };
 
 export default Orders;

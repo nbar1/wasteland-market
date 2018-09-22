@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { IconButton } from '@material-ui/core';
-import { MenuIcon } from '@material-ui/icons';
 
 const StyledBar = styled.div`
 	background-color: #2a2a2a;

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import Helmet from 'react-helmet';
+import AuthContext from '../../context/AuthContext';
 
 import Details from './Details';
 import Price from './Price';
-import Graph from './Graph';
 import Orders from './Orders';
 
 import ItemNotFound from './ItemNotFound';
@@ -96,16 +96,37 @@ class Item extends Component {
 		return (
 			<div>
 				<Helmet>
-					<title>Wasteland Market{this.state.name ? ` - ${this.state.name}` : ''}</title>
+					<title>
+						Wasteland Market
+						{this.state.name ? ` - ${this.state.name}` : ''}
+					</title>
 				</Helmet>
 				<Details name={this.state.name} category={this.state.category} />
 				<Image>
 					<img src={`/images/items/${this.state.image}.png`} alt={this.state.name} />
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
-				<Orders type={'sell'} title={'Sell Orders'} itemId={this.state.itemId} platform={this.state.platform} />
-				<HorizontalAd />
-				<Orders type={'buy'} title={'Buy Orders'} itemId={this.state.itemId} platform={this.state.platform} />
+				<AuthContext>
+					{context => (
+						<div>
+							<Orders
+								type={'sell'}
+								title={'Sell Orders'}
+								itemId={this.state.itemId}
+								platform={this.state.platform}
+								authContext={context}
+							/>
+							<HorizontalAd />
+							<Orders
+								type={'buy'}
+								title={'Buy Orders'}
+								itemId={this.state.itemId}
+								platform={this.state.platform}
+								authContext={context}
+							/>
+						</div>
+					)}
+				</AuthContext>
 				<HorizontalAd />
 			</div>
 		);

@@ -325,6 +325,7 @@ router.get('/authStatus', requiresLogin, (req, res, next) => {
 		return res.send({
 			loggedIn: true,
 			username: doc.username,
+			id: doc._id,
 			premium: doc.premium,
 			verified: doc.verified,
 			platforms: doc.platforms,
