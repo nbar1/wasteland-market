@@ -24,10 +24,11 @@ import NotFound from './components/NotFound';
 
 ReactGA.initialize('UA-126411028-1');
 
-function fireTracking() {
+const fireTracking = function() {
 	ReactGA.set({ page: window.location.pathname });
 	ReactGA.pageview(window.location.pathname);
-}
+	return null;
+};
 
 class App extends Component {
 	render() {
