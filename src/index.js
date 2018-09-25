@@ -4,15 +4,8 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-ReactGA.initialize('UA-126411028-1');
-ReactGA.pageview('/');
-
-function fireTracking() {
-	ReactGA.pageview(window.location.pathname);
-}
-
 ReactDOM.render(
-	<BrowserRouter onUpdate={fireTracking}>
+	<BrowserRouter>
 		<App />
 	</BrowserRouter>,
 	document.getElementById('root'));

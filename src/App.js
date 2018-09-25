@@ -4,6 +4,7 @@ import AuthProvider from './context/AuthProvider';
 import Header from './components/Header';
 import ContentWrapper from './components/ContentWrapper';
 import { Switch, Route } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 import RequiresLogin from './components/Wrappers/RequireLogin';
 
@@ -21,10 +22,18 @@ import CreateItem from './components/Item/CreateItem';
 
 import NotFound from './components/NotFound';
 
+ReactGA.initialize('UA-126411028-1');
+
+function fireTracking() {
+	ReactGA.set({ page: window.location.pathname });
+	ReactGA.pageview(window.location.pathname);
+}
+
 class App extends Component {
 	render() {
 		return (
 			<div className="App">
+				<Route path="/" component={fireTracking} />
 				<AuthProvider>
 					<Helmet>
 						<title>Wasteland Market</title>
