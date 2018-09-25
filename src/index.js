@@ -8,7 +8,7 @@ ReactGA.initialize('UA-126411028-1');
 ReactGA.pageview('/');
 
 function fireTracking() {
-	ReactGA.pageview(window.location);
+	ReactGA.pageview(window.location.pathname);
 }
 
 ReactDOM.render(
