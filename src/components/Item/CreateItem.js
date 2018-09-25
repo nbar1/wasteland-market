@@ -14,6 +14,7 @@ import qs from 'querystring';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
+import ReactGA from 'react-ga';
 
 const StyledCard = styled(Card)`
 	margin: 0 auto;
@@ -121,6 +122,12 @@ class CreateItem extends Component {
 				if (res.data.redirect) {
 					this.setState({
 						redirect: res.data.redirect,
+					});
+
+					ReactGA.event({
+						category: 'Item',
+						action: 'Create Item',
+						label: this.state.item,
 					});
 				}
 			})

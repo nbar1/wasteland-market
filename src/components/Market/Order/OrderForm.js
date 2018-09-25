@@ -20,6 +20,7 @@ import axios from 'axios';
 import qs from 'querystring';
 import { Redirect } from 'react-router-dom';
 import capImage from '../../../images/cap.png';
+import ReactGA from 'react-ga';
 
 const StyledCard = styled(Card)`
 	&& {
@@ -285,6 +286,11 @@ class Platforms extends Component {
 				if (res.data.success === true && res.data.message === 'order-created') {
 					this.setState({
 						orderSuccess: true,
+					});
+
+					ReactGA.event({
+						category: 'Market',
+						action: 'Create Order',
 					});
 				}
 			})

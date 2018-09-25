@@ -5,6 +5,7 @@ import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
 import { Redirect } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 const LoginWrapper = styled.div`
 	margin: 0 auto;
@@ -220,6 +221,12 @@ class LoginForm extends Component {
 				)
 				.then(res => {
 					this.props.context.login(res.data.user);
+
+					ReactGA.event({
+						category: 'User',
+						action: 'Login',
+						label: this.state.email,
+					});
 				})
 				.catch((err, res) => {
 					let errorMessage =
@@ -247,6 +254,12 @@ class LoginForm extends Component {
 					if (res.data.success === true) {
 						window.location.href = '/';
 					}
+
+					ReactGA.event({
+						category: 'User',
+						action: 'Register',
+						label: this.state.email,
+					});
 				})
 				.catch((err, res) => {
 					let errorMessage =

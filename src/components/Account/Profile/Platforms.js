@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Card, Typography, CardContent, TextField, Button } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
+import ReactGA from 'react-ga';
 
 const StyledTextField = styled(TextField)`
 	&& {
@@ -117,6 +118,11 @@ class Platforms extends Component {
 				if (res.data.success === true) {
 					this.setState({
 						successMessage: res.data.message,
+					});
+
+					ReactGA.event({
+						category: 'User',
+						action: 'Update Platforms'
 					});
 				}
 			})

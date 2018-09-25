@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Card, Typography, CardContent } from '@material-ui/core';
 import Helmet from 'react-helmet';
 import axios from 'axios';
+import ReactGA from 'react-ga';
 
 class Verify extends Component {
 	constructor(props) {
@@ -21,6 +22,11 @@ class Verify extends Component {
 			.get(`/api/user/verify/${token}`)
 			.then(res => {
 				this.setState({ isVerified: true });
+
+				ReactGA.event({
+					category: 'User',
+					action: 'Verified Email'
+				});
 			})
 			.catch(err => {
 				this.setState({ error: true });

@@ -4,6 +4,7 @@ import Autosuggest from 'react-autosuggest';
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
+import ReactGA from 'react-ga';
 
 const SearchBarWrapper = styled.div`
 	border-radius: 3px;
@@ -122,6 +123,12 @@ class SearchBar extends Component {
 
 	onSuggestionSelected = (event, data) => {
 		window.location.href = `/market/${data.suggestion.linkName}`;
+
+		ReactGA.event({
+			category: 'Search',
+			action: 'Confirmed Search',
+			label: data.suggestion.linkName,
+		});
 	};
 
 	// Autosuggest will call this function every time you need to clear suggestions.

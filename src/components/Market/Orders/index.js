@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import qs from 'querystring';
 import capImage from '../../../images/cap.png';
+import ReactGA from 'react-ga';
 
 const StyledPaper = styled(Paper)`
 	&& {
@@ -224,6 +225,11 @@ class Orders extends Component {
 					this.closeDialog();
 					this.getOrders();
 				}
+
+				ReactGA.event({
+					category: 'Market',
+					action: 'Close Order',
+				});
 			})
 			.catch(() => {});
 	}
