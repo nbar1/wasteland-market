@@ -183,6 +183,11 @@ class Orders extends Component {
 				level: this.state.orders[key].level ? this.state.orders[key].level : undefined,
 			},
 		});
+
+		ReactGA.event({
+			category: 'Market',
+			action: 'Open Order Details',
+		});
 	}
 
 	/**

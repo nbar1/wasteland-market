@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Menu, MenuItem, IconButton } from '@material-ui/core';
+import ReactGA from 'react-ga';
 
 class Dropdown extends Component {
 	state = {
@@ -23,6 +24,11 @@ class Dropdown extends Component {
 			.then(res => {
 				document.location.href = '/';
 				this.handleClose();
+
+				ReactGA.event({
+					category: 'User',
+					action: 'Logout',
+				});
 			})
 			.catch((err, res) => {
 				document.location.href = '/';
