@@ -34,11 +34,11 @@ class App extends Component {
 	render() {
 		return (
 			<div className="App">
-				<Route path="/" component={fireTracking} />
 				<AuthProvider>
 					<Helmet>
 						<title>Wasteland Market</title>
 					</Helmet>
+					<Route path="/" component={fireTracking} />
 					<Header />
 					<ContentWrapper>
 						<Switch>

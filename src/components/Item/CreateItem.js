@@ -17,7 +17,7 @@ import Helmet from 'react-helmet';
 import ReactGA from 'react-ga';
 
 const StyledCard = styled(Card)`
-	margin: 0 auto;
+	margin: 25px auto 0;
 	max-width: 400px;
 `;
 

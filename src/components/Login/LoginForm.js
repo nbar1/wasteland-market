@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Card, CardContent, Typography } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import ReactGA from 'react-ga';
 
 const LoginWrapper = styled.div`
 	margin: 0 auto;
-	padding-top: 10vh;
+	padding-top: 25px;
 	text-align: center;
 `;
 
@@ -33,7 +33,7 @@ const Title = styled.div`
 	}
 `;
 
-const FormWrapper = styled.form`
+const StyledCard = styled(Card)`
 	background-color: #ddd;
 	border-radius: 3px;
 	box-shadow: 0 0 5px 2px rgba(220, 182, 38, 0.5);
@@ -46,7 +46,7 @@ const FormWrapper = styled.form`
 const StyledTextField = styled(TextField)`
 	&& {
 		display: block;
-		margin-left: 50px;
+		margin: 0 auto;
 		text-align: center;
 		width: 300px;
 	}
@@ -229,10 +229,7 @@ class LoginForm extends Component {
 					});
 				})
 				.catch((err, res) => {
-					let errorMessage =
-						err.response && err.response.data
-							? err.response.data.message
-							: 'Unknown Error';
+					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
 					this.setState({
 						generalError: errorMessage,
 					});
@@ -262,10 +259,7 @@ class LoginForm extends Component {
 					});
 				})
 				.catch((err, res) => {
-					let errorMessage =
-						err.response && err.response.data
-							? err.response.data.message
-							: 'Unknown Error';
+					let errorMessage = err.response && err.response.data ? err.response.data.message : 'Unknown Error';
 					this.setState({
 						generalError: errorMessage,
 					});
@@ -305,102 +299,91 @@ class LoginForm extends Component {
 						<title>Wasteland Market - Register</title>
 					</Helmet>
 				)}
-				<Title>
-					<div className="header">{this.state.isLogin ? 'Login' : 'Register'}</div>
-					<div className="subheader" onClick={this.toggleForm}>
-						{this.state.isLogin ? 'Register' : 'Login'}
-					</div>
-				</Title>
-				<FormWrapper onSubmit={this.submitForm}>
-					{this.state.generalError && (
-						<GeneralError>{this.state.generalError}</GeneralError>
-					)}
+				<StyledCard raised={true}>
+					<form onSubmit={this.submitForm}>
+						<CardContent>
+							<Typography gutterBottom variant="headline" component="h2">
+								{this.state.isLogin ? 'Login' : 'Register'}
+							</Typography>
 
-					<StyledTextField
-						required
-						id="email"
-						name="email"
-						label="Email Address"
-						margin="normal"
-						fullWidth={true}
-						value={this.state.email}
-						onChange={this.onChange}
-						error={this.state.missingEmail ? true : false}
-						helperText={
-							this.state.missingEmail ? 'Please enter your Email Address' : false
-						}
-					/>
+							{this.state.generalError && <GeneralError>{this.state.generalError}</GeneralError>}
 
-					{!this.state.isLogin && (
-						<StyledTextField
-							required
-							id="username"
-							name="username"
-							label="Username"
-							margin="normal"
-							fullWidth={true}
-							value={this.state.username}
-							onChange={this.onChange}
-							error={this.state.missingUsername ? true : false}
-							helperText={
-								this.state.missingUsername ? 'Please enter your Username' : false
-							}
-						/>
-					)}
+							<StyledTextField
+								required
+								id="email"
+								name="email"
+								label="Email Address"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.email}
+								onChange={this.onChange}
+								error={this.state.missingEmail ? true : false}
+								helperText={this.state.missingEmail ? 'Please enter your Email Address' : false}
+							/>
 
-					<StyledTextField
-						type="password"
-						required
-						id="password"
-						name="password"
-						label="Password"
-						margin="normal"
-						fullWidth={true}
-						value={this.state.password}
-						onChange={this.onChange}
-						error={
-							this.state.missingPassword || this.state.passwordMismatch ? true : false
-						}
-						helperText={this.state.missingPassword ? 'Please enter a password' : false}
-					/>
+							{!this.state.isLogin && (
+								<StyledTextField
+									required
+									id="username"
+									name="username"
+									label="Username"
+									margin="normal"
+									fullWidth={true}
+									value={this.state.username}
+									onChange={this.onChange}
+									error={this.state.missingUsername ? true : false}
+									helperText={this.state.missingUsername ? 'Please enter your Username' : false}
+								/>
+							)}
 
-					{!this.state.isLogin && (
-						<StyledTextField
-							type="password"
-							required
-							id="passwordConf"
-							name="passwordConf"
-							label="Confirm Password"
-							margin="normal"
-							fullWidth={true}
-							value={this.state.passwordConf}
-							onChange={this.onChange}
-							error={
-								this.state.missingPasswordConf || this.state.passwordMismatch
-									? true
-									: false
-							}
-							helperText={
-								this.state.missingPasswordConf
-									? 'Please confirm your password'
-									: false
-							}
-						/>
-					)}
+							<StyledTextField
+								type="password"
+								required
+								id="password"
+								name="password"
+								label="Password"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.password}
+								onChange={this.onChange}
+								error={this.state.missingPassword || this.state.passwordMismatch ? true : false}
+								helperText={this.state.missingPassword ? 'Please enter a password' : false}
+							/>
 
-					{this.state.passwordMismatch &&
-						!this.state.isLogin && (
-							<GeneralError>Your passwords do not match</GeneralError>
-						)}
+							{!this.state.isLogin && (
+								<StyledTextField
+									type="password"
+									required
+									id="passwordConf"
+									name="passwordConf"
+									label="Confirm Password"
+									margin="normal"
+									fullWidth={true}
+									value={this.state.passwordConf}
+									onChange={this.onChange}
+									error={this.state.missingPasswordConf || this.state.passwordMismatch ? true : false}
+									helperText={this.state.missingPasswordConf ? 'Please confirm your password' : false}
+								/>
+							)}
 
-					<HiddenSubmit type="submit" />
+							{this.state.passwordMismatch &&
+								!this.state.isLogin && <GeneralError>Your passwords do not match</GeneralError>}
 
-					<ButtonWrapper>
-						<StyledButton variant="contained" size="large" onClick={this.submitForm}>
-							{this.state.isLogin ? 'Login' : 'Register'}
-						</StyledButton>
-					</ButtonWrapper>
-				</FormWrapper>
+							<HiddenSubmit type="submit" />
+
+							<ButtonWrapper>
+								<StyledButton variant="contained" size="large" onClick={this.submitForm}>
+									{this.state.isLogin ? 'Login' : 'Register'}
+								</StyledButton>
+							</ButtonWrapper>
+							<ButtonWrapper>
+								<StyledButton variant="contained" size="small" onClick={this.toggleForm}>
+									{this.state.isLogin ? 'Register' : 'Login'}
+								</StyledButton>
+							</ButtonWrapper>
+						</CardContent>
+					</form>
+				</StyledCard>
 			</LoginWrapper>
 		);
 	}
