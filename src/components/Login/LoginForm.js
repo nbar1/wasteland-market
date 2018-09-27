@@ -13,26 +13,6 @@ const LoginWrapper = styled.div`
 	text-align: center;
 `;
 
-const Title = styled.div`
-	margin: 0 auto 5px;
-	position: relative;
-	text-align: left;
-	width: 400px;
-
-	> .header {
-		font-size: 32px;
-		font-weight: bold;
-	}
-
-	> .subheader {
-		bottom: 0;
-		cursor: pointer;
-		position: absolute;
-		right: 0;
-		text-decoration: underline;
-	}
-`;
-
 const StyledCard = styled(Card)`
 	background-color: #ddd;
 	border-radius: 3px;

@@ -44,7 +44,7 @@ const getUserById = userId => {
 	return User.find({
 		_id: userId,
 	})
-		.select('username platforms')
+		.select('username platforms premium')
 		.exec()
 		.then(user => user[0].toObject())
 		.catch(err => {

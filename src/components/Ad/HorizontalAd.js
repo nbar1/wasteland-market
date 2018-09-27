@@ -14,6 +14,8 @@ const HorizontalAdWrapper = styled.div`
 
 class HorizontalAd extends Component {
 	render() {
+		return null;
+
 		return (
 			<div>
 				<AuthContext>
