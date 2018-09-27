@@ -20,6 +20,26 @@ router.post('/register', (req, res, next) => {
 		return next(err);
 	}
 
+	if (req.body.password.length < 8) {
+		return next({
+			status: 401,
+			message: {
+				success: false,
+				message: 'Your password must be at least 8 characters',
+			},
+		});
+	}
+
+	if (req.body.username.length < 6) {
+		return next({
+			status: 401,
+			message: {
+				success: false,
+				message: 'Your username must be at least 6 characters',
+			},
+		});
+	}
+
 	let userData = {
 		email: req.body.email,
 		username: req.body.username,
@@ -83,7 +103,13 @@ router.post('/register', (req, res, next) => {
 
 			sendMail(user.email, 'Verify Your Email - Wasteland Market', message, (err, data) => {
 				if (err) {
-					return res.status(500).send({ msg: err.message });
+					return next({
+						status: 401,
+						message: {
+							success: false,
+							message: 'Unable to send verification email. Please contact support.',
+						},
+					});
 				}
 
 				return res.send({
@@ -195,11 +221,13 @@ router.post('/change-password', (req, res, next) => {
 	// check password integrity
 	if (req.body.newPassword !== req.body.newPasswordConf) {
 		let err = new Error('Passwords do not match.');
-		err.status = 400;
-
-		res.send('passwords dont match');
-
-		return next(err);
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: err.message || 'Unknown Error',
+			},
+		});
 	}
 
 	User.changePassword(req.session.userId, req.body.currentPassword, (err, user) => {
@@ -209,6 +237,16 @@ router.post('/change-password', (req, res, next) => {
 				message: {
 					success: false,
 					message: err.message || 'Unable to update password',
+				},
+			});
+		}
+
+		if (req.body.newPassword.length < 8) {
+			return next({
+				status: 401,
+				message: {
+					success: false,
+					message: err.message || 'Your password must be at least 8 characters',
 				},
 			});
 		}
@@ -298,7 +336,7 @@ router.get('/verify/resend', (req, res, next) => {
 					return res.status(500).send({ msg: err.message });
 				}
 
-				return res.send({tokenCreated: true});
+				return res.send({ tokenCreated: true });
 			});
 		});
 	});

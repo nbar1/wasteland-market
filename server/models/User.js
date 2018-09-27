@@ -51,7 +51,7 @@ UserSchema.plugin(uniqueValidator);
 
 // authenticate input against database
 UserSchema.statics.authenticate = (email, password, callback) => {
-	User.findOne({ email: email }).exec((err, user) => {
+	User.findOne({ email: email.toLowerCase() }).exec((err, user) => {
 		if (err) {
 			return callback(err);
 		}
@@ -73,6 +73,12 @@ UserSchema.statics.authenticate = (email, password, callback) => {
 
 // change password
 UserSchema.statics.changePassword = (userId, currentPassword, callback) => {
+	if (currentPassword.length < 8) {
+		let err = new Error('Your password must be at least 8 characters');
+		err.status = 401;
+		return callback(err);
+	}
+
 	User.findOne({ _id: userId }).exec((err, user) => {
 		if (err) {
 			return callback(err);
