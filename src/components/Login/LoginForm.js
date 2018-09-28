@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from 'react-helmet';
+import { Link } from 'react-router-dom';
 import { TextField, Button, Card, CardContent, Typography } from '@material-ui/core';
 import axios from 'axios';
 import qs from 'querystring';
@@ -356,6 +357,15 @@ class LoginForm extends Component {
 									{this.state.isLogin ? 'Login' : 'Register'}
 								</StyledButton>
 							</ButtonWrapper>
+							{this.state.isLogin && (
+								<ButtonWrapper>
+									<Link to={'/account/reset-password'}>
+										<StyledButton variant="contained" size="small">
+											Forgot Password
+										</StyledButton>
+									</Link>
+								</ButtonWrapper>
+							)}
 							<ButtonWrapper>
 								<StyledButton variant="contained" size="small" onClick={this.toggleForm}>
 									{this.state.isLogin ? 'Register' : 'Login'}
