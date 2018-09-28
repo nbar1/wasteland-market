@@ -7,6 +7,7 @@ import { Switch, Route } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
 import RequiresLogin from './components/Wrappers/RequireLogin';
+import RequiresAdmin from './components/Wrappers/RequireAdmin';
 
 import Home from './components/Home';
 import Login from './components/Login';
@@ -21,6 +22,8 @@ import Order from './components/Market/Order';
 import OrderMock from './components/Market/Order/Mock';
 import OrderSuccess from './components/Market/Order/OrderSuccess';
 import CreateItem from './components/Item/CreateItem';
+
+import MyOrders from './components/Market/Orders/MyOrders';
 
 import NotFound from './components/NotFound';
 
@@ -54,10 +57,12 @@ class App extends Component {
 							<Route exact path="/account/reset-password/:token" component={ResetPasswordEntry} />
 
 							<Route exact path="/order" component={RequiresLogin(Order)} />
-							<Route exact path="/order/mock" component={RequiresLogin(OrderMock)} />
+							<Route exact path="/order/mock" component={RequiresAdmin(OrderMock)} />
 							<Route exact path="/order/success" component={RequiresLogin(OrderSuccess)} />
 							<Route exact path="/market" component={Market} />
 							<Route exact path="/market/:item" component={Market} />
+							<Route exact path="/my-orders" component={RequiresLogin(MyOrders)} />
+
 							<Route exact path="/create-item" component={RequiresLogin(CreateItem)} />
 
 							<Route path="*" component={NotFound} />

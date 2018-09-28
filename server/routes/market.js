@@ -85,6 +85,10 @@ const getOrders = (req, res, next, type) => {
 		orderQuery.platform = req.query.platform;
 	}
 
+	if (req.query.user) {
+		orderQuery.addedBy = req.query.user;
+	}
+
 	Order.find(orderQuery)
 		.sort({ date: -1 })
 		.skip(page * perPage)
@@ -103,9 +107,12 @@ const getOrders = (req, res, next, type) => {
 			let dataWithUserInfo = [];
 			let processed = 0;
 
+			if (data.length === 0) {
+				return res.send([]);
+			}
+
 			data.forEach((order, key) => {
 				dataWithUserInfo.push(order.toObject());
-
 				getUserById(order.addedBy, key).then(user => {
 					dataWithUserInfo[key].user = user;
 					getItemById(order.itemId, key).then(item => {

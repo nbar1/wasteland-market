@@ -143,6 +143,7 @@ class Navigation extends Component {
 			<div>
 				<StyledBar open={true} variant={'permanent'}>
 					<Link to={'/order'}>Create Order</Link>
+					<Link to={'/my-orders'}>My Orders</Link>
 					<Link to={'/market'}>Market</Link>
 					<Link to={'/create-item'}>Add Item</Link>
 					<SocialLinks>

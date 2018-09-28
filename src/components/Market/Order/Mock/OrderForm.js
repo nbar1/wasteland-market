@@ -253,7 +253,7 @@ class Platforms extends Component {
 	};
 
 	getTimestamp = () => {
-		let start = new Date(2018, 6, 6);
+		let start = new Date(2018, 8, 25);
 		let end = new Date();
 
 		return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toISOString();

@@ -507,6 +507,7 @@ router.get('/authStatus', requiresLogin, (req, res, next) => {
 			premium: doc.premium,
 			verified: doc.verified,
 			platforms: doc.platforms,
+			admin: doc.toObject().admin,
 		});
 	});
 });

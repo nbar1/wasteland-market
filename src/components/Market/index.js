@@ -31,6 +31,17 @@ const Image = styled.div`
 	}
 `;
 
+const RecentOrdersWrapper = styled.div`
+	.wm-orders {
+		@media (min-width: 1200px) {
+			box-sizing: border-box;
+			display: inline-block;
+			margin: 1%;
+			width: 48%;
+		}
+	}
+`;
+
 class Item extends Component {
 	state = {
 		error: false,
@@ -108,7 +119,7 @@ class Item extends Component {
 				<Price amount={this.state.price} change={this.state.change} />
 				<AuthContext>
 					{context => (
-						<div>
+						<RecentOrdersWrapper>
 							<Orders
 								type={'sell'}
 								title={'Sell Orders'}
@@ -116,7 +127,6 @@ class Item extends Component {
 								platform={this.state.platform}
 								authContext={context}
 							/>
-							<HorizontalAd />
 							<Orders
 								type={'buy'}
 								title={'Buy Orders'}
@@ -124,7 +134,7 @@ class Item extends Component {
 								platform={this.state.platform}
 								authContext={context}
 							/>
-						</div>
+						</RecentOrdersWrapper>
 					)}
 				</AuthContext>
 				<HorizontalAd />

@@ -201,7 +201,7 @@ class LoginForm extends Component {
 					})
 				)
 				.then(res => {
-					this.props.context.login(res.data.user);
+					window.location.href = '/';
 
 					ReactGA.event({
 						category: 'User',

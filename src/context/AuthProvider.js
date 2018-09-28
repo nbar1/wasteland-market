@@ -7,27 +7,30 @@ class AuthProvider extends Component {
 	login = user => {
 		this.setState({
 			isLoggedIn: true,
+			isAdmin: false,
 			username: user.username,
 			id: user.id,
 			premium: user.premium,
 			verified: user.verified,
 			platforms: user.platforms,
 		});
-	}
+	};
 
 	logout = () => {
 		this.setState({
 			isLoggedIn: false,
+			isAdmin: false,
 			username: null,
 			id: null,
 			premium: false,
 			verified: false,
 			platforms: {},
 		});
-	}
+	};
 
 	state = {
 		isLoggedIn: false,
+		isAdmin: false,
 		isCurrent: false,
 		username: null,
 		id: null,
@@ -35,16 +38,18 @@ class AuthProvider extends Component {
 		platforms: {},
 		login: this.login,
 		logout: this.logout,
-	}
+	};
 
 	componentDidMount = () => {
 		if (this.state.isLoggedIn !== false) return;
 
-		axios.get('/api/user/authStatus')
+		axios
+			.get('/api/user/authStatus')
 			.then(res => {
 				this.setState({
 					isCurrent: true,
 					isLoggedIn: true,
+					isAdmin: res.data.admin,
 					username: res.data.username,
 					id: res.data.id,
 					premium: res.data.premium,
@@ -63,14 +68,10 @@ class AuthProvider extends Component {
 					platforms: {},
 				});
 			});
-	}
+	};
 
 	render() {
-		return (
-			<AuthContext.Provider value={this.state}>
-				{this.props.children}
-			</AuthContext.Provider>
-		);
+		return <AuthContext.Provider value={this.state}>{this.props.children}</AuthContext.Provider>;
 	}
 }
 

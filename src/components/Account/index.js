@@ -15,7 +15,7 @@ class Account extends Component {
 				<Typography gutterBottom variant="headline" component="h1">
 					My Account
 				</Typography>
-				{!this.props.context.verified && (
+				{this.props.context.verified === false && (
 					<div>
 						<VerificationStatus />
 						<br />
