@@ -26,7 +26,7 @@ const StyledCard = styled(Card)`
 const StyledTextField = styled(TextField)`
 	&& {
 		display: block;
-		margin: 0 auto;
+		margin: 20px auto 0;
 		text-align: center;
 		width: 300px;
 	}

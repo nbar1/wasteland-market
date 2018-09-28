@@ -51,7 +51,7 @@ UserSchema.plugin(uniqueValidator);
 
 // authenticate input against database
 UserSchema.statics.authenticate = (email, password, callback) => {
-	User.findOne({ email: email.toLowerCase() }).exec((err, user) => {
+	User.findOne({ email: email }).exec((err, user) => {
 		if (err) {
 			return callback(err);
 		}

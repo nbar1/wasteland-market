@@ -4,6 +4,7 @@ var requiresLogin = require('../middleware/requiresLogin');
 var User = require('../models/User');
 var Login = require('../models/Login');
 var VerificationToken = require('../models/VerificationToken');
+var PasswordResetToken = require('../models/PasswordResetToken');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 var sendMail = require('../lib/email');
@@ -12,17 +13,18 @@ var sendMail = require('../lib/email');
 router.post('/register', (req, res, next) => {
 	// check password integrity
 	if (req.body.password !== req.body.passwordConf) {
-		let err = new Error('Passwords do not match.');
-		err.status = 400;
-
-		res.send('passwords dont match');
-
-		return next(err);
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'Passwords do not match',
+			},
+		});
 	}
 
 	if (req.body.password.length < 8) {
 		return next({
-			status: 401,
+			status: 400,
 			message: {
 				success: false,
 				message: 'Your password must be at least 8 characters',
@@ -30,9 +32,19 @@ router.post('/register', (req, res, next) => {
 		});
 	}
 
+	if (validateEmail(req.body.email) === false) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'You must use a valid email address',
+			},
+		});
+	}
+
 	if (req.body.username.length < 6) {
 		return next({
-			status: 401,
+			status: 400,
 			message: {
 				success: false,
 				message: 'Your username must be at least 6 characters',
@@ -173,7 +185,7 @@ router.get('/logout', (req, res, next) => {
 router.post('/change-email', (req, res, next) => {
 	if (req.body.email === '' || req.body.email === undefined) {
 		return next({
-			status: 401,
+			status: 400,
 			message: {
 				success: false,
 				message: 'You must provide an email address',
@@ -184,7 +196,7 @@ router.post('/change-email', (req, res, next) => {
 	User.find({ email: req.body.email }, function(err, docs) {
 		if (docs.length) {
 			return next({
-				status: 401,
+				status: 400,
 				message: {
 					success: false,
 					message: `The email ${req.body.email} already exists`,
@@ -243,7 +255,7 @@ router.post('/change-password', (req, res, next) => {
 
 		if (req.body.newPassword.length < 8) {
 			return next({
-				status: 401,
+				status: 400,
 				message: {
 					success: false,
 					message: err.message || 'Your password must be at least 8 characters',
@@ -258,6 +270,134 @@ router.post('/change-password', (req, res, next) => {
 			}
 
 			User.findOneAndUpdate({ _id: req.session.userId }, { $set: { password: hash } }, { upsert: false }, err => {
+				if (err) {
+					return next({
+						status: 401,
+						message: {
+							success: false,
+							message: 'Unable to update password in database',
+						},
+					});
+				}
+
+				return res.send({
+					success: true,
+					message: 'Your password has been changed.',
+				});
+			});
+		});
+	});
+});
+
+// Request Password Reset
+router.post('/reset-password', (req, res, next) => {
+	if (!req.body.email) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'You must provide an email address',
+			},
+		});
+	}
+
+	User.find({ email: req.body.email }, function(err, docs) {
+		if (docs.length) {
+			let user = docs[0];
+			var token = new PasswordResetToken({
+				_userId: user._id,
+				token: crypto.randomBytes(16).toString('hex'),
+			});
+
+			token.save(err => {
+				if (err) {
+					return res.status(500).send({ msg: err.message });
+				}
+
+				let message = `
+					Hello ${user.username},
+					<br><br>
+					You have requested a password reset token.
+					<br><br>
+					If you did not authorize this request, you may ignore this email.
+					<br><br>
+					If you did authorize this request, please use the link below to reset your password. This link will expire in 24 hours.
+					<br><br>
+					<a href="https://wastelandmarket.com/account/reset-password/${token.token}">
+						https://wastelandmarket.com/account/reset-password/${token.token}
+					</a>
+				`;
+
+				sendMail(user.email, 'Reset Password - Wasteland Market', message, (err, data) => {
+					if (err) {
+						return next({
+							status: 401,
+							message: {
+								success: false,
+								message: 'Unable to send password reset email. Please contact support.',
+							},
+						});
+					}
+
+					return res.send({
+						success: true,
+						message: 'password-reset-token-success',
+					});
+				});
+			});
+		}
+		else {
+			// send email
+			return res.send({
+				success: true,
+				message: 'password-reset-token-user-doesnt-exist',
+			});
+		}
+	});
+});
+
+// Reset Password with token
+router.post('/reset-password/:token', (req, res, next) => {
+	PasswordResetToken.findOne({ token: req.params.token }, function(err, token) {
+		if (!token) {
+			return next({
+				status: 400,
+				message: {
+					success: false,
+					message: 'Your password reset token is invalid.',
+				},
+			});
+		}
+
+		// check password integrity
+		if (req.body.newPassword !== req.body.newPasswordConf) {
+			let err = new Error('Passwords do not match.');
+			return next({
+				status: 400,
+				message: {
+					success: false,
+					message: err.message || 'Unknown Error',
+				},
+			});
+		}
+
+		if (req.body.newPassword.length < 8) {
+			return next({
+				status: 400,
+				message: {
+					success: false,
+					message: err.message || 'Your password must be at least 8 characters',
+				},
+			});
+		}
+
+		let newPassword = req.body.newPassword;
+		bcrypt.hash(newPassword, 10, (err, hash) => {
+			if (err) {
+				return next(err);
+			}
+
+			User.findOneAndUpdate({ _id: token._userId }, { $set: { password: hash } }, { upsert: false }, err => {
 				if (err) {
 					return next({
 						status: 401,
@@ -370,5 +510,13 @@ router.get('/authStatus', requiresLogin, (req, res, next) => {
 		});
 	});
 });
+
+function validateEmail(email) {
+	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+		return true;
+	}
+
+	return false;
+}
 
 module.exports = router;

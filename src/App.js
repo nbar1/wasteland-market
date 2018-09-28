@@ -12,6 +12,8 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Profile from './components/Account/Profile';
 import AccountVerify from './components/Account/Verify';
+import ResetPassword from './components/Account/ResetPassword';
+import ResetPasswordEntry from './components/Account/ResetPassword/Entry';
 import Account from './components/Account';
 
 import Market from './components/Market';
@@ -48,6 +50,8 @@ class App extends Component {
 							<Route exact path="/profile" component={RequiresLogin(Profile)} />
 							<Route exact path="/account" component={RequiresLogin(Account)} />
 							<Route exact path="/account/verify/:token" component={AccountVerify} />
+							<Route exact path="/account/reset-password" component={ResetPassword} />
+							<Route exact path="/account/reset-password/:token" component={ResetPasswordEntry} />
 
 							<Route exact path="/order" component={RequiresLogin(Order)} />
 							<Route exact path="/order/mock" component={RequiresLogin(OrderMock)} />
