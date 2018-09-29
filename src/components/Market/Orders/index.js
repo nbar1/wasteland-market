@@ -53,6 +53,12 @@ const BottleCap = styled.span`
 const Platform = styled.div`
 	padding: 5px 0 5px 20px;
 
+	span {
+		font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+		font-weight: normal;
+		padding-left: 5px;
+	}
+
 	&:before {
 		font-family: 'Font Awesome 5 Brands';
 		font-size: 13px;
@@ -69,6 +75,12 @@ const Platform = styled.div`
 	&.xbox:before {
 		color: #107c11;
 		content: '\f412';
+	}
+
+	&.pc:before {
+		color: #a50000;
+		content: '\f108';
+		font-family: 'Font Awesome 5 Free';
 	}
 
 	&.playstation:before {
@@ -274,28 +286,35 @@ class Orders extends Component {
 			<div>
 				{order.platform === 'xbox' ? (
 					<Platform title={`Xbox: ${order.user.platforms.xbox}`} className="xbox">
-						{showAsItem ? order.item.name : order.user.platforms.xbox}
+						<span>{showAsItem ? order.item.name : order.user.platforms.xbox}</span>
 					</Platform>
 				) : (
 					''
 				)}
 				{order.platform === 'playstation' ? (
 					<Platform title={`PlayStation: ${order.user.platforms.playstation}`} className="playstation">
-						{showAsItem ? order.item.name : order.user.platforms.playstation}
+						<span>{showAsItem ? order.item.name : order.user.platforms.playstation}</span>
 					</Platform>
 				) : (
 					''
 				)}
-				{order.platform === 'pc' && order.includeSteam ? (
+				{order.platform === 'pc' && showAsItem ? (
+					<Platform title={'PC'} className="pc fas">
+						<span>{order.item.name}</span>
+					</Platform>
+				) : (
+					''
+				)}
+				{order.platform === 'pc' && order.includeSteam && !showAsItem ? (
 					<Platform title={`Steam ID: ${order.user.platforms.steam}`} className="steam">
-						{showAsItem ? order.item.name : order.user.platforms.steam}
+						<span>{showAsItem ? order.item.name : order.user.platforms.steam}</span>
 					</Platform>
 				) : (
 					''
 				)}
-				{order.includeDiscord ? (
+				{order.includeDiscord && !showAsItem ? (
 					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
-						{showAsItem ? order.item.name : order.user.platforms.discord}
+						<span>{showAsItem ? order.item.name : order.user.platforms.discord}</span>
 					</Platform>
 				) : (
 					''
@@ -386,7 +405,9 @@ class Orders extends Component {
 													history.push(`/market/${order.item.linkName}`);
 												}}
 											>
-												<TableCell scope="row">{this.showPlatformContactInfo(order, true)}</TableCell>
+												<TableCell scope="row">
+													{this.showPlatformContactInfo(order, true)}
+												</TableCell>
 												<TableCell numeric>
 													<BottleCap title={`${order.price} Caps`}>{order.price}</BottleCap>
 												</TableCell>
