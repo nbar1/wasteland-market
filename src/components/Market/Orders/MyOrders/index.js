@@ -28,7 +28,7 @@ class MyOrders extends Component {
 				<Helmet>
 					<title>Wasteland Market - My Orders</title>
 				</Helmet>
-				<Typography gutterBottom variant="title" component="h1" align="center">
+				<Typography gutterBottom variant="headline" component="h1">
 					My Orders
 				</Typography>
 				<AuthContext>

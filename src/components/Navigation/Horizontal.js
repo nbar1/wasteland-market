@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import PlatformChanger from './PlatformChanger';
 
 const StyledBar = styled.div`
 	background-color: #2a2a2a;
@@ -24,6 +25,7 @@ const StyledBar = styled.div`
 		line-height: 17px;
 		margin-right: 10px;
 		padding: 11px 15px 11px 15px;
+		vertical-align: top;
 
 		&:hover {
 			background: rgba(0, 0, 0, 0.3);
@@ -142,6 +144,7 @@ class Navigation extends Component {
 		return (
 			<div>
 				<StyledBar open={true} variant={'permanent'}>
+					<PlatformChanger />
 					<Link to={'/order'}>Create Order</Link>
 					<Link to={'/my-orders'}>My Orders</Link>
 					<Link to={'/market'}>Market</Link>
@@ -177,6 +180,9 @@ class Navigation extends Component {
 						<LinkContainer>
 							<Link to={'/order'} onClick={this.toggleMenu.bind(this)}>
 								Create Order
+							</Link>
+							<Link to={'/my-orders'} onClick={this.toggleMenu.bind(this)}>
+								My Orders
 							</Link>
 							<Link to={'/market'} onClick={this.toggleMenu.bind(this)}>
 								Market

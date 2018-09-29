@@ -10,6 +10,7 @@ import RequiresLogin from './components/Wrappers/RequireLogin';
 import RequiresAdmin from './components/Wrappers/RequireAdmin';
 
 import Home from './components/Home';
+import Footer from './components/Footer';
 import Login from './components/Login';
 import Profile from './components/Account/Profile';
 import AccountVerify from './components/Account/Verify';
@@ -41,7 +42,7 @@ class App extends Component {
 			<div className="App">
 				<AuthProvider>
 					<Helmet>
-						<title>Wasteland Market</title>
+						<title>Wasteland Market - Fallout 76 Marketplace</title>
 					</Helmet>
 					<Route path="/" component={fireTracking} />
 					<Header />
@@ -68,6 +69,7 @@ class App extends Component {
 							<Route path="*" component={NotFound} />
 						</Switch>
 					</ContentWrapper>
+					<Footer />
 				</AuthProvider>
 			</div>
 		);
