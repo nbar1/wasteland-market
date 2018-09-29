@@ -10,26 +10,29 @@ const PlatformWrapper = styled.div`
 	height: 40px;
 
 	> img {
+		background: rgba(255, 255, 255, 0.2);
 		height: 24px;
 		padding: 8px;
 	}
 `;
 
 const Platform = styled.div`
+	background: rgba(255, 255, 255, 0.2);
 	cursor: pointer;
 	display: inline-block;
 	height: 40px;
 	line-height: 39px;
+	padding-left: 1px;
 	text-align: center;
 	width: 40px;
 
 	&.xbox:before {
-		color: #107c11;
+		color: #27bf28;
 		content: '\f412';
 	}
 
 	&.playstation:before {
-		color: #0072ce;
+		color: #136bb3;
 		content: '\f3df';
 	}
 
@@ -69,7 +72,7 @@ class PlatformChanger extends Component {
 
 		return (
 			<PlatformWrapper>
-				{this.state.platform === 'all' && <img src={logoImage} onClick={this.handleMenu} />}
+				{this.state.platform === 'all' && <img src={logoImage} alt={'All Platforms'} onClick={this.handleMenu} />}
 				{this.state.platform === 'xbox' && <Platform className={'xbox fab'} onClick={this.handleMenu} />}
 				{this.state.platform === 'playstation' && (
 					<Platform className={'playstation fab'} onClick={this.handleMenu} />

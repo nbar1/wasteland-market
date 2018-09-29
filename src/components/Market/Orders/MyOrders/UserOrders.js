@@ -261,37 +261,38 @@ class UserOrders extends Component {
 	 * showPlatformContactInfo
 	 *
 	 * @param {object} order
+	 * @param {bool} showAsItem
 	 * @returns {jsx}
 	 */
-	showPlatformContactInfo = order => {
+	showPlatformContactInfo = (order, showAsItem = false) => {
 		if (order === null) return;
 
 		return (
 			<div>
 				{order.platform === 'xbox' ? (
 					<Platform title={`Xbox: ${order.user.platforms.xbox}`} className="xbox">
-						{order.user.platforms.xbox}
+						{showAsItem ? order.item.name : order.user.platforms.xbox}
 					</Platform>
 				) : (
 					''
 				)}
 				{order.platform === 'playstation' ? (
 					<Platform title={`PlayStation: ${order.user.platforms.playstation}`} className="playstation">
-						{order.user.platforms.playstation}
+						{showAsItem ? order.item.name : order.user.platforms.playstation}
 					</Platform>
 				) : (
 					''
 				)}
 				{order.platform === 'pc' && order.includeSteam ? (
 					<Platform title={`Steam ID: ${order.user.platforms.steam}`} className="steam">
-						{order.user.platforms.steam}
+						{showAsItem ? order.item.name : order.user.platforms.steam}
 					</Platform>
 				) : (
 					''
 				)}
 				{order.includeDiscord ? (
 					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
-						{order.user.platforms.discord}
+						{showAsItem ? order.item.name : order.user.platforms.discord}
 					</Platform>
 				) : (
 					''
@@ -346,7 +347,7 @@ class UserOrders extends Component {
 											hover={true}
 											onClick={() => this.openDialog(key)}
 										>
-											<TableCell scope="row">{order.item.name}</TableCell>
+											<TableCell scope="row">{this.showPlatformContactInfo(order, true)}</TableCell>
 											<TableCell numeric>
 												<BottleCap title={`${order.price} Caps`}>{order.price}</BottleCap>
 											</TableCell>
