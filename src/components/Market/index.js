@@ -51,7 +51,7 @@ class Item extends Component {
 		category: '',
 		price: 0,
 		change: 0,
-		platform: 'xbox',
+		platform: localStorage.getItem('wm-platform') || undefined,
 	};
 
 	constructor(props) {

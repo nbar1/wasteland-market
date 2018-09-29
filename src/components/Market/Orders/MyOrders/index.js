@@ -19,7 +19,7 @@ const RecentOrdersWrapper = styled.div`
 
 class MyOrders extends Component {
 	state = {
-		platform: 'xbox',
+		platform: localStorage.getItem('wm-platform') || undefined,
 	};
 
 	render() {

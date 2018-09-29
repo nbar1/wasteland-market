@@ -268,21 +268,21 @@ class UserOrders extends Component {
 
 		return (
 			<div>
-				{this.props.platform === 'xbox' ? (
+				{order.platform === 'xbox' ? (
 					<Platform title={`Xbox: ${order.user.platforms.xbox}`} className="xbox">
 						{order.user.platforms.xbox}
 					</Platform>
 				) : (
 					''
 				)}
-				{this.props.platform === 'playstation' ? (
+				{order.platform === 'playstation' ? (
 					<Platform title={`PlayStation: ${order.user.platforms.playstation}`} className="playstation">
 						{order.user.platforms.playstation}
 					</Platform>
 				) : (
 					''
 				)}
-				{this.props.platform === 'pc' && order.includeSteam ? (
+				{order.platform === 'pc' && order.includeSteam ? (
 					<Platform title={`Steam ID: ${order.user.platforms.steam}`} className="steam">
 						{order.user.platforms.steam}
 					</Platform>

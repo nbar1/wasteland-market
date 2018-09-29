@@ -81,13 +81,15 @@ const getOrders = (req, res, next, type) => {
 		orderQuery.itemId = req.query.item;
 	}
 
-	if (req.query.platform) {
+	if (req.query.platform && req.query.platform !== 'all') {
 		orderQuery.platform = req.query.platform;
 	}
 
 	if (req.query.user) {
 		orderQuery.addedBy = req.query.user;
 	}
+
+	console.log(orderQuery);
 
 	Order.find(orderQuery)
 		.sort({ date: -1 })
