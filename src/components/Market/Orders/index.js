@@ -54,7 +54,7 @@ const Platform = styled.div`
 	padding: 5px 0 5px 20px;
 
 	span {
-		font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+		font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 		font-weight: normal;
 		padding-left: 5px;
 	}
@@ -156,9 +156,7 @@ class Orders extends Component {
 	 * @returns {void}
 	 */
 	componentDidMount() {
-		if (this.props.allItems === true) {
-			this.getOrders();
-		}
+		this.getOrders();
 	}
 
 	/**
@@ -331,7 +329,7 @@ class Orders extends Component {
 	componentDidUpdate() {
 		if (this.props.itemId === null || this.state.orders.length > 0) return;
 
-		this.getOrders();
+		// this.getOrders();
 	}
 
 	/**

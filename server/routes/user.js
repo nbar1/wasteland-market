@@ -9,8 +9,53 @@ var bcrypt = require('bcrypt');
 var crypto = require('crypto');
 var sendMail = require('../lib/email');
 
-// register
+/**
+ * Register
+ */
 router.post('/register', (req, res, next) => {
+	// Validate email
+	if (validateEmail(req.body.email) === false) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'You must use a valid email address',
+			},
+		});
+	}
+
+	// Verify username characters
+	if (/^\w+$/.test(req.body.username) === false) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'Username can contain only letters and numbers',
+			},
+		});
+	}
+
+	// Verify username length
+	if (req.body.username.length < 6) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'Your username must be at least 6 characters',
+			},
+		});
+	}
+
+	if (req.body.username.length > 32) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'Your username must be no longer than 32 characters',
+			},
+		});
+	}
+
 	// check password integrity
 	if (req.body.password !== req.body.passwordConf) {
 		return next({
@@ -133,7 +178,9 @@ router.post('/register', (req, res, next) => {
 	});
 });
 
-// login
+/**
+ * Login
+ */
 router.post('/login', (req, res, next) => {
 	User.authenticate(req.body.email, req.body.password, (err, user) => {
 		if (err || !user) {
@@ -170,7 +217,9 @@ router.post('/login', (req, res, next) => {
 	});
 });
 
-// logout
+/**
+ * Logout
+ */
 router.get('/logout', (req, res, next) => {
 	if (!req.session) return;
 
@@ -181,7 +230,9 @@ router.get('/logout', (req, res, next) => {
 	});
 });
 
-// change email
+/**
+ * Change Email
+ */
 router.post('/change-email', (req, res, next) => {
 	if (req.body.email === '' || req.body.email === undefined) {
 		return next({
@@ -228,7 +279,9 @@ router.post('/change-email', (req, res, next) => {
 	});
 });
 
-// change password
+/**
+ * Change Password
+ */
 router.post('/change-password', (req, res, next) => {
 	// check password integrity
 	if (req.body.newPassword !== req.body.newPasswordConf) {
@@ -289,7 +342,9 @@ router.post('/change-password', (req, res, next) => {
 	});
 });
 
-// Request Password Reset
+/**
+ * Password Reset - Request
+ */
 router.post('/reset-password', (req, res, next) => {
 	if (!req.body.email) {
 		return next({
@@ -356,7 +411,9 @@ router.post('/reset-password', (req, res, next) => {
 	});
 });
 
-// Reset Password with token
+/**
+ * Password Reset - Perform
+ */
 router.post('/reset-password/:token', (req, res, next) => {
 	PasswordResetToken.findOne({ token: req.params.token }, function(err, token) {
 		if (!token) {
@@ -417,7 +474,9 @@ router.post('/reset-password/:token', (req, res, next) => {
 	});
 });
 
-// update platforms
+/**
+ * Update Platforms
+ */
 router.post('/update-platforms', (req, res, next) => {
 	let platforms = {
 		xbox: req.body.xbox || '',
@@ -444,7 +503,26 @@ router.post('/update-platforms', (req, res, next) => {
 	});
 });
 
-// resend verification
+/**
+ * Email Verification - Verify
+ */
+router.get('/verify/:token', (req, res, next) => {
+	VerificationToken.findOne({ token: req.params.token }, function(err, token) {
+		if (!token) {
+			return res.status(500).send({ msg: 'Could not find token' });
+		}
+
+		// If we found a token, find a matching user
+		User.findOneAndUpdate({ _id: token._userId }, { $set: { verified: true } }, { upsert: false }, err => {
+			if (err) return res.status(400).send({ msg: 'User does not exist' });
+			return res.send({ success: true });
+		});
+	});
+});
+
+/**
+ * Email Verification - Resend
+ */
 router.get('/verify/resend', (req, res, next) => {
 	User.findOne({ _id: req.session.userId }, function(err, user) {
 		if (user.verified === true) {
@@ -482,22 +560,9 @@ router.get('/verify/resend', (req, res, next) => {
 	});
 });
 
-// verify account
-router.get('/verify/:token', (req, res, next) => {
-	VerificationToken.findOne({ token: req.params.token }, function(err, token) {
-		if (!token) {
-			return res.status(500).send({ msg: 'Could not find token' });
-		}
-
-		// If we found a token, find a matching user
-		User.findOneAndUpdate({ _id: token._userId }, { $set: { verified: true } }, { upsert: false }, err => {
-			if (err) return res.status(400).send({ msg: 'User does not exist' });
-			return res.send({ success: true });
-		});
-	});
-});
-
-// authStatus
+/**
+ * Auth Status
+ */
 router.get('/authStatus', requiresLogin, (req, res, next) => {
 	User.findOne({ _id: req.session.userId }, function(err, doc) {
 		return res.send({
@@ -512,6 +577,12 @@ router.get('/authStatus', requiresLogin, (req, res, next) => {
 	});
 });
 
+/**
+ * validateEmail
+ *
+ * @param {string} email
+ * @returns {bool}
+ */
 function validateEmail(email) {
 	if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
 		return true;
