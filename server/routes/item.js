@@ -13,6 +13,28 @@ router.post('/create', requiresLogin, (req, res, next) => {
 		addedByIP: req.ip,
 	};
 
+	const validCategories = [
+		'uncategorized',
+		'ammunition',
+		'resource',
+		'weapon',
+		'armor',
+		'food',
+		'drink',
+		'clothiing',
+		'junk',
+	];
+
+	if (validCategories.indexOf(req.body.category) === -1) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'You have entered an invalid category.',
+			},
+		});
+	}
+
 	Item.create(itemData, (err, item) => {
 		if (err) {
 			let errorMessage = 'Unknown Error';

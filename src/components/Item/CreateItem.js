@@ -65,6 +65,7 @@ const HelpText = styled.div`
 class CreateItem extends Component {
 	state = {
 		item: '',
+		category: 'uncategorized',
 		generalError: '',
 		missingItem: '',
 	};
@@ -105,10 +106,6 @@ class CreateItem extends Component {
 	submitForm = event => {
 		if (event) event.preventDefault();
 		if (this.validateForm() === false) return;
-
-		let formData = new FormData();
-		formData.set('email', this.state.email);
-		formData.set('password', this.state.password);
 
 		axios
 			.post(
