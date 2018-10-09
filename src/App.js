@@ -26,6 +26,8 @@ import CreateItem from './components/Item/CreateItem';
 
 import MyOrders from './components/Market/Orders/MyOrders';
 
+import UserProfile from './components/User/Profile';
+
 import NotFound from './components/NotFound';
 
 ReactGA.initialize('UA-126411028-1');
@@ -63,6 +65,8 @@ class App extends Component {
 							<Route exact path="/market" component={Market} />
 							<Route exact path="/market/:item" component={Market} />
 							<Route exact path="/my-orders" component={RequiresLogin(MyOrders)} />
+
+							<Route exact path="/user/:username" component={UserProfile} />
 
 							<Route exact path="/create-item" component={RequiresLogin(CreateItem)} />
 

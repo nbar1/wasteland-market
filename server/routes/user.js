@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var requiresLogin = require('../middleware/requiresLogin');
 var User = require('../models/User');
+var UserRating = require('../models/UserRating');
 var Login = require('../models/Login');
 var VerificationToken = require('../models/VerificationToken');
 var PasswordResetToken = require('../models/PasswordResetToken');
@@ -472,6 +473,100 @@ router.post('/reset-password/:token', (req, res, next) => {
 			});
 		});
 	});
+});
+
+/**
+ * Profile
+ */
+router.get('/profile', (req, res, next) => {
+	let username = req.query.username;
+
+	if (username === undefined) {
+		return next({
+			status: 400,
+			message: {
+				success: false,
+				message: 'No username given.',
+			},
+		});
+	}
+
+	User.find({ username: username }, function(err, docs) {
+		if (docs.length === 0) {
+			return next({
+				status: 400,
+				message: {
+					success: false,
+					message: 'User does not exist.',
+				},
+			});
+		}
+
+		let user = docs[0].toObject();
+
+		UserRating.count({ userId: user._id }, (err, count) => {
+			UserRating.count({ userId: user._id, ratedBy: req.session.userId }, (err, hasRated) => {
+				return res.send({
+					success: true,
+					hasRated: !!hasRated,
+					user: {
+						id: user._id,
+						platforms: user.platforms,
+						premium: user.premium,
+						rating: count,
+					},
+				});
+			});
+		});
+	});
+});
+
+/**
+ * Rate
+ */
+router.post('/rate', (req, res, next) => {
+	let userToRate = req.body.userId;
+	let ratingIncrement = req.body.rating;
+
+	// default to +1 rating for now
+	ratingIncrement = 1;
+
+	if (
+		userToRate === undefined ||
+		userToRate === '' ||
+		req.session.userId === undefined ||
+		userToRate === req.session.userId
+	) {
+		return next({
+			status: 401,
+			message: {
+				success: false,
+				message: 'Unable to update rating in database',
+			},
+		});
+	}
+
+	UserRating.findOneAndUpdate(
+		{ userId: userToRate, ratedBy: req.session.userId },
+		{ $set: { rating: ratingIncrement, createdAt: Date.now() } },
+		{ upsert: true },
+		err => {
+			if (err) {
+				return next({
+					status: 401,
+					message: {
+						success: false,
+						message: 'Unable to update rating in database',
+					},
+				});
+			}
+
+			return res.send({
+				success: true,
+				message: 'rating-updated',
+			});
+		}
+	);
 });
 
 /**

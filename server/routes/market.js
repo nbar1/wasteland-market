@@ -89,8 +89,6 @@ const getOrders = (req, res, next, type) => {
 		orderQuery.addedBy = req.query.user;
 	}
 
-	console.log(orderQuery);
-
 	Order.find(orderQuery)
 		.sort({ date: -1 })
 		.skip(page * perPage)
