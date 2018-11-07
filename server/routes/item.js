@@ -22,7 +22,8 @@ router.post('/create', requiresLogin, (req, res, next) => {
 		'armor',
 		'food',
 		'drink',
-		'clothiing',
+		'chem',
+		'clothing',
 		'junk',
 	];
 

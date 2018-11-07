@@ -199,6 +199,7 @@ class CreateItem extends Component {
 									<option value={'armor'}>Armor</option>
 									<option value={'food'}>Food</option>
 									<option value={'drink'}>Drink</option>
+									<option value={'chem'}>Chem</option>
 									<option value={'clothing'}>Clothing</option>
 									<option value={'junk'}>Junk</option>
 								</NativeSelect>
