@@ -74,7 +74,7 @@ class Item extends Component {
 					name: res.data.name,
 					category: res.data.category,
 					itemId: res.data._id,
-					linkName: res.data.linkName || 'no-item-image',
+					image: res.data.linkName || 'no-item-image',
 				});
 
 				this.getPrice();
@@ -116,8 +116,11 @@ class Item extends Component {
 				<Details name={this.state.name} category={this.state.category} />
 				<Image>
 					<img
-						src={`/images/items/${this.state.linkName}.png`}
-						alt={this.state.name} />
+						src={`/images/items/${this.state.image}.png`}
+						alt={this.state.name}
+						onError={() => {
+							this.setState({ image: 'no-item-image' });
+						}}/>
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<AuthContext>
