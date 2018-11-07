@@ -141,6 +141,7 @@ class Platforms extends Component {
 		successMessage: '',
 		includeDiscord: false,
 		includeSteam: false,
+		includeBethesda: false,
 		missingOrderType: false,
 		missingItemName: false,
 		missingPrice: false,
@@ -189,6 +190,7 @@ class Platforms extends Component {
 					notes: this.state.notes,
 					includeDiscord: this.state.includeDiscord,
 					includeSteam: this.state.includeSteam,
+					includeBethesda: this.state.includeBethesda,
 					definedTimestamp: this.state.timestamp,
 				})
 			)
@@ -423,7 +425,7 @@ class Platforms extends Component {
 								<br />
 								If your platform is not enabled, go to your Profile page and add the platform.
 								<br />
-								If you choose PC, you must include your Discord or Steam ID.
+								If you choose PC, you must include your Discord or Bethesda ID.
 							</Typography>
 							<FormControl component="fieldset">
 								<RadioGroup name="platform" value={this.state.platform} onChange={this.onChange}>
@@ -449,7 +451,7 @@ class Platforms extends Component {
 										value="pc"
 										control={<Radio />}
 										label="PC"
-										disabled={!this.props.platforms.discord && !this.props.platforms.steam}
+										disabled={!this.props.platforms.discord && !this.props.platforms.steam && !this.props.platforms.bethesda}
 									/>
 									<FormControlLabel
 										control={
@@ -493,6 +495,28 @@ class Platforms extends Component {
 											this.props.platforms.steam
 												? `Include Steam ID — ${this.props.platforms.steam}`
 												: 'Include Steam ID'
+										}
+									/>
+									<FormControlLabel
+										control={
+											<Checkbox
+												checked={this.state.includeBethesda}
+												onChange={this.onChange.bind(this, {
+													target: {
+														name: 'includeBethesda',
+														value: !this.state.includeBethesda,
+													},
+												})}
+												name="includeBethesda"
+												value="true"
+												color="primary"
+												disabled={!this.props.platforms.bethesda || this.state.platform !== 'pc'}
+											/>
+										}
+										label={
+											this.props.platforms.bethesda
+												? `Include Bethesda ID — ${this.props.platforms.bethesda}`
+												: 'Include Bethesda ID'
 										}
 									/>
 									{this.state.missingPlatform && (

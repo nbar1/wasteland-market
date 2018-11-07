@@ -92,6 +92,11 @@ const Platform = styled.div`
 		color: #171a21;
 		content: '\f1b6';
 	}
+
+	&.bethesda:before {
+		color: #171a21;
+		content: '\f1b6';
+	}
 `;
 
 const StyledTableHeader = styled(Typography)`
@@ -313,6 +318,13 @@ class Orders extends Component {
 				{order.includeDiscord && !showAsItem ? (
 					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
 						<span>{showAsItem ? order.item.name : order.user.platforms.discord}</span>
+					</Platform>
+				) : (
+					''
+				)}
+				{order.includeBethesda && !showAsItem ? (
+					<Platform title={`Bethesda ID: ${order.user.platforms.bethesda}`} className="bethesda">
+						<span>{showAsItem ? order.item.name : order.user.platforms.bethesda}</span>
 					</Platform>
 				) : (
 					''

@@ -41,6 +41,11 @@ const StyledTextField = styled(TextField)`
 			color: #171a21;
 			content: '\f1b6';
 		}
+
+		&.bethesda:before {
+			color: #171a21;
+			content: '\f1b6';
+		}
 	}
 `;
 
@@ -81,6 +86,7 @@ class Platforms extends Component {
 			xbox: '',
 			playstation: '',
 			steam: '',
+			bethesda: '',
 			discord: '',
 			generalError: '',
 			successMessage: '',
@@ -90,6 +96,7 @@ class Platforms extends Component {
 			this.state.xbox = props.platforms.xbox;
 			this.state.playstation = props.platforms.playstation;
 			this.state.steam = props.platforms.steam;
+			this.state.bethesda = props.platforms.bethesda;
 			this.state.discord = props.platforms.discord;
 		}
 	}
@@ -111,6 +118,7 @@ class Platforms extends Component {
 					xbox: this.state.xbox,
 					playstation: this.state.playstation,
 					steam: this.state.steam,
+					bethesda: this.state.bethesda,
 					discord: this.state.discord,
 				})
 			)
@@ -191,6 +199,18 @@ class Platforms extends Component {
 								margin="normal"
 								fullWidth={true}
 								value={this.state.steam}
+								onChange={this.onChange}
+							/>
+
+							<StyledTextField
+								type="text"
+								id="bethesda"
+								name="bethesda"
+								label="Bethesda ID"
+								className="bethesda"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.bethesda}
 								onChange={this.onChange}
 							/>
 

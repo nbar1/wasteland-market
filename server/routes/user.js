@@ -109,6 +109,7 @@ router.post('/register', (req, res, next) => {
 			xbox: '',
 			playstation: '',
 			steam: '',
+			bethesda: '',
 			discord: '',
 		},
 	};
@@ -577,6 +578,7 @@ router.post('/update-platforms', (req, res, next) => {
 		xbox: req.body.xbox || '',
 		playstation: req.body.playstation || '',
 		steam: req.body.steam || '',
+		bethesda: req.body.bethesda || '',
 		discord: req.body.discord || '',
 	};
 

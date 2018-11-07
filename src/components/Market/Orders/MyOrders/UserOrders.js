@@ -76,7 +76,12 @@ const Platform = styled.div`
 		content: '\f3df';
 	}
 
-	&.steam:before {
+&.steam:before {
+	color: #171a21;
+	content: '\f1b6';
+}
+
+	&.bethesda:before {
 		color: #171a21;
 		content: '\f1b6';
 	}
@@ -293,6 +298,13 @@ class UserOrders extends Component {
 				{order.includeDiscord ? (
 					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
 						{showAsItem ? order.item.name : order.user.platforms.discord}
+					</Platform>
+				) : (
+					''
+				)}
+				{order.platform === 'pc' && order.includeBethesda ? (
+					<Platform title={`Bethesda ID: ${order.user.platforms.bethesda}`} className="bethesda">
+						{showAsItem ? order.item.name : order.user.platforms.bethesda}
 					</Platform>
 				) : (
 					''
