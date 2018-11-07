@@ -8,7 +8,7 @@ var VerificationToken = require('../models/VerificationToken');
 var PasswordResetToken = require('../models/PasswordResetToken');
 var bcrypt = require('bcrypt');
 var crypto = require('crypto');
-var sendMail = require('../lib/email');
+var sendmail = require('sendmail')();
 
 /**
  * Register
@@ -160,22 +160,30 @@ router.post('/register', (req, res, next) => {
 				</a>
 			`;
 
-			sendMail(user.email, 'Verify Your Email - Wasteland Market', message, (err, data) => {
-				if (err) {
-					return next({
-						status: 401,
-						message: {
-							success: false,
-							message: 'Unable to send verification email. Please contact support.',
-						},
+			sendmail(
+				{
+					from: 'Wasteland Market <noreply@wastelandmarket.com>',
+					to: user.email,
+					subject: 'Verify Your Email - Wasteland Market',
+					html: message,
+				},
+				function(err) {
+					if (err) {
+						return next({
+							status: 401,
+							message: {
+								success: false,
+								message: 'Unable to send verification email. Please contact support.',
+							},
+						});
+					}
+
+					return res.send({
+						success: true,
+						message: 'user-created',
 					});
 				}
-
-				return res.send({
-					success: true,
-					message: 'user-created',
-				});
-			});
+			);
 		});
 	});
 });
@@ -385,22 +393,30 @@ router.post('/reset-password', (req, res, next) => {
 					</a>
 				`;
 
-				sendMail(user.email, 'Reset Password - Wasteland Market', message, (err, data) => {
-					if (err) {
-						return next({
-							status: 401,
-							message: {
-								success: false,
-								message: 'Unable to send password reset email. Please contact support.',
-							},
+				sendmail(
+					{
+						from: 'Wasteland Market <noreply@wastelandmarket.com>',
+						to: user.email,
+						subject: 'Reset Password - Wasteland Market',
+						html: message,
+					},
+					function(err) {
+						if (err) {
+							return next({
+								status: 401,
+								message: {
+									success: false,
+									message: 'Unable to send password reset email. Please contact support.',
+								},
+							});
+						}
+
+						return res.send({
+							success: true,
+							message: 'password-reset-token-success',
 						});
 					}
-
-					return res.send({
-						success: true,
-						message: 'password-reset-token-success',
-					});
-				});
+				);
 			});
 		}
 		else {
