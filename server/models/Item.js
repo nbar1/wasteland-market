@@ -16,7 +16,6 @@ var ItemSchema = new mongoose.Schema({
 	},
 	subcategory: {
 		type: String,
-		required: true,
 		trim: true,
 	},
 	linkName: {

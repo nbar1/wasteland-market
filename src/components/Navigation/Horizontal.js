@@ -77,30 +77,6 @@ const LinkContainer = styled.div`
 	}
 `;
 
-const SocialLinks = styled.div`
-	float: right;
-	padding-right: 5px;
-`;
-
-const SocialLink = styled.a`
-	color: #fff;
-	font-size: 20px;
-	margin: 5px;
-	padding: 5px;
-
-	&.fa-discord {
-		color: #7289da;
-	}
-
-	&.fa-reddit-alien {
-		color: #ff4500;
-	}
-
-	&.fa-twitter {
-		color: #00aced;
-	}
-`;
-
 const MenuButton = styled.div`
 	text-align: left;
 	width: 100%;
@@ -148,27 +124,7 @@ class Navigation extends Component {
 					<Link to={'/order'}>Create Order</Link>
 					<Link to={'/my-orders'}>My Orders</Link>
 					<Link to={'/market'}>Market</Link>
-					<Link to={'/create-item'}>Add Item</Link>
-					<SocialLinks>
-						<SocialLink
-							href="https://discord.gg/n5hTfSJ"
-							target="_blank"
-							className="fab fa-discord"
-							title="Join Our Discord"
-						/>
-						<SocialLink
-							href="https://reddit.com/r/WastelandMarket"
-							target="_blank"
-							className="fab fa-reddit-alien"
-							title="Join Our Subreddit"
-						/>
-						<SocialLink
-							href="https://twitter.com/WastelandMarket"
-							target="_blank"
-							className="fab fa-twitter"
-							title="Follow Us On Twitter"
-						/>
-					</SocialLinks>
+					<Link to={'/faq'}>FAQ</Link>
 				</StyledBar>
 				<StyledDrawer open={true} variant={'permanent'}>
 					<MenuButton onClick={this.toggleMenu.bind(this)}>
@@ -190,26 +146,6 @@ class Navigation extends Component {
 							<Link to={'/create-item'} onClick={this.toggleMenu.bind(this)}>
 								Add Item
 							</Link>
-							<SocialLinks>
-								<SocialLink
-									href="https://discord.gg/n5hTfSJ"
-									target="_blank"
-									className="fab fa-discord"
-									title="Join Our Discord"
-								/>
-								<SocialLink
-									href="https://reddit.com/r/WastelandMarket"
-									target="_blank"
-									className="fab fa-reddit-alien"
-									title="Join Our Subreddit"
-								/>
-								<SocialLink
-									href="https://twitter.com/WastelandMarket"
-									target="_blank"
-									className="fab fa-twitter"
-									title="Follow Us On Twitter"
-								/>
-							</SocialLinks>
 						</LinkContainer>
 					) : null}
 				</StyledDrawer>

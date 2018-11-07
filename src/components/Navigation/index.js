@@ -24,32 +24,6 @@ const SecondLevelListItem = styled(ListItem)`
 	}
 `;
 
-const SocialLinks = styled.div`
-	bottom: 70px;
-	padding: 5px 10px;
-	position: absolute;
-	text-align: left;
-`;
-
-const SocialLink = styled.a`
-	color: #fff;
-	font-size: 20px;
-	margin: 5px;
-	padding: 5px;
-
-	&.fa-discord {
-		color: #7289da;
-	}
-
-	&.fa-reddit-alien {
-		color: #ff4500;
-	}
-
-	&.fa-twitter {
-		color: #00aced;
-	}
-`;
-
 class Navigation extends Component {
 	state = {
 		categoriesOpen: false,
@@ -112,26 +86,6 @@ class Navigation extends Component {
 							</ListItem>
 						</Link>
 					</List>
-					<SocialLinks>
-						<SocialLink
-							href="https://discord.gg/n5hTfSJ"
-							target="_blank"
-							className="fab fa-discord"
-							title="Join Our Discord"
-						/>
-						<SocialLink
-							href="https://reddit.com/r/WastelandMarket"
-							target="_blank"
-							className="fab fa-reddit-alien"
-							title="Join Our Subreddit"
-						/>
-						<SocialLink
-							href="https://twitter.com/WastelandMarket"
-							target="_blank"
-							className="fab fa-twitter"
-							title="Follow Us On Twitter"
-						/>
-					</SocialLinks>
 				</StyledDrawer>
 			</div>
 		);
