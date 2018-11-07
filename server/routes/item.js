@@ -9,6 +9,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 		name: req.body.item,
 		linkName: req.body.item.replace(/\s+/g, '-').toLowerCase(),
 		category: req.body.category,
+		subcategory: req.body.subcategory || 'unknown',
 		addedBy: req.session.userId,
 		addedByIP: req.ip,
 	};
@@ -38,6 +39,8 @@ router.post('/create', requiresLogin, (req, res, next) => {
 	Item.create(itemData, (err, item) => {
 		if (err) {
 			let errorMessage = 'Unknown Error';
+
+			console.log(err);
 
 			if (err.errors.itemName !== undefined) {
 				errorMessage = 'This item already exists.';
