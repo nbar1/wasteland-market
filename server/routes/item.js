@@ -67,7 +67,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 // item info
 router.get('/', (req, res, next) => {
 	Item.find({ linkName: new RegExp(`^${req.query.name}`, 'i') })
-		.select('name category image')
+		.select('name category linkName')
 		.exec((err, data) => {
 			if (err) {
 				let errorMessage = 'Unknown Error';

@@ -12,7 +12,6 @@ import {
 import axios from 'axios';
 import qs from 'querystring';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import ReactGA from 'react-ga';
 
@@ -137,12 +136,6 @@ class CreateItem extends Component {
 	};
 
 	render() {
-		/*
-		if (this.state.redirect) {
-			return <Redirect to={this.state.redirect} />;
-		}
-		*/
-
 		return (
 			<div>
 				<Helmet>

@@ -20,7 +20,8 @@ const Image = styled.div`
 	vertical-align: top;
 	width: 20%;
 
-	> img {
+	> img,
+	> object {
 		max-height: 200px;
 		max-width: 100%;
 	}
@@ -47,7 +48,7 @@ class Item extends Component {
 		error: false,
 		name: '',
 		itemId: null,
-		image: 'no-item-image',
+		linkName: 'no-item-image',
 		category: '',
 		price: 0,
 		change: 0,
@@ -73,7 +74,7 @@ class Item extends Component {
 					name: res.data.name,
 					category: res.data.category,
 					itemId: res.data._id,
-					image: res.data.image || 'no-item-image',
+					linkName: res.data.linkName || 'no-item-image',
 				});
 
 				this.getPrice();
@@ -114,7 +115,9 @@ class Item extends Component {
 				</Helmet>
 				<Details name={this.state.name} category={this.state.category} />
 				<Image>
-					<img src={`/images/items/${this.state.image}.png`} alt={this.state.name} />
+					<img
+						src={`/images/items/${this.state.linkName}.png`}
+						alt={this.state.name} />
 				</Image>
 				<Price amount={this.state.price} change={this.state.change} />
 				<AuthContext>
