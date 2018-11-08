@@ -143,8 +143,8 @@ class Navigation extends Component {
 							<Link to={'/market'} onClick={this.toggleMenu.bind(this)}>
 								Market
 							</Link>
-							<Link to={'/create-item'} onClick={this.toggleMenu.bind(this)}>
-								Add Item
+							<Link to={'/faq'} onClick={this.toggleMenu.bind(this)}>
+								FAQ
 							</Link>
 						</LinkContainer>
 					) : null}
