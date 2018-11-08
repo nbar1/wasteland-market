@@ -25,6 +25,11 @@ const FooterWrapper = styled.div`
 	}
 `;
 
+const Small = styled.div`
+	font-size: 10px;
+	margin-top: 15px;
+`;
+
 class Footer extends Component {
 	render() {
 		return (
@@ -43,6 +48,7 @@ class Footer extends Component {
 					</ul>
 				</div>
 				<div>&copy; 2018 Wasteland Market</div>
+				<Small>Wasteland Market is not affiliated with Bethesda or Bethesda Game Studios.</Small>
 			</FooterWrapper>
 		);
 	}

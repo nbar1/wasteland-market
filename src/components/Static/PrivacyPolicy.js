@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import Helmet from 'react-helmet';
+
+const PrivacyPolicyWrapper = styled.div`
+	margin: 0 auto;
+	width: 70%;
+
+	@media (max-width: 600px) {
+		width: 100%;
+	}
+`;
 
 class PrivacyPolicy extends Component {
 	render() {
 		return (
-			<div>
+			<PrivacyPolicyWrapper>
+				<Helmet>
+					<title>Wasteland Market - Privacy Policy</title>
+				</Helmet>
 				<h2>Privacy Policy</h2>
 				<p>
 					Your privacy is important to us. It is Wasteland Market's policy to respect your privacy regarding
 					any information we may collect from you across our website,{' '}
-					<a href="https://wastelandmarket.com">WastelandMarket.com</a>, and other sites we own and
-					operate.
+					<a href="https://wastelandmarket.com">WastelandMarket.com</a>, and other sites we own and operate.
 				</p>
 				<p>
 					We only ask for personal information when we truly need it to provide a service to you. We collect
@@ -40,7 +53,7 @@ class PrivacyPolicy extends Component {
 					information, feel free to contact us.
 				</p>
 				<p>This policy is effective as of 1 November 2018.</p>
-			</div>
+			</PrivacyPolicyWrapper>
 		);
 	}
 }
