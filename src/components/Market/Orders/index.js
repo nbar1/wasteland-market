@@ -260,7 +260,6 @@ class Orders extends Component {
 	 * @returns {void}
 	 */
 	getOrders = (page = 1) => {
-		console.log(this.props);
 		let url = `/api/market/orders/${this.props.type}?page=${page}`;
 		url += this.props.itemId ? `&item=${this.props.itemId}` : '';
 		url += this.props.platform ? `&platform=${this.props.platform}` : '';
