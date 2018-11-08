@@ -237,16 +237,6 @@ class Platforms extends Component {
 			returnVal = false;
 		}
 
-		if (
-			this.state.platform === 'pc' &&
-			!this.state.includeDiscord &&
-			!this.state.includeSteam &&
-			!this.state.includeBethesda
-		) {
-			this.setState({ missingPCContact: true });
-			returnVal = false;
-		}
-
 		if (this.state.unusual && this.state.notes === '') {
 			this.setState({ missingUnusualNotes: true });
 			returnVal = false;
@@ -579,11 +569,6 @@ class Platforms extends Component {
 									/>
 									{this.state.missingPlatform && (
 										<GeneralError>You must select a platform.</GeneralError>
-									)}
-									{this.state.missingPCContact && (
-										<GeneralError>
-											When choosing PC as your platform, you must include a contact method.
-										</GeneralError>
 									)}
 								</RadioGroup>
 							</FormControl>
