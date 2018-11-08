@@ -88,14 +88,13 @@ const Platform = styled.div`
 		content: '\f3df';
 	}
 
-	&.steam:before {
-		color: #171a21;
-		content: '\f1b6';
-	}
-
 	&.bethesda:before {
-		color: #171a21;
-		content: '\f1b6';
+		color: #000;
+		content: '\f085';
+		font-family: 'Font Awesome 5 Free';
+		font-weight: 900;
+		font-size: 18px;
+		margin-top: 23px;
 	}
 `;
 
@@ -261,9 +260,12 @@ class Orders extends Component {
 	 * @returns {void}
 	 */
 	getOrders = (page = 1) => {
+		console.log(this.props);
 		let url = `/api/market/orders/${this.props.type}?page=${page}`;
 		url += this.props.itemId ? `&item=${this.props.itemId}` : '';
 		url += this.props.platform ? `&platform=${this.props.platform}` : '';
+
+		if (this.props.itemId === null && this.props.allItems !== true) return;
 
 		axios
 			.get(url)
@@ -272,7 +274,11 @@ class Orders extends Component {
 					orders: res.data,
 				});
 			})
-			.catch((err, res) => {});
+			.catch((err, res) => {
+				this.setState({
+					noItems: true,
+				});
+			});
 	};
 
 	/**
@@ -301,30 +307,16 @@ class Orders extends Component {
 				) : (
 					''
 				)}
-				{order.platform === 'pc' && showAsItem ? (
-					<Platform title={'PC'} className="pc fas">
-						<span>{order.item.name}</span>
-					</Platform>
-				) : (
-					''
-				)}
-				{order.platform === 'pc' && order.includeSteam && !showAsItem ? (
-					<Platform title={`Steam ID: ${order.user.platforms.steam}`} className="steam">
-						<span>{showAsItem ? order.item.name : order.user.platforms.steam}</span>
-					</Platform>
-				) : (
-					''
-				)}
-				{order.includeDiscord && !showAsItem ? (
-					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
-						<span>{showAsItem ? order.item.name : order.user.platforms.discord}</span>
-					</Platform>
-				) : (
-					''
-				)}
-				{order.includeBethesda && !showAsItem ? (
-					<Platform title={`Bethesda ID: ${order.user.platforms.bethesda}`} className="bethesda">
+				{order.platform === 'pc' ? (
+					<Platform title={`PC (Bethesda ID): ${order.user.platforms.bethesda}`} className="pc fas">
 						<span>{showAsItem ? order.item.name : order.user.platforms.bethesda}</span>
+					</Platform>
+				) : (
+					''
+				)}
+				{order.includeDiscord ? (
+					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
+						{showAsItem ? order.item.name : order.user.platforms.discord}
 					</Platform>
 				) : (
 					''
@@ -339,9 +331,9 @@ class Orders extends Component {
 	 * @returns {(void|null)}
 	 */
 	componentDidUpdate() {
-		if (this.props.itemId === null || this.state.orders.length > 0) return;
+		if (this.props.itemId === null || this.state.orders.length > 0 || this.state.noItems === true) return;
 
-		// this.getOrders();
+		this.getOrders();
 	}
 
 	/**
@@ -427,15 +419,14 @@ class Orders extends Component {
 											</TableRow>
 										);
 									})}
-								{!this.props.itemId &&
-									!this.props.allItems && (
-										<TableRow>
-											<TableCell scope="row" />
-											<TableCell numeric />
-											<TableCell className="hide-small" numeric />
-											<TableCell className="hide-small" numeric />
-										</TableRow>
-									)}
+								{!this.props.itemId && !this.props.allItems && (
+									<TableRow>
+										<TableCell scope="row" />
+										<TableCell numeric />
+										<TableCell className="hide-small" numeric />
+										<TableCell className="hide-small" numeric />
+									</TableRow>
+								)}
 							</TableBody>
 						</Table>
 						<Dialog

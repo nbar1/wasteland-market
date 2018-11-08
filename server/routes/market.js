@@ -108,7 +108,10 @@ const getOrders = (req, res, next, type) => {
 			let processed = 0;
 
 			if (data.length === 0) {
-				return res.send([]);
+				return next({
+					status: 400,
+					message: 'no-orders',
+				});
 			}
 
 			data.forEach((order, key) => {
@@ -163,13 +166,16 @@ router.post('/orders/close', (req, res) => {
 router.get('/price', (req, res, next) => {
 	let ordersToCount = 1000;
 
-	Order.find({
+	let orderQuery = {
 		itemId: req.query.item,
-		platform: req.query.platform,
 		active: true,
-	})
-		.sort({ date: -1 })
-		.limit(ordersToCount)
+	};
+
+	if (req.query.platform !== 'all') {
+		orderQuery.platform = req.query.platform;
+	}
+
+	Order.find(orderQuery)
 		.select('price')
 		.exec((err, data) => {
 			if (err) {
@@ -190,12 +196,17 @@ router.get('/price', (req, res, next) => {
 			let changeDate = new Date();
 			changeDate.setDate(changeDate.getDate() - 1);
 
-			Order.find({
+			let changeQuery = {
 				itemId: req.query.item,
-				platform: req.query.platform,
 				active: true,
 				date: { $lte: changeDate.toISOString() },
-			})
+			};
+
+			if (req.query.platform !== 'all') {
+				changeQuery.platform = req.query.platform;
+			}
+
+			Order.find(changeQuery)
 				.sort({ date: -1 })
 				.limit(ordersToCount)
 				.select('price')

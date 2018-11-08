@@ -5,3 +5,17 @@ http://fallout.wikia.com/api.php?action=query&prop=images&titles=Addictol&format
 http://fallout.wikia.com/api/v1/Articles/AsSimpleJson?id=481012
 
 http://fallout.wikia.com/api/v1/Articles/Details?ids=481012
+
+
+faq
+
+my items are bought/sold, but I keep getting messages
+
+how do I see only my platform
+
+how do I add my platform information
+
+an item I want to buy/sell is not on the site
+
+how are prices calculated
+

@@ -22,10 +22,24 @@ import { Redirect } from 'react-router-dom';
 import capImage from '../../../images/cap.png';
 import ReactGA from 'react-ga';
 
+const OrderFormWrapper = styled.div`
+	margin: 0 auto;
+	width: 70%;
+
+	@media (max-width: 800px) {
+		width: 100%;
+	}
+`;
+
 const StyledCard = styled(Card)`
 	&& {
 		margin: 15px 15px 30px;
 		overflow: visible;
+
+		&.hidden,
+		.hidden {
+			display: none !important;
+		}
 
 		.react-autosuggest__container {
 			position: relative;
@@ -181,7 +195,6 @@ class Platforms extends Component {
 	 * @returns {void}
 	 */
 	onChange = event => {
-		console.log(event.target);
 		this.setState({
 			[event.target.name]: event.target.value,
 		});
@@ -376,7 +389,7 @@ class Platforms extends Component {
 		}
 
 		return (
-			<div>
+			<OrderFormWrapper>
 				<form onSubmit={this.submitForm}>
 					<StyledCard raised={true}>
 						<CardContent>
@@ -433,48 +446,7 @@ class Platforms extends Component {
 									}}
 								/>
 							</SearchBarWrapper>
-							<SelectFormControl>
-								<InputLabel htmlFor="level">Item Level</InputLabel>
-								<NativeSelect
-									value={this.state.level}
-									onChange={this.onChange}
-									inputProps={{
-										name: 'level',
-										value: this.state.level,
-									}}
-								>
-									<option value={0}>None</option>
-									{levelOptions}
-								</NativeSelect>
-							</SelectFormControl>
-							<br />
-							<FormControl>
-								<FormControlLabel
-									control={
-										<Checkbox
-											checked={this.state.unusual}
-											onChange={this.onChange.bind(this, {
-												target: {
-													name: 'unusual',
-													value: !this.state.unusual,
-												},
-											})}
-											name="unusual"
-											value="true"
-											color="primary"
-										/>
-									}
-									label="This item has unusual attributes"
-								/>
-							</FormControl>
-						</CardContent>
-					</StyledCard>
 
-					<StyledCard raised={true}>
-						<CardContent>
-							<Typography gutterBottom variant="headline" component="h2">
-								Order Information
-							</Typography>
 							<StyledTextField
 								type="number"
 								id="price"
@@ -514,7 +486,7 @@ class Platforms extends Component {
 						</CardContent>
 					</StyledCard>
 
-					<StyledCard raised={true}>
+					<StyledCard raised={true} className="hidden">
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
 								Notes
@@ -545,15 +517,13 @@ class Platforms extends Component {
 					<StyledCard raised={true}>
 						<CardContent>
 							<Typography gutterBottom variant="headline" component="h2">
-								Order Platform
+								Platform
 							</Typography>
 							<Typography gutterBottom variant="subheading">
 								Your platform information will be exposed so another user can contact you to buy or
 								sell.
 								<br />
 								If your platform is not enabled, go to your Profile page and add the platform.
-								<br />
-								If you choose PC, you must include your Discord or Bethesda ID.
 							</Typography>
 							<FormControl component="fieldset">
 								<RadioGroup name="platform" value={this.state.platform} onChange={this.onChange}>
@@ -578,12 +548,12 @@ class Platforms extends Component {
 									<FormControlLabel
 										value="pc"
 										control={<Radio />}
-										label="PC"
-										disabled={
-											!this.props.platforms.discord &&
-											!this.props.platforms.steam &&
-											!this.props.platforms.bethesda
+										label={
+											this.props.platforms.bethesda
+												? `PC (Bethesda ID) — ${this.props.platforms.bethesda}`
+												: 'PC'
 										}
+										disabled={!this.props.platforms.bethesda}
 									/>
 									<FormControlLabel
 										control={
@@ -605,52 +575,6 @@ class Platforms extends Component {
 											this.props.platforms.discord
 												? `Include Discord — ${this.props.platforms.discord}`
 												: 'Include Discord'
-										}
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={this.state.includeSteam}
-												onChange={this.onChange.bind(this, {
-													target: {
-														name: 'includeSteam',
-														value: !this.state.includeSteam,
-													},
-												})}
-												name="includeSteam"
-												value="true"
-												color="primary"
-												disabled={!this.props.platforms.steam || this.state.platform !== 'pc'}
-											/>
-										}
-										label={
-											this.props.platforms.steam
-												? `Include Steam ID — ${this.props.platforms.steam}`
-												: 'Include Steam ID'
-										}
-									/>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={this.state.includeBethesda}
-												onChange={this.onChange.bind(this, {
-													target: {
-														name: 'includeBethesda',
-														value: !this.state.includeBethesda,
-													},
-												})}
-												name="includeBethesda"
-												value="true"
-												color="primary"
-												disabled={
-													!this.props.platforms.bethesda || this.state.platform !== 'pc'
-												}
-											/>
-										}
-										label={
-											this.props.platforms.bethesda
-												? `Include Bethesda ID — ${this.props.platforms.bethesda}`
-												: 'Include Bethesda ID'
 										}
 									/>
 									{this.state.missingPlatform && (
@@ -704,7 +628,7 @@ class Platforms extends Component {
 						</StyledButton>
 					</ButtonWrapper>
 				</form>
-			</div>
+			</OrderFormWrapper>
 		);
 	}
 }

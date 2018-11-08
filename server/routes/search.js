@@ -5,7 +5,7 @@ var Item = require('../models/Item');
 // autocomplete
 router.post('/autocomplete', (req, res, next) => {
 	Item.find({ name: new RegExp(`^${req.body.query}`, 'i') })
-		.limit(5)
+		.limit(7)
 		.select('name linkName')
 		.exec((err, data) => {
 			if (err) {

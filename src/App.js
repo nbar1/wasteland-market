@@ -19,6 +19,7 @@ import ResetPasswordEntry from './components/Account/ResetPassword/Entry';
 import Account from './components/Account';
 
 import Market from './components/Market';
+import MarketDirectory from './components/Market/Directory';
 import Order from './components/Market/Order';
 import OrderMock from './components/Market/Order/Mock';
 import OrderSuccess from './components/Market/Order/OrderSuccess';
@@ -65,13 +66,13 @@ class App extends Component {
 							<Route exact path="/order" component={RequiresLogin(Order)} />
 							<Route exact path="/order/mock" component={RequiresAdmin(OrderMock)} />
 							<Route exact path="/order/success" component={RequiresLogin(OrderSuccess)} />
-							<Route exact path="/market" component={Market} />
+							<Route exact path="/market" component={MarketDirectory} />
 							<Route exact path="/market/:item" component={Market} />
 							<Route exact path="/my-orders" component={RequiresLogin(MyOrders)} />
 
 							<Route exact path="/user/:username" component={UserProfile} />
 
-							<Route exact path="/create-item" component={RequiresLogin(CreateItem)} />
+							<Route exact path="/create-item" component={RequiresAdmin(CreateItem)} />
 
 							<Route exact path="/privacy-policy" component={PrivacyPolicy} />
 							<Route exact path="/terms-of-service" component={TermsOfService} />

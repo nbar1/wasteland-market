@@ -37,14 +37,10 @@ const StyledTextField = styled(TextField)`
 			content: '\f3df';
 		}
 
-		&.steam:before {
-			color: #171a21;
-			content: '\f1b6';
-		}
-
 		&.bethesda:before {
-			color: #171a21;
-			content: '\f1b6';
+			color: #a50000;
+			content: '\f108';
+			font-family: 'Font Awesome 5 Free';
 		}
 	}
 `;
@@ -95,7 +91,6 @@ class Platforms extends Component {
 		if (props.platforms) {
 			this.state.xbox = props.platforms.xbox;
 			this.state.playstation = props.platforms.playstation;
-			this.state.steam = props.platforms.steam;
 			this.state.bethesda = props.platforms.bethesda;
 			this.state.discord = props.platforms.discord;
 		}
@@ -130,7 +125,7 @@ class Platforms extends Component {
 
 					ReactGA.event({
 						category: 'User',
-						action: 'Update Platforms'
+						action: 'Update Platforms',
 					});
 				}
 			})
@@ -170,35 +165,11 @@ class Platforms extends Component {
 								type="text"
 								id="playstation"
 								name="playstation"
-								label="PSN Name"
+								label="PSN Online ID"
 								className="playstation"
 								margin="normal"
 								fullWidth={true}
 								value={this.state.playstation}
-								onChange={this.onChange}
-							/>
-
-							<StyledTextField
-								type="text"
-								id="discord"
-								name="discord"
-								label="Discord"
-								className="discord"
-								margin="normal"
-								fullWidth={true}
-								value={this.state.discord}
-								onChange={this.onChange}
-							/>
-
-							<StyledTextField
-								type="text"
-								id="steam"
-								name="steam"
-								label="Steam ID"
-								className="steam"
-								margin="normal"
-								fullWidth={true}
-								value={this.state.steam}
 								onChange={this.onChange}
 							/>
 
@@ -211,6 +182,18 @@ class Platforms extends Component {
 								margin="normal"
 								fullWidth={true}
 								value={this.state.bethesda}
+								onChange={this.onChange}
+							/>
+
+							<StyledTextField
+								type="text"
+								id="discord"
+								name="discord"
+								label="Discord"
+								className="discord"
+								margin="normal"
+								fullWidth={true}
+								value={this.state.discord}
 								onChange={this.onChange}
 							/>
 

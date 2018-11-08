@@ -61,6 +61,12 @@ const Platform = styled.div`
 		margin-left: -20px;
 	}
 
+	&.pc:before {
+		color: #a50000;
+		content: '\f108';
+		font-family: 'Font Awesome 5 Free';
+	}
+
 	&.discord:before {
 		color: #7289da;
 		content: '\f392';
@@ -76,14 +82,13 @@ const Platform = styled.div`
 		content: '\f3df';
 	}
 
-&.steam:before {
-	color: #171a21;
-	content: '\f1b6';
-}
-
 	&.bethesda:before {
-		color: #171a21;
-		content: '\f1b6';
+		color: #000;
+		content: '\f085';
+		font-family: 'Font Awesome 5 Free';
+		font-weight: 900;
+		font-size: 18px;
+		margin-top: 23px;
 	}
 `;
 
@@ -276,21 +281,21 @@ class UserOrders extends Component {
 			<div>
 				{order.platform === 'xbox' ? (
 					<Platform title={`Xbox: ${order.user.platforms.xbox}`} className="xbox">
-						{showAsItem ? order.item.name : order.user.platforms.xbox}
+						<span>{showAsItem ? order.item.name : order.user.platforms.xbox}</span>
 					</Platform>
 				) : (
 					''
 				)}
 				{order.platform === 'playstation' ? (
 					<Platform title={`PlayStation: ${order.user.platforms.playstation}`} className="playstation">
-						{showAsItem ? order.item.name : order.user.platforms.playstation}
+						<span>{showAsItem ? order.item.name : order.user.platforms.playstation}</span>
 					</Platform>
 				) : (
 					''
 				)}
-				{order.platform === 'pc' && order.includeSteam ? (
-					<Platform title={`Steam ID: ${order.user.platforms.steam}`} className="steam">
-						{showAsItem ? order.item.name : order.user.platforms.steam}
+				{order.platform === 'pc' ? (
+					<Platform title={`PC (Bethesda ID): ${order.user.platforms.bethesda}`} className="pc fas">
+						<span>{showAsItem ? order.item.name : order.user.platforms.bethesda}</span>
 					</Platform>
 				) : (
 					''
@@ -298,13 +303,6 @@ class UserOrders extends Component {
 				{order.includeDiscord ? (
 					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
 						{showAsItem ? order.item.name : order.user.platforms.discord}
-					</Platform>
-				) : (
-					''
-				)}
-				{order.platform === 'pc' && order.includeBethesda ? (
-					<Platform title={`Bethesda ID: ${order.user.platforms.bethesda}`} className="bethesda">
-						{showAsItem ? order.item.name : order.user.platforms.bethesda}
 					</Platform>
 				) : (
 					''
@@ -359,7 +357,9 @@ class UserOrders extends Component {
 											hover={true}
 											onClick={() => this.openDialog(key)}
 										>
-											<TableCell scope="row">{this.showPlatformContactInfo(order, true)}</TableCell>
+											<TableCell scope="row">
+												{this.showPlatformContactInfo(order, true)}
+											</TableCell>
 											<TableCell numeric>
 												<BottleCap title={`${order.price} Caps`}>{order.price}</BottleCap>
 											</TableCell>
