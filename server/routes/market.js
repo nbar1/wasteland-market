@@ -172,15 +172,17 @@ router.get('/price', (req, res, next) => {
 		active: true,
 	};
 
+	if (req.query.platform === undefined) {
+		req.query.platform = 'all';
+	}
+
 	if (req.query.platform !== 'all') {
 		orderQuery.platform = req.query.platform;
 	}
 
-	console.log(orderQuery);
 	Order.find(orderQuery)
 		.select('price')
 		.exec((err, data) => {
-			console.log(data);
 			if (err) {
 				let errorMessage = 'Unknown Error';
 
@@ -223,16 +225,7 @@ router.get('/price', (req, res, next) => {
 					let oldPrice = Math.round(getMedian(oldPrices)) || 0;
 					let change = (((oldPrice - price) / oldPrice) * 100).toFixed(2);
 
-					console.log(data);
-					console.log(prices);
-					console.log(oldPrices);
-					console.log(price);
-					console.log(oldPrice);
-
 					change = change - change * 2 || 0;
-
-					console.log(change);
-					console.log('--------');
 
 					return res.send({
 						price,
