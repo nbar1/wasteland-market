@@ -172,7 +172,7 @@ router.get('/price', (req, res, next) => {
 		active: true,
 	};
 
-	if (req.query.platform === undefined) {
+	if (req.query.platform === undefined || req.query.platform === 'undefined') {
 		req.query.platform = 'all';
 	}
 
