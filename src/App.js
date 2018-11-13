@@ -21,7 +21,6 @@ import Account from './components/Account';
 import Market from './components/Market';
 import MarketDirectory from './components/Market/Directory';
 import Order from './components/Market/Order';
-import OrderSuccess from './components/Market/Order/OrderSuccess';
 import CreateItem from './components/Item/CreateItem';
 
 import MyOrders from './components/Market/Orders/MyOrders';
@@ -64,7 +63,6 @@ class App extends Component {
 							<Route exact path="/account/reset-password/:token" component={ResetPasswordEntry} />
 
 							<Route exact path="/order" component={RequiresLogin(Order)} />
-							<Route exact path="/order/success" component={RequiresLogin(OrderSuccess)} />
 							<Route exact path="/market" component={MarketDirectory} />
 							<Route exact path="/market/:item" component={Market} />
 							<Route exact path="/my-orders" component={RequiresLogin(MyOrders)} />
