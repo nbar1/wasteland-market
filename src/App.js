@@ -31,6 +31,7 @@ import UserProfile from './components/User/Profile';
 
 import PrivacyPolicy from './components/Static/PrivacyPolicy';
 import TermsOfService from './components/Static/TermsOfService';
+import FAQ from './components/Static/FAQ';
 
 import NotFound from './components/NotFound';
 
@@ -76,6 +77,7 @@ class App extends Component {
 
 							<Route exact path="/privacy-policy" component={PrivacyPolicy} />
 							<Route exact path="/terms-of-service" component={TermsOfService} />
+							<Route exact path="/faq" component={FAQ} />
 
 							<Route path="*" component={NotFound} />
 						</Switch>

@@ -87,6 +87,7 @@ const getOrders = (req, res, next, type) => {
 
 	if (req.query.user) {
 		orderQuery.addedBy = req.query.user;
+		perPage = 100;
 	}
 
 	Order.find(orderQuery)
@@ -226,6 +227,46 @@ router.get('/price', (req, res, next) => {
 						change,
 					});
 				});
+		});
+});
+
+router.get('/directory', (req, res, next) => {
+	Item.find({ enabled: true })
+		.select('category name linkName')
+		.exec((err, data) => {
+			if (err) {
+				let errorMessage = 'Unknown Error';
+
+				return next({
+					status: 400,
+					message: errorMessage,
+				});
+			}
+
+			let categories = {};
+
+			data.forEach(item => {
+				if (categories[item.category] === undefined) {
+					categories[item.category] = [];
+				}
+
+				categories[item.category].push({
+					name: item.name,
+					linkName: item.linkName,
+				});
+			});
+
+			Object.keys(categories).forEach(category => {
+				categories[category].sort((a, b) => {
+					var textA = a.name.toUpperCase();
+					var textB = b.name.toUpperCase();
+					return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+				});
+			});
+
+			res.send({
+				categories,
+			});
 		});
 });
 

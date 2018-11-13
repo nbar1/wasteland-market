@@ -123,7 +123,7 @@ class Navigation extends Component {
 					<PlatformChanger />
 					<Link to={'/order'}>Create Order</Link>
 					<Link to={'/my-orders'}>My Orders</Link>
-					<Link to={'/market'}>Market</Link>
+					{false && <Link to={'/market'}>Market</Link>}
 					<Link to={'/faq'}>FAQ</Link>
 				</StyledBar>
 				<StyledDrawer open={true} variant={'permanent'}>
@@ -140,9 +140,11 @@ class Navigation extends Component {
 							<Link to={'/my-orders'} onClick={this.toggleMenu.bind(this)}>
 								My Orders
 							</Link>
-							<Link to={'/market'} onClick={this.toggleMenu.bind(this)}>
-								Market
-							</Link>
+							{false && (
+								<Link to={'/market'} onClick={this.toggleMenu.bind(this)}>
+									Market
+								</Link>
+							)}
 							<Link to={'/faq'} onClick={this.toggleMenu.bind(this)}>
 								FAQ
 							</Link>

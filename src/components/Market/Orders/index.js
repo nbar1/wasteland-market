@@ -54,7 +54,7 @@ const Platform = styled.div`
 	padding: 5px 0 5px 20px;
 
 	span {
-		font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+		font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif !important;
 		font-weight: normal;
 		padding-left: 5px;
 	}
@@ -309,13 +309,6 @@ class Orders extends Component {
 				{order.platform === 'pc' ? (
 					<Platform title={`PC (Bethesda ID): ${order.user.platforms.bethesda}`} className="pc fas">
 						<span>{showAsItem ? order.item.name : order.user.platforms.bethesda}</span>
-					</Platform>
-				) : (
-					''
-				)}
-				{order.includeDiscord ? (
-					<Platform title={`Discord: ${order.user.platforms.discord}`} className="discord">
-						{showAsItem ? order.item.name : order.user.platforms.discord}
 					</Platform>
 				) : (
 					''

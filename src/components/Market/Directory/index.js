@@ -1,13 +1,49 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
+import axios from 'axios';
 
-/**
- * Platforms
- *
- * @class
- */
-const Platforms = () => {
-	return <div />;
-};
+class Directory extends Component {
+	state = {
+		categories: {},
+	}
 
-export default Platforms;
+	/**
+	 * getOrders
+	 *
+	 * @param {int} [page=1]
+	 * @returns {void}
+	 */
+	getOrders = () => {
+		axios
+			.get('/api/market/directory')
+			.then(res => {
+				this.setState({
+					categories: res.data,
+				});
+			})
+			.catch((err, res) => {});
+	};
+
+	/**
+	 * componentDidMount
+	 *
+	 * @returns {void}
+	 */
+	componentDidMount = () => {
+		this.getOrders();
+	};
+
+	/**
+	 * render
+	 *
+	 * @returns {jsx}
+	 */
+	render() {
+		return (
+			<div>
+				hello
+			</div>
+		);
+	}
+}
+
+export default Directory;

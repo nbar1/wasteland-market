@@ -545,7 +545,7 @@ class Platforms extends Component {
 										}
 										disabled={!this.props.platforms.bethesda}
 									/>
-									<FormControlLabel
+									{false && <FormControlLabel
 										control={
 											<Checkbox
 												checked={this.state.includeDiscord}
@@ -566,7 +566,7 @@ class Platforms extends Component {
 												? `Include Discord — ${this.props.platforms.discord}`
 												: 'Include Discord'
 										}
-									/>
+									/>}
 									{this.state.missingPlatform && (
 										<GeneralError>You must select a platform.</GeneralError>
 									)}

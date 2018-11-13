@@ -9,6 +9,7 @@ const FooterWrapper = styled.div`
 
 	ul {
 		list-style: none;
+		padding: 0;
 
 		li {
 			display: inline-block;
@@ -42,9 +43,11 @@ class Footer extends Component {
 						<li>
 							<Link to={'/terms-of-service'}>Terms of Service</Link>
 						</li>
-						<li>
-							<Link to={'/contact-us'}>Contact Us</Link>
-						</li>
+						{false && (
+							<li>
+								<Link to={'/contact-us'}>Contact Us</Link>
+							</li>
+						)}
 					</ul>
 				</div>
 				<div>&copy; 2018 Wasteland Market</div>
