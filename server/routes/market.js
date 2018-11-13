@@ -176,9 +176,11 @@ router.get('/price', (req, res, next) => {
 		orderQuery.platform = req.query.platform;
 	}
 
+	console.log(orderQuery);
 	Order.find(orderQuery)
 		.select('price')
 		.exec((err, data) => {
+			console.log(data);
 			if (err) {
 				let errorMessage = 'Unknown Error';
 
@@ -222,14 +224,15 @@ router.get('/price', (req, res, next) => {
 					let change = (((oldPrice - price) / oldPrice) * 100).toFixed(2);
 
 					console.log(data);
-					console.log('--------');
 					console.log(prices);
 					console.log(oldPrices);
 					console.log(price);
 					console.log(oldPrice);
-					console.log(change);
 
 					change = change - change * 2 || 0;
+
+					console.log(change);
+					console.log('--------');
 
 					return res.send({
 						price,
