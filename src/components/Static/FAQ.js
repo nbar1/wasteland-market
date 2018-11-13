@@ -64,7 +64,12 @@ class FAQ extends Component {
 				<br />
 				<h3>How Can I Contact Wasteland Market About An Issue?</h3>
 				<div>
-					You can email us at <a href="mailto:WastelandMarket@syniba.com">WastelandMarket@syniba.com</a> or message us on Reddit at <a target="_blank" rel="noopener noreferrer" href="https://www.reddit.com/user/WastelandMarket/">u/WastelandMarket</a>.
+					You can email us at <a href="mailto:WastelandMarket@syniba.com">WastelandMarket@syniba.com</a> or
+					message us on Reddit at{' '}
+					<a target="_blank" rel="noopener noreferrer" href="https://www.reddit.com/user/WastelandMarket/">
+						u/WastelandMarket
+					</a>
+					.
 				</div>
 			</FAQWrapper>
 		);

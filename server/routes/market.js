@@ -220,6 +220,15 @@ router.get('/price', (req, res, next) => {
 					let price = Math.round(getMedian(prices)) || 0;
 					let oldPrice = Math.round(getMedian(oldPrices)) || 0;
 					let change = (((oldPrice - price) / oldPrice) * 100).toFixed(2);
+
+					console.log(data);
+					console.log('--------');
+					console.log(prices);
+					console.log(oldPrices);
+					console.log(price);
+					console.log(oldPrice);
+					console.log(change);
+
 					change = change - change * 2 || 0;
 
 					return res.send({

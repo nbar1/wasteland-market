@@ -21,7 +21,6 @@ import Account from './components/Account';
 import Market from './components/Market';
 import MarketDirectory from './components/Market/Directory';
 import Order from './components/Market/Order';
-import OrderMock from './components/Market/Order/Mock';
 import OrderSuccess from './components/Market/Order/OrderSuccess';
 import CreateItem from './components/Item/CreateItem';
 
