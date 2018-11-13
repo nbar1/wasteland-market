@@ -366,7 +366,7 @@ class Platforms extends Component {
 	 */
 	render() {
 		if (this.state.orderSuccess) {
-			return <Redirect to="/order/success" />;
+			return <Redirect to={`/market/${this.state.item.replace(/\s+/g, '-').toLowerCase()}`} />;
 		}
 
 		const levelOptions = [];
