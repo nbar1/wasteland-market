@@ -5,6 +5,15 @@ var Item = require('../models/Item');
 
 // create
 router.post('/create', requiresLogin, (req, res, next) => {
+	return next({
+		status: 400,
+		message: {
+			success: false,
+			message: 'Item additions disabled',
+		},
+	});
+
+	/*
 	let itemData = {
 		name: req.body.item,
 		linkName: req.body.item.replace(/\s+/g, '-').toLowerCase(),
@@ -62,6 +71,7 @@ router.post('/create', requiresLogin, (req, res, next) => {
 			redirect: `/market/${itemData.name.replace(/\s/g, '-').toLowerCase()}`,
 		});
 	});
+	*/
 });
 
 // item info

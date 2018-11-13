@@ -65,7 +65,6 @@ class App extends Component {
 							<Route exact path="/account/reset-password/:token" component={ResetPasswordEntry} />
 
 							<Route exact path="/order" component={RequiresLogin(Order)} />
-							<Route exact path="/order/mock" component={RequiresAdmin(OrderMock)} />
 							<Route exact path="/order/success" component={RequiresLogin(OrderSuccess)} />
 							<Route exact path="/market" component={MarketDirectory} />
 							<Route exact path="/market/:item" component={Market} />

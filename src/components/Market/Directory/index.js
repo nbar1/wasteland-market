@@ -40,7 +40,7 @@ class Directory extends Component {
 	render() {
 		return (
 			<div>
-				hello
+				<h2>Directory</h2>
 			</div>
 		);
 	}
